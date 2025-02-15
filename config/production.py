@@ -9,4 +9,6 @@ class Config:
     db_name = os.getenv("AZURE_SQL_DATABASE")
     db_port = os.getenv("AZURE_SQL_PORT")
 
+    print(f"Database URI Producrion: {db_user}:{db_password}@{db_host}:{db_port}/{db_name}")
+
     SQLALCHEMY_DATABASE_URI = f"mysql+pymysql://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}"
