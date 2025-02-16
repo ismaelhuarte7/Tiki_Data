@@ -1,7 +1,7 @@
 from flask import Blueprint
 from config.config import env
 from config.database import db
-from src.models.user import User  # Asegúrate de que esta es la ruta correcta para tu modelo User
+from src.models.user import User  
 
 main_bp = Blueprint("main", __name__)
 
