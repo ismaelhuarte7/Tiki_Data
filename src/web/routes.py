@@ -9,4 +9,4 @@ main_bp = Blueprint("main", __name__)
 def home():
     users = User.query.all()
     users_list = "<br>".join([f"ID: {user.id}, Username: {user.username}, Email: {user.email}" for user in users])
-    return f"¡Hola, Flask está funcionando! Entorno: {env}<br><br>{users_list}"
+    return f"¡Hola, Flask está funcionando NAZI! Entorno: {env}<br><br>{users_list}"
