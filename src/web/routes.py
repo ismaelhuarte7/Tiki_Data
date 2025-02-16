@@ -1,12 +1,14 @@
-from flask import Blueprint
+from flask import Blueprint, render_template
 from config.config import env
 from config.database import db
-from src.models.user import User  
+from src.models.user import User
+from src.models.modelo import player
 
-main_bp = Blueprint("main", __name__)
+def register(app):
+    @app.route("/")
+    def home():
+        users = User.get_all_users()
+        return render_template("home.html", users=users)
 
-@main_bp.route("/")
-def home():
-    users = User.query.all()
-    users_list = "<br>".join([f"ID: {user.id}, Username: {user.username}, Email: {user.email}" for user in users])
-    return f"¡Hola, Flask está funcionando NAZI! Entorno: {env}<br><br>{users_list}"
+
+
