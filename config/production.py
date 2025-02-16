@@ -13,4 +13,9 @@ class Config:
 
     print(f"Database URI Production: {db_user}:{db_password}@{db_host}:{db_port}/{db_name}")
 
-    SQLALCHEMY_DATABASE_URI = f"mssql+pyodbc://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}?driver=ODBC+Driver+17+for+SQL+Server"
+    SQLALCHEMY_DATABASE_URI = (
+    f"mssql+pyodbc://{db_user}:{db_password}@{db_host}:{db_port}/"
+    f"{db_name}?driver=ODBC+Driver+17+for+SQL+Server&TrustServerCertificate=yes"
+)
+
+    
