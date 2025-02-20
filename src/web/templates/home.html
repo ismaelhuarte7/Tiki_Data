@@ -1,58 +1,41 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome to Tiki-Data</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-        }
-        header {
-            background-color: #4CAF50;
-            color: white;
-            padding: 1em 0;
-            text-align: center;
-        }
-        main {
-            padding: 2em;
-            text-align: center;
-        }
-        footer {
-            background-color: #4CAF50;
-            color: white;
-            padding: 1em 0;
-            text-align: center;
-            position: fixed;
-            width: 100%;
-            bottom: 0;
-        }
-    </style>
-</head>
-<body>
-    <header>
-        <h1>Welcome to Tiki-Data</h1>
-    </header>
-    <main>
-        <h2>Your one-stop solution for data analysis</h2>
-        <p>Explore our features and tools to get the most out of your data.</p>
-        {% if users %}
-            <h3>Users</h3>
-            <ul>
+{% extends "layout.html" %}
+
+{% block title %}Tiki-Data{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8 text-center">
+            <h1 class="display-4 mb-4">Bienvenido a Tiki-Data</h1>
+            <h2 class="h4 mb-4">El único registro virtual de partidos y estadisticas</h2>
+            <p class="lead mb-5">Explora nuestras características y herramientas para aprovechar al máximo tus datos.</p>
+        </div>
+    </div>
+
+    {% if users %}
+    <div class="row">
+        <div class="col-12">
+            <h3 class="mb-4">Usuarios</h3>
+            <div class="list-group">
                 {% for user in users %}
-                    <li>{{ user.username }}</li>
-                    <li>{{ user.email }}</li>
+                <div class="list-group-item bg-dark text-light">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h5 class="mb-1">{{ user.username }}</h5>
+                            <p class="mb-1">{{ user.email }}</p>
+                        </div>
+                    </div>
+                </div>
                 {% endfor %}
-            </ul>
-        {% else %}
-            <p>No users found.</p>
-        {% endif %}
-    </main>
-    <footer>
-        <p>&copy; 2023 Tiki-Data. All rights reserved.</p>
-    </footer>
-</body>
-</html>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="row">
+        <div class="col-12 text-center">
+            <p class="text-muted">No se encontraron usuarios.</p>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

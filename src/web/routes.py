@@ -2,7 +2,6 @@ from flask import Blueprint, render_template
 from config.config import env
 from config.database import db
 from src.models.user import User
-from src.models.modelo import player
 
 def register(app):
     @app.route("/")
