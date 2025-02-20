@@ -1,0 +1,124 @@
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-color: #181411;
+    color: #ffffff;
+}
+
+main {
+    flex: 1;
+}
+
+/* Navbar styles */
+.navbar {
+    background-color: #14100d !important;
+    box-shadow: none;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    font-size: 1.125rem;
+    letter-spacing: -0.015em;
+    padding: 1rem 0;
+}
+
+.navbar-brand {
+    font-weight: 700;
+    font-size: 1.4rem;
+    letter-spacing: 0.5px;
+}
+
+.navbar-brand img {
+    max-height: 40px;
+    width: auto;
+}
+
+.nav-link {
+    font-weight: 500;
+    letter-spacing: 0.3px;
+}
+
+/* Nuevos estilos para los enlaces de navegación */
+.navbar .navbar-nav .nav-link {
+    color: white;
+    margin: 0 15px;
+    position: relative;
+    padding: 5px 0;
+}
+
+.navbar .navbar-nav .nav-link:hover {
+    color: #FF6B00;
+}
+
+.navbar .navbar-nav .nav-link::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    background: #FF6B00;
+    left: 0;
+    bottom: -2px;
+    transition: width 0.3s ease;
+}
+
+.navbar .navbar-nav .nav-link:hover::after {
+    width: 100%;
+}
+
+.navbar .navbar-nav .nav-link.active {
+    color: #FF6B00;
+}
+
+.navbar .navbar-nav .nav-link.active::after {
+    width: 100%;
+}
+
+/* Línea naranja separadora */
+.orange-line {
+    height: 0.3px;
+    background-color: #FF6B00;
+    width: 100%;
+}
+
+/* Footer styles */
+.footer {
+    background-color: #14100d !important;
+    margin-top: auto;
+    font-family: 'Poppins', sans-serif;
+}
+
+.footer h5 {
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.footer p {
+    font-weight: 400;
+    letter-spacing: 0.2px;
+}
+
+/* Dropdown styles */
+.dropdown-menu {
+    background-color: #181411;
+    border: 1px solid #FF6B00;
+}
+
+.dropdown-item {
+    color: #ffffff;
+}
+
+.dropdown-item:hover {
+    background-color: #2a2320;
+    color: #ffffff;
+}
+
+/* Ajustes responsive */
+@media (max-width: 768px) {
+    .navbar-brand img {
+        max-height: 30px;
+    }
+    
+    .navbar .navbar-nav .nav-link {
+        margin: 5px 0;
+        padding: 5px 15px;
+    }
+}
