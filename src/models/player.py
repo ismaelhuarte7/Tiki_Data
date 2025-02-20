@@ -8,6 +8,7 @@ class Player (db.Model):
     user_name = db.Column(db.String(80), unique=True, nullable=False)
     password = db.Column(db.String(80), nullable=False)
     birth_date = db.Column(db.DateTime, nullable=False)
+    is_admin = db.Column(db.Boolean, default=False)
     #rol_id = db.Column(db.Integer, db.ForeignKey('rol.id'), nullable=False)
     
     matches = db.relationship('Match', secondary='player_match', back_populates='players')
@@ -20,7 +21,7 @@ class Player (db.Model):
         return Player.query.all()
     
     def create(name, surname, email, user_name, password, birth_date):
-        player = Player(name=name, surname=surname, email=email, user_name=user_name, password=password, birth_date=birth_date)
+        player = Player(name=name, surname=surname, email=email, user_name=user_name, password=password, birth_date=birth_date, admin=False)
         db.session.add(player)
         db.session.commit()
         return player
