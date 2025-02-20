@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %}Tiki-Data</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/image.png') }}">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='../static/styles.css') }}">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container-fluid">
+            <!-- Logo y nombre de la empresa -->
+            <a class="navbar-brand d-flex align-items-center" href="/">
+                <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo" class="me-2" height="40">
+                Tiki-Data
+            </a>
+
+            <!-- Toggler para mobile -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Contenido de la navbar (notificaciones y perfil) -->
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                 <!-- Botones de navegación -->
+                <div class="navbar-nav me-auto">
+                    <a class="nav-link" href="/partidos">Partidos</a>
+                    <a class="nav-link" href="/jugadores">Jugadores</a>
+                    <a class="nav-link" href="/canchas">Canchas</a>
+                </div>
+                <ul class="navbar-nav align-items-left">
+                    <!-- Notificaciones -->
+                    <li class="nav-item dropdown me-3">
+                        <a class="nav-link" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-bell-fill fs-5"></i>
+                            <span class="position-absolute top-10 start-90 translate-middle badge rounded-pill bg-danger">
+                                0
+                                <span class="visually-hidden">Notificaciones sin leer</span>
+                            </span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="#">No hay notificaciones nuevas</a></li>
+                        </ul>
+                    </li>
+                    <!-- Perfil de usuario -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="/profile">
+                            <i class="bi bi-person-circle fs-5"></i>
+                        </a>
+                    </li>
+                </ul>
+                
+            </div>
+        </div>
+    </nav>
+    <!-- Línea naranja separadora -->
+    <div class="orange-line"></div>
+    <!-- Contenido principal -->
+    <main class="container-fluid py-4">
+        {% block content %}{% endblock %}
+    </main>
+    <!-- Footer -->
+    <footer class="footer text-light py-2 mt-auto">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <p>&copy; 2025 Tiki-Data. Todos los derechos reservados.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- Bootstrap JS y Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+</body>
+</html>
