@@ -74,7 +74,7 @@ def send_verification_email(to_email):
     email = EmailMessage(
         subject="Verifica tu cuenta - Tiki-Data",
         body=html_content,
-        from_email="tiki.data.validator@gmail.com",
+        from_email="tiki.data@yahoo.com",
         to=[to_email]
     )
     email.content_subtype = "html"  # Para indicar que el contenido es HTML
