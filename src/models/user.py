@@ -8,6 +8,7 @@ class User(db.Model):
     password = db.Column(db.String(255), nullable=False)
     is_admin = db.Column(db.Boolean, default=False)
     player_id = db.Column(db.Integer, db.ForeignKey('player.id'), nullable=True)
+    is_verified = db.Column(db.Boolean, default=False)
     
 
     def __repr__(self):
@@ -34,4 +35,9 @@ class User(db.Model):
     
     def check_password(self, password):
         return check_password_hash(self.password, password)
+    
+    def verify(self):
+        self.is_verified = True
+        db.session.commit()
+
     

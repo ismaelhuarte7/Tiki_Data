@@ -163,3 +163,174 @@ main {
 .btn-primary:hover {
     background-color: #e65a00;
 }
+
+/* Estilos personalizados para los flash messages */
+.flashes {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    position: fixed;
+    top: 80px; /* Ajusta la posición vertical según sea necesario */
+    right: 20px; /* Ajusta la posición horizontal según sea necesario */
+    z-index: 1000;
+    width: 300px; /* Ancho de las alertas */
+}
+
+.alert {
+    background-color: #2a2320; /* Fondo oscuro */
+    border: 1px solid #FF6B00; /* Borde naranja */
+    border-radius: 5px;
+    color: #ffffff; /* Texto blanco */
+    padding: 10px 15px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    opacity: 0.95;
+    transition: opacity 0.3s ease;
+}
+
+.alert:hover {
+    opacity: 1;
+}
+
+.alert-success {
+    background-color: #2a2320;
+    border-color: #28a745; /* Verde para éxito */
+}
+
+.alert-error, .alert-danger {
+    background-color: #2a2320;
+    border-color: #dc3545; /* Rojo para errores */
+}
+
+.alert-info {
+    background-color: #2a2320;
+    border-color: #17a2b8; /* Azul para información */
+}
+
+.alert-warning {
+    background-color: #2a2320;
+    border-color: #ffc107; /* Amarillo para advertencias */
+}
+
+.alert-dismissible .btn-close {
+    filter: invert(1); /* Invertir el color del botón de cierre para que sea visible */
+}
+
+.alert-dismissible .btn-close:hover {
+    filter: invert(0.8); /* Efecto hover para el botón de cierre */
+}
+
+/* Estilos personalizados para el modal */
+.modal-content {
+    background-color: #2a2320; /* Fondo oscuro */
+    border: 1px solid #FF6B00; /* Borde naranja */
+    border-radius: 10px;
+}
+
+.modal-header {
+    border-bottom: 1px solid #FF6B00; /* Borde inferior naranja */
+}
+
+.modal-footer {
+    border-top: 1px solid #FF6B00; /* Borde superior naranja */
+}
+
+.modal-title {
+    color: #ffffff; /* Texto blanco */
+}
+
+.modal-body {
+    color: #ffffff; /* Texto blanco */
+}
+
+.btn-close-white {
+    filter: invert(1); /* Invertir el color del botón de cierre */
+}
+
+.btn-secondary {
+    background-color: #6c757d; 
+    border: none;
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268; /* Efecto hover para el botón Cancelar */
+}
+
+.btn-danger {
+    background-color: #FF6B00; /* Color rojo para el botón Cerrar Sesión */
+    border: none;
+}
+
+.btn-danger:hover {
+    background-color: #ac4a12; /* Efecto hover para el botón Cerrar Sesión */
+}
+/* Estilos para la validación de formularios */
+.is-valid {
+    border-color: #28a745 !important; /* Borde verde para campos válidos */
+}
+
+.is-invalid {
+    border-color: #dc3545 !important; /* Borde rojo para campos inválidos */
+}
+
+.invalid-feedback {
+    color: #dc3545; /* Texto rojo para mensajes de error */
+    font-size: 0.875em; /* Tamaño de fuente más pequeño */
+}
+
+.valid-feedback {
+    color: #28a745; /* Texto verde para mensajes de éxito */
+    font-size: 0.875em; /* Tamaño de fuente más pequeño */
+}
+
+/* Personalizar el color del texto muted para fondos oscuros */
+.text-muted {
+    color: #a0a0a0 !important; /* Gris más claro para mejor contraste */
+}
+
+/* Estilos personalizados para Flatpickr */
+.flatpickr-calendar {
+    background-color: #2a2320 !important; /* Fondo oscuro */
+    border: 1px solid #FF6B00 !important; /* Borde naranja */
+    border-radius: 10px !important;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1) !important;
+}
+
+.flatpickr-day {
+    color: #ffffff !important; /* Texto blanco */
+}
+
+.flatpickr-day:hover {
+    background-color: #FF6B00 !important; /* Fondo naranja al pasar el mouse */
+    color: #ffffff !important;
+}
+
+.flatpickr-day.selected {
+    background-color: #FF6B00 !important; /* Fondo naranja para el día seleccionado */
+    border-color: #FF6B00 !important;
+}
+
+.flatpickr-day.today {
+    border-color: #FF6B00 !important; /* Borde naranja para el día actual */
+}
+
+.flatpickr-months .flatpickr-month {
+    color: #ffffff !important; /* Texto blanco para el mes */
+}
+
+.flatpickr-weekdays {
+    background-color: #1e1a17 !important; /* Fondo oscuro para los días de la semana */
+}
+
+.flatpickr-weekday {
+    color: #ffffff !important; /* Texto blanco para los días de la semana */
+}
+
+.flatpickr-current-month .flatpickr-monthDropdown-months {
+    background-color: #2a2320 !important; /* Fondo oscuro para el selector de mes */
+    color: #ffffff !important; /* Texto blanco */
+}
+
+.flatpickr-current-month .numInputWrapper span {
+    color: #ffffff !important; /* Texto blanco para los controles de año */
+}

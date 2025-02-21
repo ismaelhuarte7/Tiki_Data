@@ -12,21 +12,6 @@
                 </div>
                 <div class="card-body bg-dark">
                    <form method="POST" action="{{ url_for('auth.signup') }}">
-                        <!-- Email -->
-                        <div class="mb-3">
-                            <label for="email" class="form-label">Email</label>
-                            <input type="email" class="form-control" id="email" name="email" required>
-                        </div>
-                        <!-- Contraseña -->
-                        <div class="mb-3">
-                            <label for="password" class="form-label">Contraseña</label>
-                            <input type="password" class="form-control" id="password" name="password" required>
-                        </div>
-                        <!-- Nombre de usuario -->
-                        <div class="mb-3">
-                            <label for="username" class="form-label">Nombre de usuario</label>
-                            <input type="text" class="form-control" id="username" name="username" required>
-                        </div>
                         <!-- Nombre -->
                         <div class="mb-3">
                             <label for="first_name" class="form-label">Nombre</label>
@@ -36,6 +21,27 @@
                         <div class="mb-3">
                             <label for="last_name" class="form-label">Apellido</label>
                             <input type="text" class="form-control" id="last_name" name="last_name" required>
+                        </div>
+                        <!-- Nombre de usuario -->
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Nombre de usuario</label>
+                            <input type="text" class="form-control" id="username" name="username" required>
+                        </div>
+                        <!-- Email -->
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" name="email" required>
+                        </div>
+                        <!-- Contraseña -->
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Contraseña</label>
+                            <input type="password" class="form-control" id="password" name="password" required>
+                            <small class="form-text text-muted">La contraseña debe tener al menos 8 caracteres y 1 número.</small>
+                        </div>
+                        <!-- Repetir Contraseña -->
+                        <div class="mb-3">
+                            <label for="confirm_password" class="form-label">Repetir Contraseña</label>
+                            <input type="password" class="form-control" id="confirm_password" name="confirm_password" required>
                         </div>
                         <!-- Fecha de nacimiento -->
                         <div class="mb-3">
@@ -52,4 +58,78 @@
         </div>
     </div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Configura Flatpickr para el campo de fecha de nacimiento
+        flatpickr("#birthdate", {
+            dateFormat: "d-m-Y", // Formato de fecha
+            defaultDate: "01-01-2000", // Fecha predeterminada
+            maxDate: "today", // No permitir fechas futuras
+            locale: "es", // Idioma español
+            allowInput: true, // Permitir edición manual
+            disableMobile: true, // Deshabilitar el date picker nativo en móviles
+        });
+
+        // Validar contraseña
+        const passwordInput = document.getElementById("password");
+        const confirmPasswordInput = document.getElementById("confirm_password");
+        const passwordFeedback = document.createElement("div");
+        passwordFeedback.className = "invalid-feedback";
+        passwordInput.parentNode.appendChild(passwordFeedback);
+
+        const confirmPasswordFeedback = document.createElement("div");
+        confirmPasswordFeedback.className = "invalid-feedback";
+        confirmPasswordInput.parentNode.appendChild(confirmPasswordFeedback);
+
+        passwordInput.addEventListener("input", function () {
+            const password = passwordInput.value;
+            const isValid = password.length >= 8 && /\d/.test(password);
+
+            if (isValid) {
+                passwordInput.classList.remove("is-invalid");
+                passwordInput.classList.add("is-valid");
+                passwordFeedback.textContent = "";
+            } else {
+                passwordInput.classList.remove("is-valid");
+                passwordInput.classList.add("is-invalid");
+                passwordFeedback.textContent = "La contraseña debe tener al menos 8 caracteres y 1 número.";
+            }
+        });
+
+        confirmPasswordInput.addEventListener("input", function () {
+            const password = passwordInput.value;
+            const confirmPassword = confirmPasswordInput.value;
+
+            if (confirmPassword === password) {
+                confirmPasswordInput.classList.remove("is-invalid");
+                confirmPasswordInput.classList.add("is-valid");
+                confirmPasswordFeedback.textContent = "";
+            } else {
+                confirmPasswordInput.classList.remove("is-valid");
+                confirmPasswordInput.classList.add("is-invalid");
+                confirmPasswordFeedback.textContent = "Las contraseñas no coinciden.";
+            }
+        });
+
+        document.querySelector("form").addEventListener("submit", function (event) {
+            const password = passwordInput.value;
+            const confirmPassword = confirmPasswordInput.value;
+            const isValidPassword = password.length >= 8 && /\d/.test(password);
+            const passwordsMatch = password === confirmPassword;
+
+            if (!isValidPassword || !passwordsMatch) {
+                event.preventDefault();
+                if (!isValidPassword) {
+                    passwordInput.classList.add("is-invalid");
+                    passwordFeedback.textContent = "La contraseña debe tener al menos 8 caracteres y 1 número.";
+                }
+                if (!passwordsMatch) {
+                    confirmPasswordInput.classList.add("is-invalid");
+                    confirmPasswordFeedback.textContent = "Las contraseñas no coinciden.";
+                }
+            }
+        });
+    });
+</script>
 {% endblock %}
