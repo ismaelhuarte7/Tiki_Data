@@ -27,6 +27,7 @@ def signup():
         flash("Te enviamos un correo para verificar tu cuenta", "info")
         return redirect(url_for("auth.login"))
     
+    print("varianbles mail entorno"," username ", current_app.config["MAIL_USERNAME"]," passwod ", current_app.config["MAIL_PASSWORD"]," sender ", current_app.config["MAIL_DEFAULT_SENDER"])
     return render_template("auth/sign_up.html")
 
 @bp.route('/login', methods=['GET', 'POST'])
