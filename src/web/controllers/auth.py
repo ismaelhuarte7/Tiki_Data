@@ -63,7 +63,7 @@ def logout():
 
 def send_verification_email(to_email):
     token = generate_verification_token(to_email)
-    verification_url = f"https://tiki-data.com/auth/verify/{token}"
+    verification_url = f"https://tiki-data-murex.vercel.app/auth/verify/{token}"
 
     user = User.get_by_email(to_email)
     print("verification_url", verification_url)
