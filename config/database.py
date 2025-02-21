@@ -1,4 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import text 
 
 db = SQLAlchemy()
 
@@ -21,6 +22,11 @@ def reset():
     """
     print("Eliminando la base de datos")
     db.drop_all()
+
     print("Creando la base de datos")
+    with db.engine.connect() as connection:    
+        print("Tablas existentes antes de crear:", connection.execute(text("SHOW TABLES")).fetchall())
     db.create_all()
+    with db.engine.connect() as connection:
+        print("Tablas existentes después de crear:", connection.execute(text("SHOW TABLES")).fetchall())
     print("Base de datos creada")

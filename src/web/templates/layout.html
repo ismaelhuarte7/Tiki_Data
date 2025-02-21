@@ -30,41 +30,62 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
 
-            <!-- Contenido de la navbar (notificaciones y perfil) -->
+            <!-- Contenido de la navbar -->
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-                 <!-- Botones de navegación -->
+                <!-- Botones de navegación -->
                 <div class="navbar-nav me-auto">
                     <a class="nav-link" href="/partidos">Partidos</a>
                     <a class="nav-link" href="/jugadores">Jugadores</a>
                     <a class="nav-link" href="/canchas">Canchas</a>
                 </div>
                 <ul class="navbar-nav align-items-left">
-                    <!-- Notificaciones -->
-                    <li class="nav-item dropdown me-3">
-                        <a class="nav-link" href="#" role="button" data-bs-toggle="dropdown">
-                            <i class="bi bi-bell-fill fs-5"></i>
-                            <span class="position-absolute top-10 start-90 translate-middle badge rounded-pill bg-danger">
-                                0
-                                <span class="visually-hidden">Notificaciones sin leer</span>
-                            </span>
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="#">No hay notificaciones nuevas</a></li>
-                        </ul>
-                    </li>
-                    <!-- Perfil de usuario -->
-                    <li class="nav-item">
-                        <a class="nav-link" href="/profile">
-                            <i class="bi bi-person-circle fs-5"></i>
-                        </a>
-                    </li>
+                    {% if session.get('user') %}
+                        <!-- Notificaciones -->
+                        <li class="nav-item dropdown me-3">
+                            <a class="nav-link" href="#" role="button" data-bs-toggle="dropdown">
+                                <i class="bi bi-bell-fill fs-5"></i>
+                                <span class="position-absolute top-10 start-90 translate-middle badge rounded-pill bg-danger">
+                                    0
+                                    <span class="visually-hidden">Notificaciones sin leer</span>
+                                </span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item" href="#">No hay notificaciones nuevas</a></li>
+                            </ul>
+                        </li>
+                        <!-- Perfil de usuario -->
+                        <li class="nav-item">
+                            <a class="nav-link" href="/profile">
+                                <i class="bi bi-person-circle fs-5"></i>
+                            </a>
+                        </li>
+                    {% else %}
+                        <!-- Botones de inicio de sesión y registro -->
+                        <li class="nav-item me-3">
+                            <a class="btn btn-outline-light" href="{{ url_for('auth.signup') }}">Registrarse</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="btn btn-primary" href="{{ url_for('auth.login') }}">Iniciar Sesión</a>
+                        </li>
+                    {% endif %}
                 </ul>
-                
             </div>
         </div>
     </nav>
     <!-- Línea naranja separadora -->
     <div class="orange-line"></div>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <ul class="flashes" aria-live="polite">
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                        <li>{{ message }}</li>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+                    </div>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
     <!-- Contenido principal -->
     <main class="container-fluid py-4">
         {% block content %}{% endblock %}
