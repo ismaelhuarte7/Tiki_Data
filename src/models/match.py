@@ -22,3 +22,6 @@ class Match (db.Model):
         db.session.add(match)
         db.session.commit()
         return match
+
+    def get_all_matches():
+        return Match.query.all()

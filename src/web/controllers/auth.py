@@ -22,6 +22,7 @@ def signup():
             return redirect(url_for("auth.signup"))
         if User.get_by_username(username):
             flash("El nombre de usuario ya está en uso.", "danger")
+            return redirect(url_for("auth.signup"))
         player = Player.create(name, surname, birth_date)
         user = User.create(username, email, password, player.id)
         send_verification_email(email)
