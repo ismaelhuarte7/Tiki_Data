@@ -1,7 +1,8 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from itsdangerous import URLSafeTimedSerializer
 from flask import session, current_app
-from flask_mailman import EmailMessage
+from flask import current_app
+from mailjet_rest import Client
 from src.models import User, Player
 
 bp = Blueprint("auth", __name__, url_prefix="/auth")
@@ -26,9 +27,6 @@ def signup():
         send_verification_email(email)
         flash("Te enviamos un correo para verificar tu cuenta", "info")
         return redirect(url_for("auth.login"))
-    sender = current_app.config["MAIL_DEFAULT_SENDER"]
-    print("sender", sender)
-    print("varianbles mail entorno"," username ", current_app.config["MAIL_USERNAME"]," passwod ", current_app.config["MAIL_PASSWORD"]," sender ", current_app.config["MAIL_DEFAULT_SENDER"])
     return render_template("auth/sign_up.html")
 
 @bp.route('/login', methods=['GET', 'POST'])
@@ -63,6 +61,8 @@ def logout():
         flash("No has iniciado sesión", "danger")
     return redirect(url_for("home"))
 
+
+
 def send_verification_email(to_email):
     token = generate_verification_token(to_email)
     verification_url = f"https://tiki-data-murex.vercel.app/auth/verify/{token}"
@@ -72,13 +72,35 @@ def send_verification_email(to_email):
 
     html_content = render_template("auth/mail_verification.html", mail_link_validator=verification_url, username=user.username)
 
-    email = EmailMessage(
-        subject="Verifica tu cuenta - Tiki-Data",
-        body=html_content,
-        to=[to_email]
-    )
-    email.content_subtype = "html"  # Para indicar que el contenido es HTML
-    email.send()
+    correo = {
+        'Messages': [
+            {
+                "From": {
+                    "Email": current_app.config.get('MAIL_DEFAULT_SENDER'),  
+                    "Name": "Tiki-Data" 
+                },
+                "To": [
+                    {
+                        "Email": to_email,  
+                        "Name": user.username 
+                    }
+                ],
+                "Subject": "Verifica tu cuenta - Tiki-Data", 
+                "TextPart": f"Por favor, verifica tu correo electrónico: {verification_url}",  
+                "HTMLPart": html_content  
+            }
+        ]
+    }
+
+    try:
+        mailjet = Client(auth=(current_app.config.get('MAILJET_API_KEY'), current_app.config.get('MAILJET_SECRET_KEY')), version='v3.1')
+        resultado = mailjet.send.create(data=correo)
+        if resultado.status_code == 200:
+            print("Correo enviado correctamente")
+        else:
+            print("Error al enviar el correo:", resultado.json())
+    except Exception as e:
+        print("Error inesperado:", str(e))
 
 def generate_verification_token(email):
     serializer = URLSafeTimedSerializer(current_app.config["SECRET_KEY"])
