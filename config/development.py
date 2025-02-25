@@ -1,7 +1,9 @@
 import os
+import redis
 class Config:
     DEBUG = True
-    SESSION_TYPE = "filesystem"  
+    SESSION_TYPE = "redis"  
+    SESSION_REDIS = redis.from_url(os.environ.get("REDIS_URL"))
     SECRET_KEY = os.environ.get("SECRET_KEY")
     MAILJET_API_KEY = '882491176762670da1ba3ecd96a2af7f'
     MAILJET_SECRET_KEY = '4db10d01bb3315ce8ca6da7df4a832d2'
