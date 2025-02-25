@@ -10,3 +10,6 @@ class Court (db.Model):
         db.session.add(court)
         db.session.commit()
         return court
+    
+    def get_all_courts():
+        return Court.query.all()

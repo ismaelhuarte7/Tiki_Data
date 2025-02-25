@@ -17,11 +17,18 @@ class Match (db.Model):
     
     
     
-    def create(date, result, court_id):
-        match = Match(date=date, result=result, court_id=court_id)
+    def create(date, court_id):
+        match = Match(date=date, court_id=court_id)
         db.session.add(match)
         db.session.commit()
         return match
+    
+    def get_by_id(id):
+        return Match.query.filter_by(id=id).first()
 
     def get_all_matches():
         return Match.query.all()
+    
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()

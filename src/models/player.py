@@ -23,3 +23,6 @@ class Player (db.Model):
     
     def get_by_id(id):
         return Player.query.get(id)
+    
+    def get_all_players():
+        return Player.query.all()

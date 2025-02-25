@@ -4,6 +4,7 @@ from config.database import db
 import os
 from src.models import Player, User, Goal, Court, Match, Team 
 from src.web.controllers.auth import bp as auth_bp
+from src.web.controllers.match import bp as match_bp
 
 
 
@@ -19,4 +20,5 @@ def register(app):
         usuario = session.get('usuario', 'No hay usuario en la sesión')
         return f"Usuario en sesión: {usuario}"
     app.register_blueprint(auth_bp)
+    app.register_blueprint(match_bp)
 
