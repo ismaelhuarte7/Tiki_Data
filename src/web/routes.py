@@ -11,7 +11,6 @@ def register(app):
     @app.route("/")
     def home():
         users = User.get_all_users()
-        print("variables de entorno", os.getenv("BREVO_EMAIL"), os.getenv("BREVO_PASSWORD"), os.getenv("MAIL_SENDER"), os.getenv("FLASK_ENV"), os.getenv("SECRET_KEY"))
         return render_template("home.html", users=users)
     
     @app.route('/verificar')

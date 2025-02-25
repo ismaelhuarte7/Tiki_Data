@@ -9,6 +9,8 @@ class Config:
     MAILJET_SECRET_KEY = '4db10d01bb3315ce8ca6da7df4a832d2'
     MAIL_DEFAULT_SENDER = os.environ.get("MAIL_DEFAULT_SENDER")
     BASE_URL = os.getenv("BASE_URL")
+    SESSION_COOKIE_SECURE = True
+    SESSION_COOKIE_HTTPONLY = True
 
     db_user = os.environ.get("db_user")
     db_password = os.environ.get("db_password")

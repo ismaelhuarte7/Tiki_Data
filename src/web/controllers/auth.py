@@ -35,12 +35,13 @@ def signup():
                                  first_name=name, 
                                  last_name=surname, 
                                  birthdate=birth_date)
-        
         player = Player.create(name, surname, birth_date)
         user = User.create(username, email, password, player.id)
+        flash("Te enviamos un correo para verificar tu cuenta, revisa tu casilla de SPAM", "info")
         send_verification_email(email)
-        flash("Te enviamos un correo para verificar tu cuenta", "info")
-        return redirect(url_for("auth.login"))
+        
+        return render_template("auth/login.html")
+        
     return render_template("auth/sign_up.html")
 
 @bp.route('/login', methods=['GET', 'POST'])
@@ -52,13 +53,13 @@ def login():
         user = User.get_by_email(email)
         if not user:
             flash("Usuario no encontrado", "danger")
-            return redirect(url_for("auth.login"))
+            return render_template("auth/login.html")
         if not user.check_password(password):
             flash("Contraseña incorrecta", "danger")
-            return redirect(url_for("auth.login"))
+            return render_template("auth/login.html")
         if not user.is_verified:
             flash("Usuario no verificado", "danger")
-            return redirect(url_for("auth.login"))
+            return render_template("auth/login.html")
         session['user'] = user.email
         flash("Bienvenido", "success")
         return redirect(url_for("home"))
@@ -83,7 +84,6 @@ def send_verification_email(to_email):
     verification_url = f"{current_app.config['BASE_URL']}/auth/verify/{token}"
 
     user = User.get_by_email(to_email)
-    print("verification_url", verification_url)
 
     html_content = render_template("auth/mail_verification.html", mail_link_validator=verification_url, username=user.username)
 
@@ -135,11 +135,10 @@ def verify(token):
     email = confirm_verification_token(token)
     if not email:
         flash("El enlace de verificación es inválido o ha expirado", "danger")
-        return redirect(url_for("auth.login"))
+        return render_template("auth/login.html")
     user = User.get_by_email(email)
-    print("user", user)
     user.verify()
     flash("Usuario verificado correctamente", "success")
-    return redirect(url_for("auth.login"))
+    return render_template("auth/login.html")
 
     
