@@ -7,7 +7,7 @@ class User(db.Model):
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(255), nullable=False)
     is_admin = db.Column(db.Boolean, default=False)
-    player_id = db.Column(db.Integer, db.ForeignKey('player.id'), nullable=True)
+    player_id = db.Column(db.Integer,db.ForeignKey('player.id'), nullable=True)
     is_verified = db.Column(db.Boolean, default=False)
     
 
@@ -39,5 +39,9 @@ class User(db.Model):
     def verify(self):
         self.is_verified = True
         db.session.commit()
+
+    def get_by_player_id(player_id):
+        return User.query.filter_by(player_id=player_id).first()
+    
 
     

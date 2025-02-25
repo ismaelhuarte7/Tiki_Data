@@ -60,7 +60,11 @@ def login():
         if not user.is_verified:
             flash("Usuario no verificado", "danger")
             return render_template("auth/login.html")
-        session['user'] = user.email
+        session['user'] = {
+            'id': user.id,       
+            'email': user.email,     
+            'username': user.username  
+        }
         flash("Bienvenido", "success")
         return redirect(url_for("home"))
     

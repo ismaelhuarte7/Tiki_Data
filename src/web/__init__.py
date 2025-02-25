@@ -15,10 +15,14 @@ def create_app(config_class):
     # Configuración
     app.config.from_object(config_class)
     # Rutas
+
     routes.register(app)
     # Inicialización de la base de datos
     database.init_app(app)
     session.init_app(app)
+
+
+
     with app.app_context():
         db.create_all() 
     return app

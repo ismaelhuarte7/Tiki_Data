@@ -1,0 +1,191 @@
+{% extends "layout.html" %}
+
+{% block title %}Detalles del Jugador - {{ player.name }} {{ player.surname }}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <!-- Sección principal con la foto de perfil y nombre de usuario -->
+    <div class="row mb-4">
+        <div class="col-md-12 text-center">
+            <!-- Verifica si el jugador tiene una foto de perfil -->
+            {% if player.profile_picture %}
+                <div class="position-relative" style="width: 150px; height: 150px; margin: 0 auto;">
+                    <img src="{{ player.profile_picture }}" alt="Foto de perfil" class="img-fluid rounded-circle" style="width: 150px; height: 150px;">
+                    <!-- Ícono de eliminar -->
+                    {% if session.user.id == user.id %}
+                        <a href="{{ url_for('player.delete_profile_picture') }}" class="position-absolute top-0 start-0 translate-middle p-1 bg-transparent rounded-circle" style="cursor: pointer;">
+                            <i class="bi bi-trash-fill text-white" style="font-size: 1rem;"></i>
+                        </a>
+                        <!-- Ícono de editar -->
+                        <form action="{{ url_for('player.upload_profile_picture') }}" method="POST" enctype="multipart/form-data" class="position-absolute top-0 start-100 translate-middle p-1 bg-transparent rounded-circle" style="cursor: pointer;">
+                            <label for="profile_picture" class="m-0 p-0">
+                                <i class="bi bi-pencil-fill text-white" style="font-size: 1rem;"></i>
+                            </label>
+                            <input type="file" id="profile_picture" name="profile_picture" style="display: none;" accept="image/*">
+                        </form>
+                    {% endif %}
+                </div>
+            {% else %}
+                {% if session.user.id == user.id %}
+                    <!-- Formulario para subir foto de perfil -->
+                    <form action="{{ url_for('player.upload_profile_picture') }}" method="POST" enctype="multipart/form-data" id="uploadForm">
+                        <label for="profile_picture" class="text-decoration-none">
+                            <div class="img-fluid rounded-circle d-flex justify-content-center align-items-center" style="width: 150px; height: 150px; background-color: #2a2320; border: 2px dashed #FF6B00; cursor: pointer;">
+                                <i class="bi bi-camera-fill fs-1 text-white"></i>
+                            </div>
+                        </label>
+                        <input type="file" id="profile_picture" name="profile_picture" style="display: none;" accept="image/*">
+                    </form>
+                {% else %}
+                    <div class="d-flex justify-content-center">
+                        <div class="img-fluid rounded-circle d-flex justify-content-center align-items-center" style="width: 150px; height: 150px; background-color: #2a2320;">
+                            <i class="bi bi-person-circle fs-1 text-white"></i>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endif %}
+            <h1 class="mt-3">{{ player.name }} {{ player.surname }}</h1>
+        </div>
+    </div>
+
+    <!-- Modal para recortar la imagen -->
+    <div class="modal fade" id="cropImageModal" tabindex="-1" aria-labelledby="cropImageModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content bg-dark text-white">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="cropImageModalLabel">Recortar Imagen</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="img-container">
+                        <img id="imageToCrop" src="#" alt="Imagen a recortar" class="img-fluid">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" id="cropImageBtn">Recortar y Subir</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tarjetas con estadísticas -->
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="card bg-dark text-white">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Partidos Jugados</h5>
+                    <p class="card-text">{{ player.matches|length }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card bg-dark text-white">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Goles</h5>
+                    <p class="card-text">{{ player.matches|sum(attribute='goals') }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card bg-dark text-white">
+                <div class="card-body text-center">
+                    <h5 class="card-title">MVPs</h5>
+                    <p class="card-text">{{ player.matches|selectattr('mvp', 'equalto', True)|list|length }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Detalles adicionales del jugador -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card bg-dark text-white">
+                <div class="card-body">
+                    <h4 class="card-title">Detalles del Jugador</h4>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item bg-dark text-white">Nombre: {{ player.name }}</li>
+                        <li class="list-group-item bg-dark text-white">Apellido: {{ player.surname }}</li>
+                        <li class="list-group-item bg-dark text-white">Fecha de Nacimiento: {{ player.birth_date.strftime('%d/%m/%Y') }}</li>
+                        <li class="list-group-item bg-dark text-white">Partidos Jugados: {{ player.matches|length }}</li>
+                        <li class="list-group-item bg-dark text-white">Total de Goles: {{ player.matches|sum(attribute='goals') }}</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Script para inicializar Cropper.js -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const input = document.getElementById('profile_picture');
+        const image = document.getElementById('imageToCrop');
+        const cropImageModal = new bootstrap.Modal(document.getElementById('cropImageModal'));
+        let cropper;
+
+        // Cuando se selecciona una imagen
+        input.addEventListener('change', function (e) {
+            const files = e.target.files;
+            if (files && files.length > 0) {
+                const reader = new FileReader();
+                reader.onload = function (event) {
+                    image.src = event.target.result;
+                    cropImageModal.show();
+
+                    // Inicializar Cropper.js
+                    if (cropper) {
+                        cropper.destroy();
+                    }
+                    cropper = new Cropper(image, {
+                        aspectRatio: 1, // Relación de aspecto 1:1 (cuadrada)
+                        viewMode: 1,    // Modo de vista (evita que el recorte salga del contenedor)
+                        autoCropArea: 1, // Área de recorte automático
+                        responsive: true,
+                        guides: false,
+                        center: false,
+                        background: false,
+                        movable: true,
+                        zoomable: true,
+                        rotatable: false,
+                    });
+                };
+                reader.readAsDataURL(files[0]);
+            }
+        });
+
+        // Cuando se hace clic en "Recortar y Subir"
+        document.getElementById('cropImageBtn').addEventListener('click', function () {
+            if (cropper) {
+                // Obtener la imagen recortada
+                const croppedCanvas = cropper.getCroppedCanvas({
+                    width: 150, // Ancho deseado
+                    height: 150, // Alto deseado
+                });
+
+                // Convertir el canvas a Blob
+                croppedCanvas.toBlob(function (blob) {
+                    // Crear un nuevo archivo a partir del Blob
+                    const file = new File([blob], 'profile_picture.png', { type: 'image/png' });
+
+                    // Crear un FormData y adjuntar el archivo
+                    const formData = new FormData();
+                    formData.append('profile_picture', file);
+
+                    // Enviar el formulario
+                    fetch("{{ url_for('player.upload_profile_picture') }}", {
+                        method: 'POST',
+                        body: formData,
+                    }).then(response => {
+                        if (response.ok) {
+                            window.location.reload(); // Recargar la página después de subir la imagen
+                        } else {
+                            alert("Error al subir la imagen");
+                        }
+                    });
+                }, 'image/png');
+            }
+        });
+    });
+</script>
+{% endblock %}
