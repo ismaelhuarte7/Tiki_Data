@@ -9,6 +9,7 @@ bp = Blueprint("auth", __name__, url_prefix="/auth")
 
 @bp.route('/sign_up', methods=['GET', 'POST'])
 def signup():
+    session.clear()
     if request.method == "POST":
         email = request.form["email"]
         password = request.form["password"]
@@ -44,6 +45,7 @@ def signup():
 
 @bp.route('/login', methods=['GET', 'POST'])
 def login():
+    session.clear()
     if request.method == "POST":
         email = request.form["email"]
         password = request.form["password"]
