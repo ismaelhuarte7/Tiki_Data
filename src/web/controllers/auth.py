@@ -19,10 +19,22 @@ def signup():
         
         if User.get_by_email(email):
             flash("El email ya está en uso.", "danger")
-            return redirect(url_for("auth.signup"))
+            return render_template("auth/sign_up.html", 
+                                 email=email, 
+                                 username=username, 
+                                 first_name=name, 
+                                 last_name=surname, 
+                                 birthdate=birth_date)
+        
         if User.get_by_username(username):
             flash("El nombre de usuario ya está en uso.", "danger")
-            return redirect(url_for("auth.signup"))
+            return render_template("auth/sign_up.html", 
+                                 email=email, 
+                                 username=username, 
+                                 first_name=name, 
+                                 last_name=surname, 
+                                 birthdate=birth_date)
+        
         player = Player.create(name, surname, birth_date)
         user = User.create(username, email, password, player.id)
         send_verification_email(email)
@@ -66,7 +78,7 @@ def logout():
 
 def send_verification_email(to_email):
     token = generate_verification_token(to_email)
-    verification_url = f"https://tiki-data-murex.vercel.app/auth/verify/{token}"
+    verification_url = f"{current_app.config['BASE_URL']}/auth/verify/{token}"
 
     user = User.get_by_email(to_email)
     print("verification_url", verification_url)

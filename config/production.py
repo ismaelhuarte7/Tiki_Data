@@ -8,4 +8,5 @@ class Config:
     MAILJET_SECRET_KEY = '4db10d01bb3315ce8ca6da7df4a832d2'
     MAIL_DEFAULT_SENDER = os.environ.get("MAIL_DEFAULT_SENDER")
     SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URL_UNPOOLED")
+    BASE_URL = os.getenv("BASE_URL")
     
