@@ -33,13 +33,21 @@
                                 <h5 class="text-center">Equipo 1</h5>
                                 {% for i in range(1, 6) %}
                                     <div class="mb-3">
-                                        <label for="player1_{{ i }}" class="form-label">Jugador {{ i }}</label>
-                                        <select class="form-select" id="player1_{{ i }}" name="player1_{{ i }}" required>
-                                            <option value="" disabled selected>Seleccione un jugador</option>
-                                            {% for player in players %}
-                                                <option value="{{ player.id }}">{{ player.name }}</option>
-                                            {% endfor %}
-                                        </select>
+                                        <div class="row align-items-center">
+                                            <div class="col-8">
+                                                <label for="player1_{{ i }}" class="form-label">Jugador {{ i }}</label>
+                                                <select class="form-select" id="player1_{{ i }}" name="player1_{{ i }}" required>
+                                                    <option value="" disabled selected>Seleccione un jugador</option>
+                                                    {% for player in players %}
+                                                        <option value="{{ player.id }}">{{ player.name }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                            <div class="col-4">
+                                                <label for="goals_player1_{{ i }}" class="form-label">Goles</label>
+                                                <input type="number" class="form-control" id="goals_player1_{{ i }}" name="goals_player1_{{ i }}" min="0" value="0" required>
+                                            </div>
+                                        </div>
                                     </div>
                                 {% endfor %}
                             </div>
@@ -52,13 +60,21 @@
                                 <h5 class="text-center">Equipo 2</h5>
                                 {% for i in range(1, 6) %}
                                     <div class="mb-3">
-                                        <label for="player2_{{ i }}" class="form-label">Jugador {{ i }}</label>
-                                        <select class="form-select" id="player2_{{ i }}" name="player2_{{ i }}" required>
-                                            <option value="" disabled selected>Seleccione un jugador</option>
-                                            {% for player in players %}
-                                                <option value="{{ player.id }}">{{ player.name }}</option>
-                                            {% endfor %}
-                                        </select>
+                                        <div class="row align-items-center">
+                                            <div class="col-8">
+                                                <label for="player2_{{ i }}" class="form-label">Jugador {{ i }}</label>
+                                                <select class="form-select" id="player2_{{ i }}" name="player2_{{ i }}" required>
+                                                    <option value="" disabled selected>Seleccione un jugador</option>
+                                                    {% for player in players %}
+                                                        <option value="{{ player.id }}">{{ player.name }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                            <div class="col-4">
+                                                <label for="goals_player2_{{ i }}" class="form-label">Goles</label>
+                                                <input type="number" class="form-control" id="goals_player2_{{ i }}" name="goals_player2_{{ i }}" min="0" value="0" required>
+                                            </div>
+                                        </div>
                                     </div>
                                 {% endfor %}
                             </div>
