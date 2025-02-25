@@ -29,7 +29,7 @@
                         </div>
                         <!-- Jugadores -->
                         <div class="row mb-3">
-                            <div class="col-md-5">
+                            <div class="col-md-4"> <!-- Equipo 1 -->
                                 <h5 class="text-center">Equipo 1</h5>
                                 {% for i in range(1, 6) %}
                                     <div class="mb-3">
@@ -43,10 +43,12 @@
                                     </div>
                                 {% endfor %}
                             </div>
-                            <div class="col-md-2 d-flex align-items-center justify-content-center">
-                                <img src="{{ url_for('static', filename='img/tablero.png') }}" alt="Cancha" class="img-fluid">
+                            <div class="col-md-4 d-flex align-items-center justify-content-center"> <!-- Columna central para la imagen -->
+                                <div class="w-100 h-100 d-flex align-items-center justify-content-center" style="border: 2px solid #FF6B00; border-radius: 10px; overflow: hidden;">
+                                    <img src="{{ url_for('static', filename='img/tablero.png') }}" alt="Cancha" class="img-fluid w-100 h-100" style="object-fit: cover;">
+                                </div>
                             </div>
-                            <div class="col-md-5">
+                            <div class="col-md-4"> <!-- Equipo 2 -->
                                 <h5 class="text-center">Equipo 2</h5>
                                 {% for i in range(1, 6) %}
                                     <div class="mb-3">
@@ -82,6 +84,37 @@
             allowInput: true, // Permitir edición manual
             disableMobile: true, // Deshabilitar el date picker nativo en móviles
         });
+    });
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Inicializar Select2 para los selectores de jugadores y canchas
+        $('#court').select2({
+            placeholder: "Seleccione una cancha",
+            allowClear: true,
+            width: '100%',
+            theme: 'bootstrap-5' // Usar el tema de Bootstrap 5
+        });
+
+        // Inicializar Select2 para los jugadores del Equipo 1
+        {% for i in range(1, 6) %}
+            $('#player1_{{ i }}').select2({
+                placeholder: "Seleccione un jugador",
+                allowClear: true,
+                width: '100%',
+                theme: 'bootstrap-5' // Usar el tema de Bootstrap 5
+            });
+        {% endfor %}
+
+        // Inicializar Select2 para los jugadores del Equipo 2
+        {% for i in range(1, 6) %}
+            $('#player2_{{ i }}').select2({
+                placeholder: "Seleccione un jugador",
+                allowClear: true,
+                width: '100%',
+                theme: 'bootstrap-5' // Usar el tema de Bootstrap 5
+            });
+        {% endfor %}
     });
 </script>
 {% endblock %}
