@@ -171,7 +171,7 @@ main {
     margin: 0;
     position: fixed;
     top: 80px; /* Ajusta la posición vertical según sea necesario */
-    right: 20px; /* Ajusta la posición horizontal según sea necesario */
+    left: 20px; /* Ajusta la posición horizontal según sea necesario */
     z-index: 1000;
     width: 300px; /* Ancho de las alertas */
 }

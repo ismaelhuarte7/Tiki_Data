@@ -48,9 +48,15 @@ def signup():
 def login():
     session.clear()
     if request.method == "POST":
-        email = request.form["email"]
+        identifier = request.form["email"]  
         password = request.form["password"]
-        user = User.get_by_email(email)
+        print(identifier)
+
+        if "@" in identifier:
+            user = User.get_by_email(identifier)  
+        else:
+            user = User.get_by_username(identifier)
+            print(user)  
         if not user:
             flash("Usuario no encontrado", "danger")
             return render_template("auth/login.html")
