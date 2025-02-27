@@ -6,6 +6,9 @@ class Court (db.Model):
     address = db.Column(db.String(255), nullable=False)
     picture = db.Column(db.String(255), nullable=True)
 
+
+    def __repr__(self):
+        return self.name
     
     def create(name, address, picture):
         court = Court(name=name, address=address, picture=picture)
