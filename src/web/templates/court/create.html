@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 
-{% block title %}Crear Cancha{% endblock %}
+{% block title %}Registrar Cancha{% endblock %}
 
 {% block content %}
 <div class="container mt-5">
@@ -26,7 +26,7 @@
                             <input type="file" class="form-control" id="picture" name="picture" accept="image/*">
                             <small class="text-muted">Formatos admitidos: JPG, PNG, JPEG. Tamaño máximo: 5MB.</small>
                         </div>
-                        <button type="submit" class="btn btn-primary">Crear Cancha</button>
+                        <button type="submit" class="btn btn-primary">Registrar Cancha</button>
                         <a href="{{ url_for('court.list') }}" class="btn btn-secondary">Cancelar</a>
                     </form>
                 </div>

@@ -21,3 +21,19 @@ class Court (db.Model):
     
     def list():
         return Court.query.all()
+    
+    def update(id, name, address, picture):
+        court = Court.get_by_id(id)
+        court.name = name
+        court.address = address
+        court.picture = picture
+        db.session.commit()
+        return court
+    
+    def delete(id):
+        court = Court.get_by_id(id)
+        db.session.delete(court)
+        db.session.commit()
+        return True
+    
+    

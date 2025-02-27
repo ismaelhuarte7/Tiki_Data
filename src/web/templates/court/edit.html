@@ -1,0 +1,51 @@
+{% extends "layout.html" %}
+
+{% block title %}Editar Cancha{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title text-white">Editar Cancha</h3>
+                </div>
+                <div class="card-body">
+                    <form method="POST" enctype="multipart/form-data">
+                        <!-- Campo para el nombre -->
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Nombre de la Cancha</label>
+                            <input type="text" class="form-control" id="name" name="name" value="{{ court.name }}" required>
+                        </div>
+
+                        <!-- Campo para la dirección -->
+                        <div class="mb-3">
+                            <label for="address" class="form-label">Enlace de Google Maps</label>
+                            <input type="url" class="form-control" id="address" name="address" value="{{ court.address }}" required>
+                            <small class="text-muted">Pega el enlace de Google Maps de la ubicación de la cancha.</small>
+                        </div>
+
+                        <!-- Campo para la imagen -->
+                        <div class="mb-3">
+                            <label for="picture" class="form-label">Foto de la Cancha</label>
+                            <input type="file" class="form-control" id="picture" name="picture" accept="image/*">
+                            {% if court.picture %}
+                                <small class="text-muted">Imagen actual: <a href="{{ court.picture }}" target="_blank">Ver imagen</a></small>
+                            {% else %}
+                                <small class="text-muted">No hay imagen cargada.</small>
+                            {% endif %}
+                            <small class="text-muted">Formatos admitidos: JPG, PNG, JPEG. Tamaño máximo: 5MB.</small>
+                        </div>
+
+                        <!-- Botones de acción -->
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a href="{{ url_for('court.list') }}" class="btn btn-secondary me-md-2">Cancelar</a>
+                            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

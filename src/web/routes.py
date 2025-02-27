@@ -13,6 +13,8 @@ def register(app):
     @app.route("/")
     def home():
         users = User.get_all_users()
+        if 'user' not in session:
+            session.clear()
         return render_template("home.html", users=users)
     
     @app.errorhandler(404)
