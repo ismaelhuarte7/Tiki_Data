@@ -9,6 +9,7 @@ class Player (db.Model):
     
     matches = db.relationship('Match', secondary='player_match', back_populates='players')
     teams = db.relationship('Team', secondary='player_team', back_populates='players')
+    user = db.relationship('User', back_populates='player', uselist=False)
     
     def __repr__(self):
         return '<Player %r>' % self.user_name

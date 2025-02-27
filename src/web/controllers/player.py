@@ -16,9 +16,10 @@ def list():
 def show(id):
     player = Player.get_by_id(id)
     user = User.get_by_player_id(id)
+    print (player.user.username)
     if not player:
         flash("Ese jugador no existe o fue eliminado", "danger")
-        return render_template('home.html')
+        return render_template('player/list.html')
     return render_template("player/show.html", player=player, user=user)
 
 @bp.route('/upload_profile_picture', methods=['GET', 'POST'])

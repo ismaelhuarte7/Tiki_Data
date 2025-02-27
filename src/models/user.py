@@ -9,6 +9,8 @@ class User(db.Model):
     is_admin = db.Column(db.Boolean, default=False)
     player_id = db.Column(db.Integer,db.ForeignKey('player.id'), nullable=True)
     is_verified = db.Column(db.Boolean, default=False)
+
+    player = db.relationship('Player', back_populates='user')
     
 
     def __repr__(self):

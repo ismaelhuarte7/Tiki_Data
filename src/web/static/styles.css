@@ -334,3 +334,31 @@ main {
 .flatpickr-current-month .numInputWrapper span {
     color: #ffffff !important; /* Texto blanco para los controles de año */
 }
+
+/* Estilos específicos para las tarjetas de jugadores */
+.player-card {
+    border: 1px solid #FF6B00;
+    border-radius: 10px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.player-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 15px rgba(255, 107, 0, 0.3);
+}
+
+/* Estilos para la foto de perfil en las tarjetas de jugadores */
+.player-card .rounded-circle {
+    border: 2px solid #FF6B00;
+}
+
+/* Estilos para el botón en las tarjetas de jugadores */
+.player-card .btn-primary {
+    background-color: #FF6B00;
+    border: none;
+    transition: background-color 0.3s ease;
+}
+
+.player-card .btn-primary:hover {
+    background-color: #e65a00;
+}
