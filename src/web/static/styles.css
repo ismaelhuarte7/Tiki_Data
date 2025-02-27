@@ -362,3 +362,30 @@ main {
 .player-card .btn-primary:hover {
     background-color: #e65a00;
 }
+/* Estilos específicos para las tarjetas de canchas */
+.court-card {
+    border: 1px solid #FF6B00;
+    border-radius: 10px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.court-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 15px rgba(255, 107, 0, 0.3);
+}
+
+/* Estilos para la imagen de la cancha */
+.court-card img {
+    border-radius: 10px 10px 0 0;
+}
+
+/* Estilos para el botón en las tarjetas de canchas */
+.court-card .btn-primary {
+    background-color: #FF6B00;
+    border: none;
+    transition: background-color 0.3s ease;
+}
+
+.court-card .btn-primary:hover {
+    background-color: #e65a00;
+}

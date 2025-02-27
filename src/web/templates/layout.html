@@ -42,7 +42,7 @@
                 <div class="navbar-nav me-auto">
                     <a class="nav-link" href="">Partidos</a>
                     <a class="nav-link" href="{{ url_for('player.list') }}">Jugadores</a>
-                    <a class="nav-link" href="#">Canchas</a>
+                    <a class="nav-link" href="{{ url_for('court.list') }}">Canchas</a>
                 </div>
                 <ul class="navbar-nav align-items-left">
                     {% if session.get('user') %}

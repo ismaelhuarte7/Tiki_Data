@@ -5,6 +5,7 @@ import os
 from src.models import Player, User, Goal, Court, Match, Team 
 from src.web.controllers.auth import bp as auth_bp
 from src.web.controllers.player import bp as player_bp
+from src.web.controllers.court import bp as court_bp
 
 
 
@@ -22,4 +23,5 @@ def register(app):
         return render_template("errors/500.html"), 500
     app.register_blueprint(auth_bp)
     app.register_blueprint(player_bp)
+    app.register_blueprint(court_bp)
 

@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+
+{% block title %}Lista de Canchas{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="text-center mb-4">Lista de Canchas</h1>
+    <!--<a href="{{ url_for('court.create') }}" class="btn btn-primary mb-4">Crear Nueva Cancha</a>-->
+    <div class="row">
+        {% for court in courts %}
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card court-card bg-dark text-white h-100">
+                <!-- Imagen de la cancha -->
+                <div class="text-center mt-3">
+                    {% if court.picture %}
+                        <img src="{{ court.picture }}" alt="{{ court.name }}" class="img-fluid rounded" style="max-height: 200px; width: 100%; object-fit: cover;">
+                    {% else %}
+                        <div class="d-flex justify-content-center align-items-center bg-secondary" style="height: 200px;">
+                            <i class="bi bi-image fs-1 text-white"></i>
+                        </div>
+                    {% endif %}
+                </div>
+                <!-- Detalles de la cancha -->
+                <div class="card-body text-center">
+                    <h5 class="card-title">{{ court.name }}</h5>
+                    <a href="{{ court.address }}" target="_blank" class="btn btn-primary mb-3">
+                        <i class="bi bi-map-fill"></i> Ver en Google Maps
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
