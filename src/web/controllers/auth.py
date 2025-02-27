@@ -146,11 +146,12 @@ def verify(token):
         return render_template("auth/login.html")
     user = User.get_by_email(email)
     user.verify()
+    player = Player.get_by_id(user.player_id)
     News.create(
             title="Nuevo Jugador Registrado",
             content=f"Bienvenido a Tiki-Data, {user.username}!",
             user_id=user.id,
-            player_id=user.player.id
+            player_id=player.id
         )
     flash("Usuario verificado correctamente", "success")
     return render_template("auth/login.html")
