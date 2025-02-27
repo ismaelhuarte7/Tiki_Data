@@ -14,11 +14,12 @@ def register(app):
         users = User.get_all_users()
         return render_template("home.html", users=users)
     
-    @app.route('/verificar')
-    def verificar():
-        # Recupera el valor de la sesión
-        usuario = session.get('usuario', 'No hay usuario en la sesión')
-        return f"Usuario en sesión: {usuario}"
+    @app.errorhandler(404)
+    def page_not_found(e):
+        return render_template("errors/404.html"), 404
+    @app.errorhandler(500)
+    def internal_server_error(e):
+        return render_template("errors/500.html"), 500
     app.register_blueprint(auth_bp)
     app.register_blueprint(player_bp)
 

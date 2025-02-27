@@ -16,6 +16,9 @@ def list():
 def show(id):
     player = Player.get_by_id(id)
     user = User.get_by_player_id(id)
+    if not player:
+        flash("Ese jugador no existe o fue eliminado", "danger")
+        return render_template('home.html')
     return render_template("player/show.html", player=player, user=user)
 
 @bp.route('/upload_profile_picture', methods=['GET', 'POST'])
@@ -24,8 +27,6 @@ def upload_profile_picture():
         flash("Debes iniciar sesión para subir una foto de perfil", "danger")
         return redirect(url_for('auth.login'))
     
-
-
     if request.method == "POST":
         if 'profile_picture' not in request.files:
             flash("No se ha seleccionado ningún archivo", "danger")
