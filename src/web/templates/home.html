@@ -3,39 +3,24 @@
 {% block title %}Tiki-Data{% endblock %}
 
 {% block content %}
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8 text-center">
-            <h1 class="display-4 mb-4">Bienvenido a Tiki-Data</h1>
-            <h2 class="h4 mb-4">El único registro virtual de partidos y estadisticas</h2>
-            <p class="lead mb-5">Explora nuestras características y herramientas para aprovechar al máximo tus datos.</p>
-        </div>
-    </div>
+<div class="container mt-4">
+    <h1 class="text-center mb-4">Últimas Noticias</h1>
 
-    {% if users %}
+    <!-- Lista de noticias -->
     <div class="row">
-        <div class="col-12">
-            <h3 class="mb-4">Usuarios</h3>
-            <div class="list-group">
-                {% for user in users %}
-                <div class="list-group-item bg-dark text-light">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <h5 class="mb-1">{{ user.username }}</h5>
-                            <p class="mb-1">{{ user.email }}</p>
-                        </div>
+        <div class="col-md-8 mx-auto">
+            {% for news in news_list %}
+                <div class="card mb-4 bg-dark text-white">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ news.title }}</h5>
+                        <p class="card-text">{{ news.content }}</p>
+                        <small class="text-muted">
+                            Publicado el {{ news.created_at.strftime('%d/%m/%Y %H:%M') }} por Tiki-Data
+                        </small>
                     </div>
                 </div>
-                {% endfor %}
-            </div>
+            {% endfor %}
         </div>
     </div>
-    {% else %}
-    <div class="row">
-        <div class="col-12 text-center">
-            <p class="text-muted">No se encontraron usuarios.</p>
-        </div>
-    </div>
-    {% endif %}
 </div>
 {% endblock %}

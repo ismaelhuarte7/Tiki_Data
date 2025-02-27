@@ -389,3 +389,27 @@ main {
 .court-card .btn-primary:hover {
     background-color: #e65a00;
 }
+/* Estilos para las tarjetas de noticias */
+.news-card {
+    border: 1px solid #FF6B00;
+    border-radius: 10px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.news-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 15px rgba(255, 107, 0, 0.3);
+}
+
+.news-card .card-title {
+    color: #FF6B00;
+    font-weight: 600;
+}
+
+.news-card .card-text {
+    color: #ffffff;
+}
+
+.news-card .text-muted {
+    color: #a0a0a0 !important;
+}

@@ -3,7 +3,7 @@ from itsdangerous import URLSafeTimedSerializer
 from flask import session, current_app
 from flask import current_app
 from mailjet_rest import Client
-from src.models import User, Player
+from src.models import User, Player, News
 
 bp = Blueprint("auth", __name__, url_prefix="/auth")
 
@@ -146,6 +146,12 @@ def verify(token):
         return render_template("auth/login.html")
     user = User.get_by_email(email)
     user.verify()
+    News.create(
+            title="Nuevo Jugador Registrado",
+            content=f"Bienvenido a Tiki-Data, {user.username}!",
+            user_id=user.id,
+            player_id=user.player.id
+        )
     flash("Usuario verificado correctamente", "success")
     return render_template("auth/login.html")
 
