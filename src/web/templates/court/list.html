@@ -43,7 +43,14 @@
                 </div>
             </div>
         </div>
+        {% else %}
+        <div class="col">
+            <div class="d-flex justify-content-center text-muted" role="alert">
+                No hay canchas registradas.
+            </div>
+        </div>
         {% endfor %}
+
     </div>
 </div>
 
