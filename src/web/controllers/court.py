@@ -2,15 +2,19 @@ from flask import Blueprint, render_template, request, flash, redirect, url_for,
 from vercel_blob.blob_store import put
 import uuid
 import os
-from src.models import Court
+from src.models import Court, User
 
 bp = Blueprint("court", __name__, url_prefix="/court")
 
 @bp.route('/create', methods=['GET', 'POST'])
 def create():
     if 'user' not in session:
-        flash("Debes iniciar sesión para crear una cancha", "danger")
+        flash("Debes iniciar sesión para registrar una cancha", "danger")
         return redirect(url_for('auth.login'))
+    user=User.get_by_id(session['user']['id'])
+    if user.is_admin == False:
+        flash("No tienes permiso para registrar una cancha", "danger")
+        return redirect(url_for('court.list'))
 
     if request.method == "POST":
         name = request.form.get("name")
@@ -47,4 +51,6 @@ def create():
 @bp.route('/list')
 def list():
     courts = Court.list()
-    return render_template("court/list.html", courts=courts)
+    user = User.get_by_id(session['user']['id'])
+    print("user", user) 
+    return render_template("court/list.html", courts=courts, user=user)
