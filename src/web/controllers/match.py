@@ -17,24 +17,27 @@ def create():
         date = request.form["match_date"]
         court_id = request.form["court_id"]
         
-        # Crear el partido
         match = Match.create(date, court_id)
+        goals_team1 = 0
+        goals_team2 = 0
         
-        # Procesar los goles de los jugadores del Equipo 1
         for i in range(1, 6):
             player_id = request.form.get(f"player1_{i}")
             goals = int(request.form.get(f"goals_player1_{i}"))
+            goals_team1 += goals 
             for _ in range(goals):
                 Goal.create(player_id=player_id, match_id=match.id)
         
-        # Procesar los goles de los jugadores del Equipo 2
         for i in range(1, 6):
             player_id = request.form.get(f"player2_{i}")
             goals = int(request.form.get(f"goals_player2_{i}"))
+            goals_team2 += goals 
             for _ in range(goals):
                 Goal.create(player_id=player_id, match_id=match.id)
         
-        return redirect(url_for("match.create"))
+        match.set_result(f"Equipo1 {goals_team1} - {goals_team2} Equipo2")
+        
+        return redirect(url_for("match.index"))
     
     courts = Court.get_all_courts()
     players = Player.get_all_players()

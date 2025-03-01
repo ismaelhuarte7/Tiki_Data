@@ -29,6 +29,10 @@ class Match (db.Model):
     def get_all_matches():
         return Match.query.all()
     
+    def set_result(self, result):
+        self.result = result
+        db.session.commit()
+    
     def delete(self):
         db.session.delete(self)
         db.session.commit()
