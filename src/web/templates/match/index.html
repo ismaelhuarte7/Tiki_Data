@@ -2,6 +2,7 @@
 
 {% block content %}
 <h1>Matches</h1>
+<a href="{{ url_for('match.create') }}" class="btn btn-primary">Create Match</a>
 <ul>
     {% for match in matches %}
     <li>{{ match.team1 }} vs {{ match.team2 }} - {{ match.date }}</li>

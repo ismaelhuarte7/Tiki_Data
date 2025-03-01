@@ -36,10 +36,10 @@
                                         <div class="row align-items-center">
                                             <div class="col-8">
                                                 <label for="player1_{{ i }}" class="form-label">Jugador {{ i }}</label>
-                                                <select class="form-select" id="player1_{{ i }}" name="player1_{{ i }}" required>
+                                                <select class="form-select player-select" id="player1_{{ i }}" name="player1_{{ i }}" required>
                                                     <option value="" disabled selected>Seleccione un jugador</option>
                                                     {% for player in players %}
-                                                        <option value="{{ player.id }}">{{ player.name }}</option>
+                                                        <option value="{{ player.id }}">{{ player.name }} {{ player.surname }}</option>
                                                     {% endfor %}
                                                 </select>
                                             </div>
@@ -63,10 +63,10 @@
                                         <div class="row align-items-center">
                                             <div class="col-8">
                                                 <label for="player2_{{ i }}" class="form-label">Jugador {{ i }}</label>
-                                                <select class="form-select" id="player2_{{ i }}" name="player2_{{ i }}" required>
+                                                <select class="form-select player-select" id="player2_{{ i }}" name="player2_{{ i }}" required>
                                                     <option value="" disabled selected>Seleccione un jugador</option>
                                                     {% for player in players %}
-                                                        <option value="{{ player.id }}">{{ player.name }}</option>
+                                                        <option value="{{ player.id }}">{{ player.name }} {{ player.surname }}</option>
                                                     {% endfor %}
                                                 </select>
                                             </div>
@@ -104,33 +104,37 @@
 </script>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        // Inicializar Select2 para los selectores de jugadores y canchas
+
         $('#court').select2({
             placeholder: "Seleccione una cancha",
             allowClear: true,
             width: '100%',
-            theme: 'bootstrap-5' // Usar el tema de Bootstrap 5
+            theme: 'bootstrap-5' 
         });
 
-        // Inicializar Select2 para los jugadores del Equipo 1
-        {% for i in range(1, 6) %}
-            $('#player1_{{ i }}').select2({
-                placeholder: "Seleccione un jugador",
-                allowClear: true,
-                width: '100%',
-                theme: 'bootstrap-5' // Usar el tema de Bootstrap 5
-            });
-        {% endfor %}
+        $('.player-select').select2({
+            placeholder: "Seleccione un jugador",
+            allowClear: true,
+            width: '100%',
+            theme: 'bootstrap-5' 
+        });
 
-        // Inicializar Select2 para los jugadores del Equipo 2
-        {% for i in range(1, 6) %}
-            $('#player2_{{ i }}').select2({
-                placeholder: "Seleccione un jugador",
-                allowClear: true,
-                width: '100%',
-                theme: 'bootstrap-5' // Usar el tema de Bootstrap 5
+        function disableSelectedPlayers() {
+            $('.player-select').each(function () {
+                var selectedPlayerId = $(this).val(); 
+                if (selectedPlayerId) {
+                    $('.player-select').not(this).find('option[value="' + selectedPlayerId + '"]').prop('disabled', true);
+                }
             });
-        {% endfor %}
+        }
+
+        $('.player-select').on('change', function () {
+            $('.player-select option').prop('disabled', false);
+            disableSelectedPlayers();
+        });
+
+
+        disableSelectedPlayers();
     });
 </script>
 {% endblock %}

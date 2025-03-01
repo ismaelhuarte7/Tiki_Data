@@ -38,6 +38,7 @@ def create():
     
     courts = Court.get_all_courts()
     players = Player.get_all_players()
+    
     return render_template("match/create.html", courts=courts, players=players)
 
 
