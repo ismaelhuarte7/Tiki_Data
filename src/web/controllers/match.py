@@ -16,22 +16,34 @@ def create():
     if request.method == "POST":
         date = request.form["match_date"]
         court_id = request.form["court_id"]
+        match_type = request.form["match_type"]  # Nuevo campo: tipo de partido
         
-        match = Match.create(date, court_id)
+        match = Match.create(date, court_id, match_type)
+        
+        players_per_team = {
+            "futbol_5": 5,
+            "futbol_6": 6,
+            "futbol_7": 7,
+            "futbol_9": 9,
+            "futbol_11": 11,
+        }.get(match_type, 0)
+        
         goals_team1 = 0
         goals_team2 = 0
         
-        for i in range(1, 6):
+        # Procesar los goles de los jugadores del Equipo 1
+        for i in range(1, players_per_team + 1):
             player_id = request.form.get(f"player1_{i}")
             goals = int(request.form.get(f"goals_player1_{i}"))
-            goals_team1 += goals 
+            goals_team1 += goals
             for _ in range(goals):
                 Goal.create(player_id=player_id, match_id=match.id)
         
-        for i in range(1, 6):
+        # Procesar los goles de los jugadores del Equipo 2
+        for i in range(1, players_per_team + 1):
             player_id = request.form.get(f"player2_{i}")
             goals = int(request.form.get(f"goals_player2_{i}"))
-            goals_team2 += goals 
+            goals_team2 += goals
             for _ in range(goals):
                 Goal.create(player_id=player_id, match_id=match.id)
         
@@ -41,7 +53,6 @@ def create():
     
     courts = Court.get_all_courts()
     players = Player.get_all_players()
-    
     return render_template("match/create.html", courts=courts, players=players)
 
 

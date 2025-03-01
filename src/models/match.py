@@ -10,6 +10,7 @@ class Match (db.Model):
     id = db.Column(db.Integer, primary_key=True)
     date = db.Column(db.DateTime, nullable=False)
     result = db.Column(db.String(80), nullable=True)
+    match_type = db.Column(db.String(20), nullable=False) 
     court_id = db.Column(db.Integer, db.ForeignKey('court.id'), nullable=False)
     players = db.relationship('Player', secondary='player_match', back_populates='matches')
     goals = db.relationship('Goal', backref='match', lazy=True)
@@ -17,8 +18,8 @@ class Match (db.Model):
     
     
     
-    def create(date, court_id):
-        match = Match(date=date, court_id=court_id)
+    def create(date, court_id, match_type):
+        match = Match(date=date, court_id=court_id, match_type=match_type)
         db.session.add(match)
         db.session.commit()
         return match

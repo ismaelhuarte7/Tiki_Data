@@ -27,57 +27,21 @@
                                 {% endfor %}
                             </select>
                         </div>
-                        <!-- Jugadores -->
-                        <div class="row mb-3">
-                            <div class="col-md-4"> <!-- Equipo 1 -->
-                                <h5 class="text-center">Equipo 1</h5>
-                                {% for i in range(1, 6) %}
-                                    <div class="mb-3">
-                                        <div class="row align-items-center">
-                                            <div class="col-8">
-                                                <label for="player1_{{ i }}" class="form-label">Jugador {{ i }}</label>
-                                                <select class="form-select player-select" id="player1_{{ i }}" name="player1_{{ i }}" required>
-                                                    <option value="" disabled selected>Seleccione un jugador</option>
-                                                    {% for player in players %}
-                                                        <option value="{{ player.id }}">{{ player.name }} {{ player.surname }}</option>
-                                                    {% endfor %}
-                                                </select>
-                                            </div>
-                                            <div class="col-4">
-                                                <label for="goals_player1_{{ i }}" class="form-label">Goles</label>
-                                                <input type="number" class="form-control" id="goals_player1_{{ i }}" name="goals_player1_{{ i }}" min="0" value="0" required>
-                                            </div>
-                                        </div>
-                                    </div>
-                                {% endfor %}
-                            </div>
-                            <div class="col-md-4 d-flex align-items-center justify-content-center"> <!-- Columna central para la imagen -->
-                                <div class="w-100 h-100 d-flex align-items-center justify-content-center" style="border: 2px solid #FF6B00; border-radius: 10px; overflow: hidden;">
-                                    <img src="{{ url_for('static', filename='img/tablero.png') }}" alt="Cancha" class="img-fluid w-100 h-100" style="object-fit: cover;">
-                                </div>
-                            </div>
-                            <div class="col-md-4"> <!-- Equipo 2 -->
-                                <h5 class="text-center">Equipo 2</h5>
-                                {% for i in range(1, 6) %}
-                                    <div class="mb-3">
-                                        <div class="row align-items-center">
-                                            <div class="col-8">
-                                                <label for="player2_{{ i }}" class="form-label">Jugador {{ i }}</label>
-                                                <select class="form-select player-select" id="player2_{{ i }}" name="player2_{{ i }}" required>
-                                                    <option value="" disabled selected>Seleccione un jugador</option>
-                                                    {% for player in players %}
-                                                        <option value="{{ player.id }}">{{ player.name }} {{ player.surname }}</option>
-                                                    {% endfor %}
-                                                </select>
-                                            </div>
-                                            <div class="col-4">
-                                                <label for="goals_player2_{{ i }}" class="form-label">Goles</label>
-                                                <input type="number" class="form-control" id="goals_player2_{{ i }}" name="goals_player2_{{ i }}" min="0" value="0" required>
-                                            </div>
-                                        </div>
-                                    </div>
-                                {% endfor %}
-                            </div>
+                        <!-- Tipo de Partido -->
+                        <div class="mb-3">
+                            <label for="match_type" class="form-label">Tipo de Partido</label>
+                            <select class="form-select" id="match_type" name="match_type" required>
+                                <option value="" disabled selected>Seleccione el tipo de partido</option>
+                                <option value="futbol_5">Fútbol 5</option>
+                                <option value="futbol_6">Fútbol 6</option>
+                                <option value="futbol_7">Fútbol 7</option>
+                                <option value="futbol_9">Fútbol 9</option>
+                                <option value="futbol_11">Fútbol 11</option>
+                            </select>
+                        </div>
+                        <!-- Jugadores (se generan dinámicamente con JavaScript) -->
+                        <div id="players-section" class="row mb-3">
+                            <!-- Aquí se generarán los jugadores dinámicamente -->
                         </div>
                         <!-- Botón de envío -->
                         <div class="d-grid gap-2">
@@ -100,41 +64,130 @@
             allowInput: true, // Permitir edición manual
             disableMobile: true, // Deshabilitar el date picker nativo en móviles
         });
-    });
-</script>
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
 
+        // Inicializar Select2 para los selectores de jugadores y canchas
         $('#court').select2({
             placeholder: "Seleccione una cancha",
             allowClear: true,
             width: '100%',
-            theme: 'bootstrap-5' 
+            theme: 'bootstrap-5'
         });
 
-        $('.player-select').select2({
-            placeholder: "Seleccione un jugador",
-            allowClear: true,
-            width: '100%',
-            theme: 'bootstrap-5' 
-        });
-
+        // Función para deshabilitar jugadores seleccionados en otros selectores
         function disableSelectedPlayers() {
             $('.player-select').each(function () {
-                var selectedPlayerId = $(this).val(); 
+                var selectedPlayerId = $(this).val();
                 if (selectedPlayerId) {
                     $('.player-select').not(this).find('option[value="' + selectedPlayerId + '"]').prop('disabled', true);
                 }
             });
         }
 
-        $('.player-select').on('change', function () {
-            $('.player-select option').prop('disabled', false);
-            disableSelectedPlayers();
+        // Función para generar los campos de jugadores dinámicamente
+        const matchTypeSelect = document.getElementById("match_type");
+        const playersSection = document.getElementById("players-section");
+
+        matchTypeSelect.addEventListener("change", function () {
+            const matchType = this.value;
+            const playersPerTeam = getPlayersPerTeam(matchType);
+            renderPlayerFields(playersPerTeam);
         });
 
+        function getPlayersPerTeam(matchType) {
+            switch (matchType) {
+                case "futbol_5": return 5;
+                case "futbol_6": return 6;
+                case "futbol_7": return 7;
+                case "futbol_9": return 9;
+                case "futbol_11": return 11;
+                default: return 0;
+            }
+        }
 
-        disableSelectedPlayers();
+        function renderPlayerFields(playersPerTeam) {
+            playersSection.innerHTML = ""; // Limpiar sección de jugadores
+
+            // Equipo 1
+            const team1Div = document.createElement("div");
+            team1Div.className = "col-md-5"; // Equipo 1 ocupa 5 columnas
+            team1Div.innerHTML = `<h5 class="text-center">Equipo 1</h5>`;
+            for (let i = 1; i <= playersPerTeam; i++) {
+                team1Div.innerHTML += `
+                    <div class="mb-3">
+                        <div class="row align-items-center">
+                            <div class="col-8">
+                                <label for="player1_${i}" class="form-label">Jugador ${i}</label>
+                                <select class="form-select player-select" id="player1_${i}" name="player1_${i}" required>
+                                    <option value="" disabled selected>Seleccione un jugador</option>
+                                    {% for player in players %}
+                                        <option value="{{ player.id }}">{{ player.name }} {{ player.surname }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-4">
+                                <label for="goals_player1_${i}" class="form-label">Goles</label>
+                                <input type="number" class="form-control" id="goals_player1_${i}" name="goals_player1_${i}" min="0" value="0" required>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+            playersSection.appendChild(team1Div);
+
+            // Imagen de la cancha en el centro
+            const courtDiv = document.createElement("div");
+            courtDiv.className = "col-md-2 d-flex align-items-center justify-content-center"; // 2 columnas para la imagen
+            courtDiv.innerHTML = `
+                <div class="w-100 h-100 d-flex align-items-center justify-content-center" style="border: 2px solid #FF6B00; border-radius: 10px; overflow: hidden;">
+                    <img src="{{ url_for('static', filename='img/tablero.png') }}" alt="Cancha" class="img-fluid w-100 h-100" style="object-fit: cover;">
+                </div>
+            `;
+            playersSection.appendChild(courtDiv);
+
+            // Equipo 2
+            const team2Div = document.createElement("div");
+            team2Div.className = "col-md-5"; // Equipo 2 ocupa 5 columnas
+            team2Div.innerHTML = `<h5 class="text-center">Equipo 2</h5>`;
+            for (let i = 1; i <= playersPerTeam; i++) {
+                team2Div.innerHTML += `
+                    <div class="mb-3">
+                        <div class="row align-items-center">
+                            <div class="col-8">
+                                <label for="player2_${i}" class="form-label">Jugador ${i}</label>
+                                <select class="form-select player-select" id="player2_${i}" name="player2_${i}" required>
+                                    <option value="" disabled selected>Seleccione un jugador</option>
+                                    {% for player in players %}
+                                        <option value="{{ player.id }}">{{ player.name }} {{ player.surname }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-4">
+                                <label for="goals_player2_${i}" class="form-label">Goles</label>
+                                <input type="number" class="form-control" id="goals_player2_${i}" name="goals_player2_${i}" min="0" value="0" required>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+            playersSection.appendChild(team2Div);
+
+            // Inicializar Select2 para los nuevos selectores de jugadores
+            $('.player-select').select2({
+                placeholder: "Seleccione un jugador",
+                allowClear: true,
+                width: '100%',
+                theme: 'bootstrap-5'
+            });
+
+            // Deshabilitar jugadores seleccionados en otros selectores
+            disableSelectedPlayers();
+
+            // Ejecutar la función cuando se cambia la selección en cualquier selector
+            $('.player-select').on('change', function () {
+                $('.player-select option').prop('disabled', false);
+                disableSelectedPlayers();
+            });
+        }
     });
 </script>
 {% endblock %}
