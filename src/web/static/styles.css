@@ -334,6 +334,31 @@ main {
 .flatpickr-current-month .numInputWrapper span {
     color: #ffffff !important; /* Texto blanco para los controles de año */
 }
+
+.flatpickr-hour {
+    color: #ffffff !important; /* Texto blanco para las horas */
+}
+
+
+.flatpickr-minute {
+    color: #ffffff !important; /* Texto blanco para los minutos */
+}
+
+.flatpickr-am-pm {
+    color: #ffffff !important; /* Texto blanco para AM/PM */
+}
+
+/* Estilo para el hover en las horas y minutos */
+.flatpickr-time .numInputWrapper:hover {
+    background-color: #FF6B00 !important; /* Fondo naranja al pasar el mouse */
+}
+.flatpickr-time .numInputWrapper:hover .flatpickr-hour,
+.flatpickr-time .numInputWrapper:hover .flatpickr-minute,
+.flatpickr-time .numInputWrapper:hover .flatpickr-am-pm {
+    color: #2a2320 !important; /* Texto blanco al pasar el mouse */
+}
+
+
 /* En tu archivo CSS personalizado o en un bloque <style> */
 /* Estilo para el contenedor del selector */
 .select2-container--default .select2-selection--single {
@@ -379,4 +404,27 @@ main {
 .select2-container--default .select2-results__option[aria-selected="true"] {
     background-color: #ff8c42; /* Fondo naranja */
     color: #000000; /* Texto negro */
+}
+
+.match-card {
+    border: 1px solid #FF6B00;
+    border-radius: 10px;
+    transition: transform 0.2s ease-in-out;
+}
+
+.match-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(255, 107, 0, 0.2);
+}
+
+.match-card img {
+    border-radius: 10px 10px 0 0;
+}
+
+.match-card .card-body {
+    padding: 1.5rem;
+}
+
+.match-card .btn {
+    margin: 0 5px;
 }

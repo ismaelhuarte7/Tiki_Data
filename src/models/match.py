@@ -15,6 +15,8 @@ class Match (db.Model):
     players = db.relationship('Player', secondary='player_match', back_populates='matches')
     goals = db.relationship('Goal', backref='match', lazy=True)
     mvp_id = db.Column(db.Integer, db.ForeignKey('player.id'), nullable=True)
+
+    court = db.relationship('Court', back_populates='matches')
     
     
     
@@ -23,11 +25,15 @@ class Match (db.Model):
         db.session.add(match)
         db.session.commit()
         return match
+
+    @classmethod
+    def get_all_matches(cls):
+        return Match.query.options(db.joinedload(Match.court)).all()
     
     def get_by_id(id):
         return Match.query.filter_by(id=id).first()
 
-    def get_all_matches():
+    def get_all():
         return Match.query.all()
     
     def set_result(self, result):

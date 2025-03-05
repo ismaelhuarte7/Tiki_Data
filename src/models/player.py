@@ -26,3 +26,11 @@ class Player (db.Model):
     
     def get_all_players():
         return Player.query.all()
+    
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+            "surname": self.surname,
+            "birth_date": self.birth_date,
+        }

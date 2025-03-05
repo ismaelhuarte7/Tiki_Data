@@ -58,30 +58,36 @@
     document.addEventListener("DOMContentLoaded", function () {
         // Configura Flatpickr para el campo de fecha del partido
         flatpickr("#match_date", {
-            dateFormat: "Y-m-d", // Formato de fecha
+            enableTime: true, // Habilitar selección de hora
+            dateFormat: "Y-m-d H:i", // Formato de fecha y hora
             defaultDate: "today", // Fecha predeterminada
             locale: "es", // Idioma español
             allowInput: true, // Permitir edición manual
             disableMobile: true, // Deshabilitar el date picker nativo en móviles
         });
 
-        // Inicializar Select2 para los selectores de jugadores y canchas
-        $('#court').select2({
-            placeholder: "Seleccione una cancha",
-            allowClear: true,
-            width: '100%',
-            theme: 'bootstrap-5'
-        });
-
         // Función para deshabilitar jugadores seleccionados en otros selectores
         function disableSelectedPlayers() {
+            // Reiniciar todas las opciones (habilitar todas)
+            $('.player-select option').prop('disabled', false);
+        
+            // Recorrer todos los selectores de jugadores
             $('.player-select').each(function () {
-                var selectedPlayerId = $(this).val();
+                const selectedPlayerId = $(this).val();
                 if (selectedPlayerId) {
-                    $('.player-select').not(this).find('option[value="' + selectedPlayerId + '"]').prop('disabled', true);
+                    // Deshabilitar este jugador en otros selectores del mismo equipo
+                    $(this).closest('.col-md-6').find('.player-select').not(this).each(function () {
+                        $(this).find(`option[value="${selectedPlayerId}"]`).prop('disabled', true);
+                    });
+        
+                    // Deshabilitar este jugador en otros selectores de otros equipos
+                    $('.col-md-6').not($(this).closest('.col-md-6')).find('.player-select').each(function () {
+                        $(this).find(`option[value="${selectedPlayerId}"]`).prop('disabled', true);
+                    });
                 }
             });
         }
+        
 
         // Función para generar los campos de jugadores dinámicamente
         const matchTypeSelect = document.getElementById("match_type");
@@ -109,8 +115,8 @@
 
             // Equipo 1
             const team1Div = document.createElement("div");
-            team1Div.className = "col-md-5"; // Equipo 1 ocupa 5 columnas
-            team1Div.innerHTML = `<h5 class="text-center">Equipo 1</h5>`;
+            team1Div.className = "col-md-6"; // Equipo 1 ocupa 5 columnas
+            team1Div.innerHTML = `<h5 class="text-center text-white">Equipo 1</h5>`;
             for (let i = 1; i <= playersPerTeam; i++) {
                 team1Div.innerHTML += `
                     <div class="mb-3">
@@ -134,20 +140,10 @@
             }
             playersSection.appendChild(team1Div);
 
-            // Imagen de la cancha en el centro
-            const courtDiv = document.createElement("div");
-            courtDiv.className = "col-md-2 d-flex align-items-center justify-content-center"; // 2 columnas para la imagen
-            courtDiv.innerHTML = `
-                <div class="w-100 h-100 d-flex align-items-center justify-content-center" style="border: 2px solid #FF6B00; border-radius: 10px; overflow: hidden;">
-                    <img src="{{ url_for('static', filename='img/tablero.png') }}" alt="Cancha" class="img-fluid w-100 h-100" style="object-fit: cover;">
-                </div>
-            `;
-            playersSection.appendChild(courtDiv);
-
             // Equipo 2
             const team2Div = document.createElement("div");
-            team2Div.className = "col-md-5"; // Equipo 2 ocupa 5 columnas
-            team2Div.innerHTML = `<h5 class="text-center">Equipo 2</h5>`;
+            team2Div.className = "col-md-6"; 
+            team2Div.innerHTML = `<h5 class="text-center text-white">Equipo 2</h5>`;
             for (let i = 1; i <= playersPerTeam; i++) {
                 team2Div.innerHTML += `
                     <div class="mb-3">
