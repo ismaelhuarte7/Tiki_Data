@@ -3,39 +3,59 @@
 {% block title %}Tiki-Data{% endblock %}
 
 {% block content %}
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8 text-center">
-            <h1 class="display-4 mb-4">Bienvenido a Tiki-Data</h1>
-            <h2 class="h4 mb-4">El único registro virtual de partidos y estadisticas</h2>
-            <p class="lead mb-5">Explora nuestras características y herramientas para aprovechar al máximo tus datos.</p>
-        </div>
-    </div>
-
-    {% if users %}
+<div class="container mt-4">
+    <h1 class="text-center mb-4">Últimas Noticias</h1>
+    <!-- Lista de noticias -->
     <div class="row">
-        <div class="col-12">
-            <h3 class="mb-4">Usuarios</h3>
-            <div class="list-group">
-                {% for user in users %}
-                <div class="list-group-item bg-dark text-light">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <h5 class="mb-1">{{ user.username }}</h5>
-                            <p class="mb-1">{{ user.email }}</p>
+        <div class="col-md-8 mx-auto">
+            {% for news in news_list %}
+                <div class="card mb-4 bg-dark text-white news-card">
+                    <div class="card-body">
+                        <div class="row">
+                            <!-- Columna para la imagen -->
+                            <div class="col-md-4 d-flex align-items-center justify-content-center">
+                                <div class="news-image-container">
+                                    {% if news.player %}
+                                        {% if news.player.profile_picture %}
+                                            <img src="{{ news.player.profile_picture }}" alt="Foto de perfil" class="news-image">
+                                        {% else %}
+                                            <div class="img-fluid rounded-circle d-flex justify-content-center align-items-center" style="width: 150px; height: 150px; background-color: #2a2320;">
+                                                <i class="bi bi-person-circle fs-1 text-white"></i>
+                                            </div>
+                                        {% endif %}
+                                    {% elif news.court and news.court.picture %}
+                                        <img src="{{ news.court.picture }}" alt="Foto de la cancha" class="news-image">
+                                    {% else %}
+                                        <img src="{{ url_for('static', filename='img/default-new.png') }}"alt="Foto de noticia" class="news-image">
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <!-- Columna para el contenido -->
+                            <div class="col-md-8 d-flex flex-column justify-content-center align-items-center">
+                                <h5 class="card-title text-center">{{ news.title }}</h5>
+                                <p class="card-text text-center">{{ news.content }}</p>
+                                <small class="text-muted text-center">
+                                    Publicado el {{ news.created_at.strftime('%d/%m/%Y %H:%M') }} por Tiki-Data
+                                </small>
+                                <!-- Botón para redirigir al perfil del jugador o a la cancha -->
+                                <div class="mt-3 w-100 text-center">
+                                    {% if news.player %}
+                                        <a href="{{ url_for('player.show', id=news.player.id) }}" class="btn btn-primary">
+                                            <i class="bi bi-person-fill"></i> Ver Perfil
+                                        </a>
+                                    {% elif news.court %}
+                                        <a href="{{ news.court.address }}" target="_blank" class="btn btn-primary">
+                                            <i class="bi bi-map-fill"></i> Ver en Google Maps
+                                        </a>
+                                    
+                                    {% endif %}
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-                {% endfor %}
-            </div>
+            {% endfor %}
         </div>
     </div>
-    {% else %}
-    <div class="row">
-        <div class="col-12 text-center">
-            <p class="text-muted">No se encontraron usuarios.</p>
-        </div>
-    </div>
-    {% endif %}
 </div>
 {% endblock %}

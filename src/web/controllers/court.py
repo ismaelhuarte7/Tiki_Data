@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, request, flash, redirect, url_for,
 from vercel_blob.blob_store import put
 import uuid
 import os
-from src.models import Court, User
+from src.models import Court, User, News
 
 bp = Blueprint("court", __name__, url_prefix="/court")
 
@@ -43,6 +43,12 @@ def create():
 
         # Crear la cancha en la base de datos
         court = Court.create(name=name, address=address, picture=picture_url)
+        News.create(
+            title="Nueva Cancha Registrada",
+            content=f"Se ha registrado una nueva cancha: {court.name}.",
+            user_id=session['user']['id'],
+            court_id=court.id
+        )
         flash("Cancha creada correctamente", "success")
         return redirect(url_for('court.list'))
 
