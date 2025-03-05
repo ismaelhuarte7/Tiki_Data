@@ -113,12 +113,12 @@ def edit(id):
 def delete(id):
     if 'user' not in session:
         flash("Debes iniciar sesión para eliminar una cancha", "danger")
-        return render_template('auth/login')
+        return render_template('auth/login.html')
     
     user=User.get_by_id(session['user']['id'])
     if user.is_admin == False:
         flash("No tienes permiso para eliminar una cancha", "danger")
-        return render_template('court/list')
+        return render_template('court/list.html')
     
     try:
         court = Court.get_by_id(id)
@@ -134,8 +134,8 @@ def delete(id):
             flash("Cancha no encontrada", "danger")
     except Exception as e:
         flash(f"Error al eliminar la cancha: {str(e)}", "danger")
-        return render_template('court/list')
+        return render_template('court/list.html')
     court = Court.get_by_id(id)
     Court.delete(id)
     flash("Cancha eliminada correctamente", "success")
-    return render_template('court/list')
+    return render_template('court/list.html')
