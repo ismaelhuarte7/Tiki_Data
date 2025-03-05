@@ -171,7 +171,7 @@ main {
     margin: 0;
     position: fixed;
     top: 80px; /* Ajusta la posición vertical según sea necesario */
-    right: 20px; /* Ajusta la posición horizontal según sea necesario */
+    left: 20px; /* Ajusta la posición horizontal según sea necesario */
     z-index: 1000;
     width: 300px; /* Ancho de las alertas */
 }
@@ -427,4 +427,108 @@ main {
 
 .match-card .btn {
     margin: 0 5px;
+}
+
+/* Estilos específicos para las tarjetas de jugadores */
+.player-card {
+    border: 1px solid #FF6B00;
+    border-radius: 10px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.player-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 15px rgba(255, 107, 0, 0.3);
+}
+
+/* Estilos para la foto de perfil en las tarjetas de jugadores */
+.player-card .rounded-circle {
+    border: 2px solid #FF6B00;
+}
+
+/* Estilos para el botón en las tarjetas de jugadores */
+.player-card .btn-primary {
+    background-color: #FF6B00;
+    border: none;
+    transition: background-color 0.3s ease;
+}
+
+.player-card .btn-primary:hover {
+    background-color: #e65a00;
+}
+/* Estilos específicos para las tarjetas de canchas */
+.court-card {
+    border: 1px solid #FF6B00;
+    border-radius: 10px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.court-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 15px rgba(255, 107, 0, 0.3);
+}
+
+/* Estilos para la imagen de la cancha */
+.court-card img {
+    border-radius: 10px 10px 0 0;
+}
+
+/* Estilos para el botón en las tarjetas de canchas */
+.court-card .btn-primary {
+    background-color: #FF6B00;
+    border: none;
+    transition: background-color 0.3s ease;
+}
+
+.court-card .btn-primary:hover {
+    background-color: #e65a00;
+}
+/* Estilos para las tarjetas de noticias */
+.news-card {
+    border: 1px solid #FF6B00;
+    border-radius: 10px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    height: 200px; /* Altura fija para todas las tarjetas */
+    overflow: hidden; /* Evita que el contenido se desborde */
+}
+
+.news-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 15px rgba(255, 107, 0, 0.3);
+}
+
+/* Contenedor de la imagen */
+.news-image-container {
+    width: 150px; /* Ancho fijo para el contenedor de la imagen */
+    height: 150px; /* Altura fija para el contenedor de la imagen */
+    overflow: hidden; /* Evita que la imagen se desborde */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Estilos para las imágenes */
+.news-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ajusta la imagen sin distorsionarla */
+    border-radius: 10px; /* Bordes redondeados */
+}
+
+/* Estilos para el contenido de la tarjeta */
+.news-card .card-title {
+    color: #FF6B00;
+    font-weight: 600;
+}
+
+.news-card .card-text {
+    color: #ffffff;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+}
+
+.news-card .text-muted {
+    color: #a0a0a0 !important;
 }

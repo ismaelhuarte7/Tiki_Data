@@ -1,0 +1,37 @@
+{% extends "layout.html" %}
+
+{% block title %}Lista de Jugadores{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="text-center mb-4">Lista de Jugadores</h1>
+    <div class="row">
+        {% for player in players %}
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card player-card bg-dark text-white h-100">
+                <!-- Foto de perfil del jugador -->
+                <div class="text-center mt-3">
+                    {% if player.profile_picture %}
+                        <img src="{{ player.profile_picture }}" alt="Foto de perfil" class="rounded-circle" style="width: 100px; height: 100px; object-fit: cover;">
+                    {% else %}
+                        <div class="d-flex justify-content-center">
+                            <div class="rounded-circle d-flex justify-content-center align-items-center bg-secondary" style="width: 100px; height: 100px;">
+                                <i class="bi bi-person-fill fs-1 text-white"></i>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+                <!-- Detalles del jugador -->
+                <div class="card-body text-center">
+                    <h5 class="card-title">{{ player.user.username }}</h5>
+                    <p class="card-text text-muted">{{ player.name }} {{ player.surname }}</p>
+                    <a href="{{ url_for('player.show', id=player.id) }}" class="btn btn-primary">
+                        <i class="bi bi-eye-fill"></i> Ver Perfil
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

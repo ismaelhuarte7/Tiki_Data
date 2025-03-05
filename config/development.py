@@ -1,5 +1,6 @@
 import os
 import redis
+
 class Config:
     DEBUG = True
     SESSION_TYPE = "redis"  
@@ -11,6 +12,7 @@ class Config:
     BASE_URL = os.getenv("BASE_URL")
     SESSION_COOKIE_SECURE = True
     SESSION_COOKIE_HTTPONLY = True
+    BLOB_READ_WRITE_TOKEN = os.getenv("BLOB_READ_WRITE_TOKEN")
 
     db_user = os.environ.get("db_user")
     db_password = os.environ.get("db_password")

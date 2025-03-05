@@ -3,7 +3,7 @@ from itsdangerous import URLSafeTimedSerializer
 from flask import session, current_app
 from flask import current_app
 from mailjet_rest import Client
-from src.models import User, Player
+from src.models import User, Player, News
 
 bp = Blueprint("auth", __name__, url_prefix="/auth")
 
@@ -48,9 +48,13 @@ def signup():
 def login():
     session.clear()
     if request.method == "POST":
-        email = request.form["email"]
+        identifier = request.form["email"]  
         password = request.form["password"]
-        user = User.get_by_email(email)
+
+        if "@" in identifier:
+            user = User.get_by_email(identifier)  
+        else:
+            user = User.get_by_username(identifier)
         if not user:
             flash("Usuario no encontrado", "danger")
             return render_template("auth/login.html")
@@ -60,7 +64,11 @@ def login():
         if not user.is_verified:
             flash("Usuario no verificado", "danger")
             return render_template("auth/login.html")
-        session['user'] = user.email
+        session['user'] = {
+            'id': user.id,       
+            'email': user.email,     
+            'username': user.username  
+        }
         flash("Bienvenido", "success")
         return redirect(url_for("home"))
     
@@ -138,6 +146,13 @@ def verify(token):
         return render_template("auth/login.html")
     user = User.get_by_email(email)
     user.verify()
+    player = Player.get_by_id(user.player_id)
+    News.create(
+            title="Nuevo Jugador Registrado",
+            content=f"Bienvenido a Tiki-Data, {user.username}!",
+            user_id=user.id,
+            player_id=player.id
+        )
     flash("Usuario verificado correctamente", "success")
     return render_template("auth/login.html")
 

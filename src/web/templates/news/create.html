@@ -1,0 +1,49 @@
+{% extends "layout.html" %}
+
+{% block title %}Registrar Noticia{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title text-white">Registrar Noticia</h3>
+                </div>
+                <div class="card-body">
+                    <form action="{{ url_for('news.create') }}" method="POST">
+                        <div class="mb-3">
+                            <label for="title" class="form-label">Título de la Noticia</label>
+                            <input type="text" class="form-control" id="title" name="title" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="content" class="form-label">Contenido de la Noticia</label>
+                            <textarea class="form-control" id="content" name="content" rows="5" required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="player_id" class="form-label">Jugador Relacionado (Opcional)</label>
+                            <select class="form-control" id="player_id" name="player_id">
+                                <option value="">Selecciona un jugador</option>
+                                {% for player in players %}
+                                    <option value="{{ player.id }}">{{ player.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="court_id" class="form-label">Cancha Relacionada (Opcional)</label>
+                            <select class="form-control" id="court_id" name="court_id">
+                                <option value="">Selecciona una cancha</option>
+                                {% for court in courts %}
+                                    <option value="{{ court.id }}">{{ court.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Registrar Noticia</button>
+                        <a href="{{ url_for('home') }}" class="btn btn-secondary">Cancelar</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
