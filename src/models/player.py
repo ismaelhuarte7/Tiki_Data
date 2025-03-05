@@ -1,4 +1,5 @@
 from config.database import db
+from src.models.goal import Goal
 
 class Player (db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -31,3 +32,9 @@ class Player (db.Model):
         player.profile_picture = profile_picture
         db.session.commit()
         return player
+    
+    def get_goals_in_match(self, match_id):
+        return Goal.query.filter_by(player_id=self.id, match_id=match_id).count()
+    
+    def get_goals(self):
+        return Goal.query.filter_by(player_id=self.id).count()

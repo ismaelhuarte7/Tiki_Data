@@ -1,0 +1,106 @@
+{% extends "layout.html" %}
+
+{% block title %}Detalles del Partido - Tiki-Data{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="text-center mb-4">Detalles del Partido</h1>
+
+    <!-- Información del Partido -->
+    <div class="card bg-dark text-white mb-4">
+        <div class="card-body">
+            <h5 class="card-title">Partido del {{ match.date.strftime('%d/%m/%Y %H:%M') }}</h5>
+            <p class="card-text">
+                <strong>Resultado:</strong> {{ match.result }}<br>
+                <strong>Cancha:</strong> {{ match.court.name }}<br>
+                <strong>Tipo:</strong> {{ match.match_type.replace('_', ' ') | title }}
+            </p>
+        </div>
+    </div>
+
+    <!-- Lista de Jugadores y Cancha -->
+    <div class="row">
+        <!-- Equipo 1 -->
+        <div class="col-md-4">
+            <div class="card bg-dark text-white mb-4">
+                <div class="card-header">
+                    <h5 class="card-title">Equipo 1</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        {% for player in match.players[:match.players|length//2] %}
+                            <li class="list-group-item bg-dark text-white">
+                                {{ player.name }} {{ player.surname }}
+                                {% if player.get_goals_in_match(match.id) > 0 %}
+                                    <span class="badge bg-primary float-end">
+                                        {{ player.get_goals_in_match(match.id) }} Goles
+                                    </span>
+                                {% endif %}
+                            </li>
+                        {% else %}
+                            <p> No hay jugadores registrados en este equipo.</p>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cancha -->
+        <div class="col-md-4">
+            <div class="soccer-field">
+                <!-- Equipo 1 -->
+                <div class="team team-left">
+                    {% for player in match.players[:match.players|length//2] %}
+                        <div class="player position-{{ loop.index }}">
+                            {% if player.profile_picture %}
+                                <img src="{{ player.profile_picture }}" alt="{{ player.name }} {{ player.surname }}" class="player-image">
+                            {% else %}
+                                <div class="player-placeholder">
+                                    <i class="bi bi-person-circle"></i>
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+            
+                <!-- Equipo 2 -->
+                <div class="team team-right">
+                    {% for player in match.players[match.players|length//2:] %}
+                        <div class="player position-{{ loop.index }}">
+                            {% if player.profile_picture %}                       
+                                <img src="{{ player.profile_picture }}" alt="{{ player.name }} {{ player.surname }}" class="player-image">
+                            {% else %}
+                                <div class="player-placeholder">
+                                    <i class="bi bi-person-circle"></i>                             
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <!-- Equipo 2 -->
+        <div class="col-md-4">
+            <div class="card bg-dark text-white mb-4">
+                <div class="card-header">
+                    <h5 class="card-title">Equipo 2</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        {% for player in match.players[match.players|length//2:] %}
+                            <li class="list-group-item bg-dark text-white">
+                                {{ player.name }} {{ player.surname }}
+                                {% if player.get_goals_in_match(match.id) > 0 %}
+                                    <span class="badge bg-primary float-end">
+                                        {{ player.get_goals_in_match(match.id) }} Goles
+                                    </span>
+                                {% endif %}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

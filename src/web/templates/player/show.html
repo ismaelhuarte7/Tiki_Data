@@ -83,7 +83,7 @@
             <div class="card bg-dark text-white">
                 <div class="card-body text-center">
                     <h5 class="card-title">Goles</h5>
-                    <p class="card-text">{{ player.matches|sum(attribute='goals') }}</p>
+                    {# <p class="card-text">{{ player.matches|sum(attribute='goals') }}</p> #}
                 </div>
             </div>
         </div>
@@ -108,7 +108,7 @@
                         <li class="list-group-item bg-dark text-white">Apellido: {{ player.surname }}</li>
                         <li class="list-group-item bg-dark text-white">Fecha de Nacimiento: {{ player.birth_date.strftime('%d/%m/%Y') }}</li>
                         <li class="list-group-item bg-dark text-white">Partidos Jugados: {{ player.matches|length }}</li>
-                        <li class="list-group-item bg-dark text-white">Total de Goles: {{ player.matches|sum(attribute='goals') }}</li>
+                        {# <li class="list-group-item bg-dark text-white">Total de Goles: {{ player.matches|sum(attribute='goals') }}</li> #}
                     </ul>
                 </div>
             </div>

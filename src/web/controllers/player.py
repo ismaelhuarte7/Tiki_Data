@@ -16,6 +16,8 @@ def list():
 def show(id):
     player = Player.get_by_id(id)
     user = User.get_by_player_id(id)
+    goals = Player.get_goals(player)
+
     if not player:
         flash("Ese jugador no existe o fue eliminado", "danger")
         return render_template('player/list.html')

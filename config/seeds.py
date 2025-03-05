@@ -32,6 +32,5 @@ def run():
     user12 = User.create("player12","player12@gmail.com","12345678",12)
     user13 = User.create("player13","player13@gmail.com","12345678",13)
     user14 = User.create("player14","player14@gmail.com","12345678",14)
-    court1 = Court.create("Las palmas 27", "27 y 41")
-    court2 = Court.create("Las palmas 22", "22 y 37")
+    
     

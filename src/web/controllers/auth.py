@@ -38,7 +38,7 @@ def signup():
         player = Player.create(name, surname, birth_date)
         user = User.create(username, email, password, player.id)
         flash("Te enviamos un correo para verificar tu cuenta, revisa tu casilla de SPAM", "info")
-        send_verification_email(email)
+        #send_verification_email(email)
         
         return render_template("auth/login.html")
         

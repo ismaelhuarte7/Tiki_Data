@@ -45,7 +45,7 @@
                 <div class="navbar-nav me-auto">
                     <a class="nav-link" href="{{ url_for('player.list') }}">Jugadores</a>
                     <a class="nav-link" href="{{ url_for('court.list') }}">Canchas</a>
-                    <a class="nav-link" href="{{ url_for('match.index') }}">Partidos</a>
+                    <a class="nav-link" href="{{ url_for('match.list') }}">Partidos</a>
                 </div>
                 <ul class="navbar-nav align-items-left">
                     {% if session.get('user') %}
@@ -61,6 +61,13 @@
                                 <li class="nav-item me-3">
                                     <a href="{{ url_for('news.create') }}" class="btn btn-primary">
                                         <i class="bi bi-plus-lg"></i> Registrar Noticia
+                                    </a>
+                                </li>
+                            {% endif %}
+                            {% if request.endpoint == 'match.list' %}
+                                <li class="nav-item me-3">
+                                    <a href="{{ url_for('match.create') }}" class="btn btn-primary">
+                                        <i class="bi bi-plus-lg"></i> Registrar Nuevo Partido
                                     </a>
                                 </li>
                             {% endif %}

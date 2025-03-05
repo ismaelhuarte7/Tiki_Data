@@ -13,7 +13,7 @@ class Match (db.Model):
     match_type = db.Column(db.String(20), nullable=False) 
     court_id = db.Column(db.Integer, db.ForeignKey('court.id'), nullable=False)
     players = db.relationship('Player', secondary='player_match', back_populates='matches')
-    goals = db.relationship('Goal', backref='match', lazy=True)
+    goals = db.relationship('Goal', backref='match', lazy=True, cascade="all, delete-orphan")
     mvp_id = db.Column(db.Integer, db.ForeignKey('player.id'), nullable=True)
 
     court = db.relationship('Court', back_populates='matches')
@@ -42,4 +42,8 @@ class Match (db.Model):
     
     def delete(self):
         db.session.delete(self)
+        db.session.commit()
+
+    def add_player(self, player):
+        self.players.append(player)
         db.session.commit()
