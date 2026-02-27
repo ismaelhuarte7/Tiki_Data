@@ -1,76 +1,134 @@
 {% extends "layout.html" %}
 
-{% block title %}Lista de Canchas{% endblock %}
+{% block title %}Canchas - Tiki-Data{% endblock %}
 
 {% block content %}
-<div class="container mt-4">
-    <h1 class="text-center mb-4">Lista de Canchas</h1>    
-    <div class="row">
-        {% for court in courts %}
-        <div class="col-md-6 col-lg-4 mb-4">
-            <div class="card court-card bg-dark text-white h-100">
-                <!-- Imagen de la cancha -->
-                <div class="text-center mt-3">
-                    {% if court.picture %}
-                        <img src="{{ court.picture }}" alt="{{ court.name }}" class="img-fluid rounded" style="max-height: 200px; width: 100%; object-fit: cover;">
-                    {% else %}
-                        <div class="d-flex justify-content-center align-items-center bg-secondary" style="height: 200px;">
-                            <i class="bi bi-image fs-1 text-white"></i>
-                        </div>
-                    {% endif %}
+<div class="container-fluid">
+    <!-- Header Section -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex align-items-center justify-content-between">
+                <div>
+                    <h2 class="mb-0" style="font-weight: 700;">
+                        <i class="bi bi-geo-alt-fill me-2" style="color: var(--primary);"></i>
+                        Canchas
+                    </h2>
+                    <p class="text-muted mt-2 mb-0">Explora nuestras canchas disponibles</p>
                 </div>
-                <!-- Detalles de la cancha -->
-                <div class="card-body text-center">
-                    <h5 class="card-title">{{ court.name }}</h5>
-                    <a href="{{ court.address }}" target="_blank" class="btn btn-primary mb-3">
-                        <i class="bi bi-map-fill"></i> Ver en Google Maps
+                {% if user and user.is_admin %}
+                    <a href="{{ url_for('court.create') }}" class="btn btn-primary">
+                        <i class="bi bi-plus-circle me-1"></i>
+                        Nueva Cancha
                     </a>
+                {% endif %}
+            </div>
+            <hr style="border-color: var(--border); opacity: 0.5; margin-top: 1rem;">
+        </div>
+    </div>
 
-                    <!-- Botones de editar y eliminar (solo para administradores) -->
-                    {% if user and user.is_admin %}
-                        <div class="d-flex justify-content-center gap-2">
-                            <!-- Botón de editar -->
-                            <a href="{{ url_for('court.edit', id=court.id) }}" class="btn btn-outline-warning btn-sm">
-                                <i class="bi bi-pencil"></i> Editar
+    {% if courts %}
+        <div class="row g-4">
+            {% for court in courts %}
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="card h-100" style="overflow: hidden;">
+                        <!-- Imagen de la cancha -->
+                        <div style="position: relative; height: 220px; overflow: hidden; background: var(--bg-secondary);">
+                            {% if court.picture %}
+                                <img src="{{ court.picture }}" 
+                                     alt="{{ court.name }}" 
+                                     style="width: 100%; height: 100%; object-fit: cover; transition: transform var(--transition);"
+                                     onmouseover="this.style.transform='scale(1.1)'"
+                                     onmouseout="this.style.transform='scale(1)'">
+                            {% else %}
+                                <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;">
+                                    <i class="bi bi-image" style="font-size: 4rem; color: var(--text-muted);"></i>
+                                </div>
+                            {% endif %}
+                            
+                            <!-- Overlay con gradiente -->
+                            <div style="position: absolute; bottom: 0; left: 0; right: 0; height: 50%; background: linear-gradient(to top, rgba(10, 14, 24, 0.95), transparent);"></div>
+                            
+                            <!-- Nombre de la cancha en overlay -->
+                            <div style="position: absolute; bottom: 1rem; left: 1rem; right: 1rem;">
+                                <h5 class="mb-0" style="font-weight: 700; color: white; text-shadow: 0 2px 8px rgba(0, 0, 0, 0.7);">
+                                    {{ court.name }}
+                                </h5>
+                            </div>
+                        </div>
+
+                        <!-- Contenido de la card -->
+                        <div class="card-body">
+                            <!-- Botón de ubicación -->
+                            <a href="{{ court.address }}" 
+                               target="_blank" 
+                               class="btn btn-outline-primary w-100 mb-3"
+                               style="border-width: 2px;">
+                                <i class="bi bi-map me-2"></i>
+                                Ver Ubicación
                             </a>
 
-                            <!-- Botón de eliminar con modal de confirmación -->
-                            <button type="button" class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal{{ court.id }}">
-                                <i class="bi bi-trash"></i> Eliminar
-                            </button>
+                            <!-- Botones de administración -->
+                            {% if user and user.is_admin %}
+                                <div class="d-flex gap-2">
+                                    <a href="{{ url_for('court.edit', id=court.id) }}" 
+                                       class="btn btn-warning flex-fill">
+                                        <i class="bi bi-pencil-fill me-1"></i>
+                                        Editar
+                                    </a>
+                                    <button type="button" 
+                                            class="btn btn-danger flex-fill" 
+                                            data-bs-toggle="modal" 
+                                            data-bs-target="#deleteModal{{ court.id }}">
+                                        <i class="bi bi-trash-fill me-1"></i>
+                                        Eliminar
+                                    </button>
+                                </div>
+                            {% endif %}
                         </div>
-                    {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="row">
+            <div class="col-12">
+                <div class="text-center py-5" style="background: var(--bg-card); border-radius: var(--radius-lg); border: 1px solid var(--border);">
+                    <i class="bi bi-geo-alt" style="font-size: 4rem; color: var(--text-muted); display: block; margin-bottom: 1rem;"></i>
+                    <h5 class="text-muted">No hay canchas registradas</h5>
+                    <p class="text-muted mb-0">Las canchas aparecerán aquí cuando se registren</p>
                 </div>
             </div>
         </div>
-        {% else %}
-        <div class="col">
-            <div class="d-flex justify-content-center text-muted" role="alert">
-                No hay canchas registradas.
-            </div>
-        </div>
-        {% endfor %}
-
-    </div>
+    {% endif %}
 </div>
 
-<!-- Modal de confirmación para eliminar (fuera del bucle) -->
+<!-- Modales de confirmación para eliminar -->
 {% if user and user.is_admin %}
     {% for court in courts %}
         <div class="modal fade" id="deleteModal{{ court.id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ court.id }}" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content bg-dark text-light">
-                    <div class="modal-header border-secondary">
-                        <h5 class="modal-title" id="deleteModalLabel{{ court.id }}">Eliminar Cancha</h5>
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteModalLabel{{ court.id }}">
+                            <i class="bi bi-exclamation-triangle-fill text-danger me-2"></i>
+                            Confirmar Eliminación
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                     </div>
                     <div class="modal-body">
-                        ¿Estás seguro de que deseas eliminar la cancha "{{ court.name }}"?
+                        <p class="mb-0">¿Estás seguro de que deseas eliminar la cancha <strong>"{{ court.name }}"</strong>?</p>
+                        <p class="text-muted mt-2 mb-0" style="font-size: 0.9rem;">Esta acción no se puede deshacer.</p>
                     </div>
-                    <div class="modal-footer border-secondary">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            <i class="bi bi-x-circle me-1"></i>
+                            Cancelar
+                        </button>
                         <form action="{{ url_for('court.delete', id=court.id) }}" method="POST" style="display: inline;">
-                            <button type="submit" class="btn btn-danger">Eliminar</button>
+                            <button type="submit" class="btn btn-danger">
+                                <i class="bi bi-trash-fill me-1"></i>
+                                Eliminar
+                            </button>
                         </form>
                     </div>
                 </div>
@@ -78,4 +136,26 @@
         </div>
     {% endfor %}
 {% endif %}
+
+<style>
+    .card {
+        animation: fadeInSlide 0.5s ease;
+    }
+    
+    @keyframes fadeInSlide {
+        from {
+            opacity: 0;
+            transform: translateX(-20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+    
+    .card:hover {
+        transform: translateY(-8px) !important;
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6), 0 0 30px rgba(0, 255, 136, 0.25) !important;
+    }
+</style>
 {% endblock %}

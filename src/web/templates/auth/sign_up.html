@@ -3,54 +3,119 @@
 {% block title %}Registro - Tiki-Data{% endblock %}
 
 {% block content %}
-<div class="container">
+<div class="container" style="max-width: 900px; margin-top: 3rem; margin-bottom: 3rem;">
     <div class="row justify-content-center">
-        <div class="col-md-8 col-lg-6">
-            <div class="card mt-5">
-                <div class="card-header bg-dark text-white">
-                    <h3 class="card-title text-center">Registro</h3>
+        <div class="col-12">
+            <div class="card fade-in">
+                <!-- Header -->
+                <div class="card-header text-center py-3" style="background: linear-gradient(135deg, var(--bg-secondary), var(--bg-card)); border-bottom: 2px solid var(--primary);">
+                    <h2 class="mb-0" style="font-weight: 700; letter-spacing: -0.02em; font-size: 1.75rem; color: var(--text-primary);">
+                        <i class="bi bi-person-plus me-2" style="color: var(--primary);"></i>
+                        Crear Cuenta
+                    </h2>
+                    <p class="mb-0 mt-2" style="color: #8b95a8; font-size: 0.95rem;">Únete a la comunidad de Tiki-Data</p>
                 </div>
-                <div class="card-body bg-dark">
-                   <form method="POST" action="{{ url_for('auth.signup') }}">
-                        <!-- Nombre -->
-                        <div class="mb-3">
-                            <label for="first_name" class="form-label">Nombre</label>
-                            <input type="text" class="form-control" id="first_name" name="first_name" required>
+                
+                <div class="card-body p-4">
+                    <form method="POST" action="{{ url_for('auth.signup') }}" class="needs-validation" novalidate>
+                        <div class="row">
+                            <!-- Nombre -->
+                            <div class="col-md-6 mb-3">
+                                <label for="first_name" class="form-label" style="color: var(--text-primary); font-weight: 600; font-size: 0.95rem;">
+                                    <i class="bi bi-person me-1"></i>Nombre
+                                </label>
+                                <input type="text" class="form-control" id="first_name" name="first_name" placeholder="Tu nombre" required autofocus>
+                                <div class="invalid-feedback">Ingresa tu nombre.</div>
+                            </div>
+                            
+                            <!-- Apellido -->
+                            <div class="col-md-6 mb-3">
+                                <label for="last_name" class="form-label" style="color: var(--text-primary); font-weight: 600; font-size: 0.95rem;">
+                                    <i class="bi bi-person me-1"></i>Apellido
+                                </label>
+                                <input type="text" class="form-control" id="last_name" name="last_name" placeholder="Tu apellido" required>
+                                <div class="invalid-feedback">Ingresa tu apellido.</div>
+                            </div>
                         </div>
-                        <!-- Apellido -->
-                        <div class="mb-3">
-                            <label for="last_name" class="form-label">Apellido</label>
-                            <input type="text" class="form-control" id="last_name" name="last_name" required>
+                        
+                        <div class="row">
+                            <!-- Username -->
+                            <div class="col-md-6 mb-3">
+                                <label for="username" class="form-label" style="color: var(--text-primary); font-weight: 600; font-size: 0.95rem;">
+                                    <i class="bi bi-at me-1"></i>Nombre de usuario
+                                </label>
+                                <input type="text" class="form-control" id="username" name="username" placeholder="usuario123" required>
+                                <div class="invalid-feedback">Elige un nombre de usuario.</div>
+                            </div>
+                            
+                            <!-- Email -->
+                            <div class="col-md-6 mb-3">
+                                <label for="email" class="form-label" style="color: var(--text-primary); font-weight: 600; font-size: 0.95rem;">
+                                    <i class="bi bi-envelope me-1"></i>Email
+                                </label>
+                                <input type="email" class="form-control" id="email" name="email" placeholder="tu@email.com" required>
+                                <div class="invalid-feedback">Ingresa un email válido.</div>
+                            </div>
                         </div>
-                        <!-- Nombre de usuario -->
-                        <div class="mb-3">
-                            <label for="username" class="form-label">Nombre de usuario</label>
-                            <input type="text" class="form-control" id="username" name="username" required>
+                        
+                        <div class="row">
+                            <!-- Contraseña -->
+                            <div class="col-md-6 mb-3">
+                                <label for="password" class="form-label" style="color: var(--text-primary); font-weight: 600; font-size: 0.95rem;">
+                                    <i class="bi bi-shield-lock me-1"></i>Contraseña
+                                </label>
+                                <input type="password" class="form-control" id="password" name="password" placeholder="Mínimo 8 caracteres" required>
+                                <small class="form-text" style="color: #8b95a8; font-size: 0.85rem;">
+                                    <i class="bi bi-info-circle me-1"></i>
+                                    Mínimo 8 caracteres y al menos 1 número
+                                </small>
+                                <div class="invalid-feedback">La contraseña debe tener al menos 8 caracteres y 1 número.</div>
+                            </div>
+                            
+                            <!-- Confirmar Contraseña -->
+                            <div class="col-md-6 mb-3">
+                                <label for="confirm_password" class="form-label" style="color: var(--text-primary); font-weight: 600; font-size: 0.95rem;">
+                                    <i class="bi bi-shield-check me-1"></i>Confirmar Contraseña
+                                </label>
+                                <input type="password" class="form-control" id="confirm_password" name="confirm_password" placeholder="Repite tu contraseña" required>
+                                <div class="invalid-feedback">Las contraseñas no coinciden.</div>
+                            </div>
                         </div>
-                        <!-- Email -->
-                        <div class="mb-3">
-                            <label for="email" class="form-label">Email</label>
-                            <input type="email" class="form-control" id="email" name="email" required>
-                        </div>
-                        <!-- Contraseña -->
-                        <div class="mb-3">
-                            <label for="password" class="form-label">Contraseña</label>
-                            <input type="password" class="form-control" id="password" name="password" required>
-                            <small class="form-text text-muted">La contraseña debe tener al menos 8 caracteres y 1 número.</small>
-                        </div>
-                        <!-- Repetir Contraseña -->
-                        <div class="mb-3">
-                            <label for="confirm_password" class="form-label">Repetir Contraseña</label>
-                            <input type="password" class="form-control" id="confirm_password" name="confirm_password" required>
-                        </div>
+                        
                         <!-- Fecha de nacimiento -->
-                        <div class="mb-3">
-                            <label for="birthdate" class="form-label">Fecha de nacimiento</label>
+                        <div class="mb-4">
+                            <label for="birthdate" class="form-label" style="color: var(--text-primary); font-weight: 600; font-size: 0.95rem;">
+                                <i class="bi bi-calendar-event me-1"></i>Fecha de Nacimiento
+                            </label>
                             <input type="date" class="form-control" id="birthdate" name="birthdate" required>
+                            <div class="invalid-feedback">Ingresa tu fecha de nacimiento.</div>
                         </div>
-                        <!-- Botón de envío -->
-                        <div class="d-grid gap-2">
-                            <button type="submit" class="btn btn-primary">Registrarse</button>
+                        
+                        <!-- Botón de registro -->
+                        <div class="d-grid mb-3">
+                            <button type="submit" class="btn btn-primary btn-lg" id="submitBtn">
+                                <i class="bi bi-person-plus me-2"></i>
+                                Crear Mi Cuenta
+                            </button>
+                        </div>
+                        
+                        <!-- Divider -->
+                        <div class="text-center mb-3">
+                            <div style="display: flex; align-items: center; text-align: center; margin: 0;">
+                                <div style="flex: 1; border-bottom: 1px solid var(--border);"></div>
+                                <span style="padding: 0 1rem; color: #8b95a8; font-size: 0.875rem;">O</span>
+                                <div style="flex: 1; border-bottom: 1px solid var(--border);"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- Link a login -->
+                        <div class="text-center">
+                            <p class="mb-0" style="color: #8b95a8;">
+                                ¿Ya tienes una cuenta? 
+                                <a href="{{ url_for('auth.login') }}" class="text-decoration-none" style="color: var(--primary); font-weight: 600;">
+                                    Inicia Sesión
+                                </a>
+                            </p>
                         </div>
                     </form>
                 </div>
@@ -58,78 +123,68 @@
         </div>
     </div>
 </div>
+
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        // Configura Flatpickr para el campo de fecha de nacimiento
+        // Flatpickr para fecha de nacimiento
         flatpickr("#birthdate", {
-            dateFormat: "Y-m-d", // Formato de fecha
-            defaultDate: "01-01-2000", // Fecha predeterminada
-            maxDate: "today", // No permitir fechas futuras
-            locale: "es", // Idioma español
-            allowInput: true, // Permitir edición manual
-            disableMobile: true, // Deshabilitar el date picker nativo en móviles
+            dateFormat: "Y-m-d",
+            maxDate: "today",
+            locale: "es",
+            allowInput: true,
+            disableMobile: true,
         });
 
-        // Validar contraseña
+        // Validación de contraseña
         const passwordInput = document.getElementById("password");
         const confirmPasswordInput = document.getElementById("confirm_password");
-        const passwordFeedback = document.createElement("div");
-        passwordFeedback.className = "invalid-feedback";
-        passwordInput.parentNode.appendChild(passwordFeedback);
 
-        const confirmPasswordFeedback = document.createElement("div");
-        confirmPasswordFeedback.className = "invalid-feedback";
-        confirmPasswordInput.parentNode.appendChild(confirmPasswordFeedback);
-
-        passwordInput.addEventListener("input", function () {
+        function validatePassword() {
             const password = passwordInput.value;
             const isValid = password.length >= 8 && /\d/.test(password);
 
-            if (isValid) {
-                passwordInput.classList.remove("is-invalid");
-                passwordInput.classList.add("is-valid");
-                passwordFeedback.textContent = "";
-            } else {
-                passwordInput.classList.remove("is-valid");
-                passwordInput.classList.add("is-invalid");
-                passwordFeedback.textContent = "La contraseña debe tener al menos 8 caracteres y 1 número.";
+            if (password.length > 0) {
+                if (isValid) {
+                    passwordInput.classList.remove("is-invalid");
+                    passwordInput.classList.add("is-valid");
+                } else {
+                    passwordInput.classList.remove("is-valid");
+                    passwordInput.classList.add("is-invalid");
+                }
             }
-        });
+            return isValid;
+        }
 
-        confirmPasswordInput.addEventListener("input", function () {
+        function validateConfirmPassword() {
             const password = passwordInput.value;
             const confirmPassword = confirmPasswordInput.value;
-
-            if (confirmPassword === password) {
-                confirmPasswordInput.classList.remove("is-invalid");
-                confirmPasswordInput.classList.add("is-valid");
-                confirmPasswordFeedback.textContent = "";
-            } else {
-                confirmPasswordInput.classList.remove("is-valid");
-                confirmPasswordInput.classList.add("is-invalid");
-                confirmPasswordFeedback.textContent = "Las contraseñas no coinciden.";
-            }
-        });
-
-        document.querySelector("form").addEventListener("submit", function (event) {
-            const password = passwordInput.value;
-            const confirmPassword = confirmPasswordInput.value;
-            const isValidPassword = password.length >= 8 && /\d/.test(password);
             const passwordsMatch = password === confirmPassword;
 
-            if (!isValidPassword || !passwordsMatch) {
-                event.preventDefault();
-                if (!isValidPassword) {
-                    passwordInput.classList.add("is-invalid");
-                    passwordFeedback.textContent = "La contraseña debe tener al menos 8 caracteres y 1 número.";
-                }
-                if (!passwordsMatch) {
+            if (confirmPassword.length > 0) {
+                if (passwordsMatch && validatePassword()) {
+                    confirmPasswordInput.classList.remove("is-invalid");
+                    confirmPasswordInput.classList.add("is-valid");
+                } else {
+                    confirmPasswordInput.classList.remove("is-valid");
                     confirmPasswordInput.classList.add("is-invalid");
-                    confirmPasswordFeedback.textContent = "Las contraseñas no coinciden.";
                 }
             }
-        });
+            return passwordsMatch;
+        }
+
+        passwordInput.addEventListener("input", validatePassword);
+        confirmPasswordInput.addEventListener("input", validateConfirmPassword);
+
+        // Validación del formulario
+        const form = document.querySelector('.needs-validation');
+        form.addEventListener('submit', function(event) {
+            if (!form.checkValidity() || !validatePassword() || !validateConfirmPassword()) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            form.classList.add('was-validated');
+        }, false);
     });
 </script>
 {% endblock %}

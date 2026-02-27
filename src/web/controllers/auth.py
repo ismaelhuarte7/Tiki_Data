@@ -48,7 +48,7 @@ def signup():
 def login():
     session.clear()
     if request.method == "POST":
-        identifier = request.form["email"]  
+        identifier = request.form["username"]  
         password = request.form["password"]
 
         if "@" in identifier:

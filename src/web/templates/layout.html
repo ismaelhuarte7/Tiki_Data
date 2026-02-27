@@ -3,153 +3,267 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}{% endblock %}</title>
+    <meta name="description" content="Tiki-Data - Plataforma moderna de gestión deportiva">
+    <title>{% block title %}Tiki-Data{% endblock %}</title>
+    
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/favicon.png') }}">
+    
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='../static/styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    
     <!-- Flatpickr CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-    <!-- Flatpickr JS -->
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    
     <!-- Cropper.js CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.css">
 </head>
 <body>
-    <!-- Navbar -->
+    <!-- Navbar Moderna -->
     <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
-        <div class="container-fluid">
-            <!-- Logo y nombre de la empresa -->
-            <a class="navbar-brand d-flex align-items-center" href="/">
-                <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo" class="me-2" height="40">
+        <div class="container-fluid px-4">
+            <!-- Logo y Marca -->
+            <a class="navbar-brand" href="/">
+                <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Tiki-Data Logo" height="40">
                 Tiki-Data
             </a>
 
-            <!-- Toggler para mobile -->
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <!-- Toggle para móvil -->
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
-            <!-- Contenido de la navbar -->
-            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-                <!-- Botones de navegación -->
-                <div class="navbar-nav me-auto">
-                    <a class="nav-link" href="{{ url_for('match.index') }}">Partidos</a>
-                    <a class="nav-link" href="{{ url_for('player.list') }}">Jugadores</a>
-                    <a class="nav-link" href="{{ url_for('court.list') }}">Canchas</a>
-                </div>
-                <ul class="navbar-nav align-items-left">
+            <!-- Contenido del navbar -->
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <!-- Links de navegación -->
+                <ul class="navbar-nav mx-auto mb-lg-0 mb-3">
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'match.index' %}active{% endif %}" href="{{ url_for('match.index') }}">
+                            <i class="bi bi-trophy me-2"></i> Partidos
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'player.list' %}active{% endif %}" href="{{ url_for('player.list') }}">
+                            <i class="bi bi-people me-2"></i> Jugadores
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'court.list' %}active{% endif %}" href="{{ url_for('court.list') }}">
+                            <i class="bi bi-geo-alt me-2"></i> Canchas
+                        </a>
+                    </li>
+                </ul>
+
+                <!-- Separador móvil -->
+                <div class="navbar-divider d-lg-none"></div>
+
+                <!-- Acciones del usuario -->
+                <ul class="navbar-nav align-items-lg-center">
                     {% if session.get('user') %}
+                        <!-- Botones de acción para admin -->
                         {% if user and user.is_admin %}
                             {% if request.endpoint == 'court.list' %}
-                                <li class="nav-item me-3">
-                                    <a href="{{ url_for('court.create') }}" class="btn btn-primary">
-                                        <i class="bi bi-plus-lg"></i> Agregar Nueva Cancha
+                                <li class="nav-item mb-3 mb-lg-0 me-lg-2">
+                                    <a href="{{ url_for('court.create') }}" class="btn btn-primary btn-sm w-100 w-lg-auto">
+                                        <i class="bi bi-plus-circle me-2"></i> Nueva Cancha
                                     </a>
                                 </li>
                             {% endif %}
                             {% if request.endpoint == 'home' %}
-                                <li class="nav-item me-3">
-                                    <a href="{{ url_for('news.create') }}" class="btn btn-primary">
-                                        <i class="bi bi-plus-lg"></i> Registrar Noticia
+                                <li class="nav-item mb-3 mb-lg-0 me-lg-2">
+                                    <a href="{{ url_for('news.create') }}" class="btn btn-primary btn-sm w-100 w-lg-auto">
+                                        <i class="bi bi-newspaper me-2"></i> Nueva Noticia
                                     </a>
                                 </li>
                             {% endif %}
                         {% endif %}
                         
                         <!-- Notificaciones -->
-                        <li class="nav-item dropdown me-3">
-                            <a class="nav-link" href="#" role="button" data-bs-toggle="dropdown">
-                                <i class="bi bi-bell-fill fs-5"></i>
-                                <span class="position-absolute top-10 start-90 translate-middle badge rounded-pill bg-danger">
+                        <li class="nav-item dropdown me-lg-2 mb-2 mb-lg-0">
+                            <a class="nav-link position-relative notification-icon d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown">
+                                <i class="bi bi-bell-fill fs-5 me-2 me-lg-0"></i>
+                                <span class="d-lg-none">Notificaciones</span>
+                                <!-- Badge solo visible cuando hay notificaciones -->
+                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="display: none;">
                                     0
-                                    <span class="visually-hidden">Notificaciones sin leer</span>
                                 </span>
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end">
-                                <li><a class="dropdown-item" href="#">No hay notificaciones nuevas</a></li>
+                                <li class="dropdown-item text-muted">Sin notificaciones</li>
                             </ul>
                         </li>
-                        <!-- Perfil de usuario con menú desplegable -->
+                        
+                        <!-- Perfil de usuario -->
                         <li class="nav-item dropdown">
-                            <a class="nav-link" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="bi bi-person-circle fs-5"></i>
+                            <a class="nav-link d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown">
+                                <i class="bi bi-person-circle fs-5 me-2 me-lg-0"></i>
+                                <span class="d-lg-none">{{ session.user.username }}</span>
                             </a>
-                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" href="{{ url_for('player.show', id=session.user.id) }}">Perfil</a></li>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li>
+                                    <a class="dropdown-item" href="{{ url_for('player.show', id=session.user.id) }}">
+                                        <i class="bi bi-person me-2"></i> Mi Perfil
+                                    </a>
+                                </li>
                                 <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#logoutModal">Cerrar Sesión</a></li>
+                                <li>
+                                    <a class="dropdown-item text-danger" href="#" data-bs-toggle="modal" data-bs-target="#logoutModal">
+                                        <i class="bi bi-box-arrow-right me-2"></i> Cerrar Sesión
+                                    </a>
+                                </li>
                             </ul>
                         </li>
                     {% else %}
-                        <!-- Botones de inicio de sesión y registro -->
-                        <li class="nav-item me-3">
-                            <a class="btn btn-outline-light" href="{{ url_for('auth.signup') }}">Registrarse</a>
+                        <!-- Botones para usuarios no autenticados -->
+                        <li class="nav-item mb-2 mb-lg-0 me-lg-2">
+                            <a class="btn btn-outline-light btn-sm w-100 w-lg-auto" href="{{ url_for('auth.signup') }}">
+                                <i class="bi bi-person-plus me-2"></i> Registrarse
+                            </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="btn btn-primary" href="{{ url_for('auth.login') }}">Iniciar Sesión</a>
+                        <li class="nav-item mb-2 mb-lg-0">
+                            <a class="btn btn-primary btn-sm w-100 w-lg-auto" href="{{ url_for('auth.login') }}">
+                                <i class="bi bi-box-arrow-in-right me-2"></i> Iniciar Sesión
+                            </a>
                         </li>
                     {% endif %}
                 </ul>
             </div>
         </div>
     </nav>
-    <!-- Línea naranja separadora -->
-    <div class="orange-line"></div>
+
+    <!-- Línea decorativa -->
+    <div class="nav-divider"></div>
+
+    <!-- Flash Messages -->
     {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
-            <ul class="flashes" aria-live="polite">
+            <ul class="flashes">
                 {% for category, message in messages %}
-                    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
-                        <li>{{ message }}</li>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
-                    </div>
+                    <li>
+                        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                            <strong>
+                                {% if category == 'success' %}
+                                    <i class="bi bi-check-circle me-2"></i>
+                                {% elif category == 'danger' or category == 'error' %}
+                                    <i class="bi bi-exclamation-circle me-2"></i>
+                                {% elif category == 'warning' %}
+                                    <i class="bi bi-exclamation-triangle me-2"></i>
+                                {% else %}
+                                    <i class="bi bi-info-circle me-2"></i>
+                                {% endif %}
+                            </strong>
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    </li>
                 {% endfor %}
             </ul>
         {% endif %}
     {% endwith %}
-    <!-- Contenido principal -->
-    <main class="container-fluid py-4">
+
+    <!-- Contenido Principal -->
+    <main class="container-fluid px-4">
         {% block content %}{% endblock %}
     </main>
+
     <!-- Footer -->
-    <footer class="footer text-light py-2 mt-auto">
+    <footer class="footer">
         <div class="container">
-            <div class="row">
-                <div class="col-md-12 text-center">
-                    <p>&copy; 2025 Tiki-Data. Todos los derechos reservados.</p>
+            <div class="row align-items-center">
+                <div class="col-md-6 text-center text-md-start">
+                    <p>&copy; 2026 Tiki-Data. Todos los derechos reservados.</p>
+                </div>
+                <div class="col-md-6 text-center text-md-end">
+                    <a href="#" class="text-muted text-decoration-none me-3 hover-primary">
+                        <i class="bi bi-github fs-5"></i>
+                    </a>
+                    <a href="#" class="text-muted text-decoration-none me-3 hover-primary">
+                        <i class="bi bi-twitter fs-5"></i>
+                    </a>
+                    <a href="#" class="text-muted text-decoration-none hover-primary">
+                        <i class="bi bi-instagram fs-5"></i>
+                    </a>
                 </div>
             </div>
         </div>
     </footer>
-    <!-- Bootstrap JS y Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
-    <!-- Cropper.js JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js"></script>
-    <!-- Modal de confirmación para cerrar sesión -->
-    <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
+
+    <!-- Modal de Logout -->
+    <div class="modal fade" id="logoutModal" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content bg-dark text-light">
-                <div class="modal-header border-secondary">
-                    <h5 class="modal-title" id="logoutModalLabel">Cerrar Sesión</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="bi bi-box-arrow-right me-2"></i>
+                        Cerrar Sesión
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    ¿Estás seguro que quieres cerrar sesión?
+                    ¿Estás seguro que deseas cerrar sesión?
                 </div>
-                <div class="modal-footer border-secondary">
+                <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                     <a href="{{ url_for('auth.logout') }}" class="btn btn-danger">Cerrar Sesión</a>
                 </div>
             </div>
         </div>
     </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js"></script>
+    
+    <script>
+        // Auto-cerrar alertas después de 5 segundos
+        document.querySelectorAll('.alert').forEach(alert => {
+            setTimeout(() => {
+                const bsAlert = new bootstrap.Alert(alert);
+                bsAlert.close();
+            }, 5000);
+        });
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Notification handler
+        function updateNotifications(count) {
+            const notificationIcon = document.querySelector('.notification-icon');
+            const badge = notificationIcon.querySelector('.badge');
+            
+            if (count > 0) {
+                // Show badge and add animation
+                badge.style.display = 'block';
+                badge.textContent = count;
+                notificationIcon.classList.add('has-notifications');
+            } else {
+                // Hide badge and remove animation
+                badge.style.display = 'none';
+                notificationIcon.classList.remove('has-notifications');
+            }
+        }
+
+        // Example: Check for notifications on page load
+        // Replace this with actual backend call
+        document.addEventListener('DOMContentLoaded', function() {
+            // Example: updateNotifications(3); // This would show 3 notifications with animation
+            updateNotifications(0); // Currently no notifications
+        });
+    </script>
 </body>
 </html>

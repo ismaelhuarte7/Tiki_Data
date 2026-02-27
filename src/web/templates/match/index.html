@@ -3,84 +3,200 @@
 {% block title %}Partidos - Tiki-Data{% endblock %}
 
 {% block content %}
-<div class="container mt-5">
+<div class="container-fluid">
+    <!-- Header Section -->
     <div class="row mb-4">
-        <div class="col">
-            <h1 class="display-4">
-                <i class="bi bi-trophy"></i> Partidos
-            </h1>
-            <p class="lead">Gestión de partidos y resultados</p>
+        <div class="col-12">
+            <div class="d-flex align-items-center justify-content-between">
+                <div>
+                    <h2 class="mb-0" style="font-weight: 700;">
+                        <i class="bi bi-trophy-fill me-2" style="color: var(--primary);"></i>
+                        Partidos
+                    </h2>
+                    <p class="text-muted mt-2 mb-0">Historial de todos los partidos jugados</p>
+                </div>
+                {% if user and user.is_admin %}
+                    <a href="{{ url_for('match.create') }}" class="btn btn-primary">
+                        <i class="bi bi-plus-circle me-1"></i>
+                        Nuevo Partido
+                    </a>
+                {% endif %}
+            </div>
+            <hr style="border-color: var(--border); opacity: 0.5; margin-top: 1rem;">
         </div>
-        {% if user and user.is_admin %}
-        <div class="col-auto">
-            <a href="{{ url_for('match.create') }}" class="btn btn-primary">
-                <i class="bi bi-plus-circle"></i> Nuevo Partido
-            </a>
-        </div>
-        {% endif %}
     </div>
 
     {% if matches %}
-    <div class="row">
-        <div class="col-12">
-            <div class="card bg-dark text-white">
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-dark table-hover">
-                            <thead>
-                                <tr>
-                                    <th>Fecha</th>
-                                    <th>Cancha</th>
-                                    <th>Resultado</th>
-                                    <th>MVP</th>
-                                    <th>Acciones</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for match in matches %}
-                                <tr>
-                                    <td>{{ match.date.strftime('%d/%m/%Y %H:%M') if match.date else 'N/A' }}</td>
-                                    <td>{{ match.court.name if match.court else 'N/A' }}</td>
-                                    <td>{{ match.result if match.result else 'Pendiente' }}</td>
-                                    <td>
-                                        {% if match.mvp_id %}
-                                            {{ match.mvp.first_name }} {{ match.mvp.last_name }}
-                                        {% else %}
-                                            -
-                                        {% endif %}
-                                    </td>
-                                    <td>
-                                        <a href="#" class="btn btn-sm btn-info">
-                                            <i class="bi bi-eye"></i> Ver
+        <div class="row g-4">
+            {% for match in matches %}
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <!-- Fecha y Cancha -->
+                                <div class="col-lg-3 mb-3 mb-lg-0">
+                                    <div class="d-flex align-items-center gap-3">
+                                        <div style="width: 60px; height: 60px; background: var(--bg-secondary); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; border: 2px solid var(--primary);">
+                                            <i class="bi bi-calendar-event" style="font-size: 1.5rem; color: var(--primary);"></i>
+                                        </div>
+                                        <div>
+                                            <div style="font-weight: 700; color: var(--text-primary);">
+                                                {{ match.date.strftime('%d/%m/%Y') if match.date else 'N/A' }}
+                                            </div>
+                                            <div class="text-muted" style="font-size: 0.85rem;">
+                                                <i class="bi bi-geo-alt me-1"></i>
+                                                {% if match.court %}
+                                                    {{ match.court.name }}
+                                                {% else %}
+                                                    Cancha no especificada
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Equipos y Resultado -->
+                                <div class="col-lg-6 mb-3 mb-lg-0">
+                                    <div class="d-flex align-items-center justify-content-center gap-4">
+                                        <!-- Equipo 1 -->
+                                        <div class="text-center flex-fill">
+                                            <div class="mb-2" style="color: var(--text-primary); font-weight: 600;">
+                                                Equipo 1
+                                            </div>
+                                            <div style="font-size: 2rem; font-weight: 700; color: var(--primary); line-height: 1;">
+                                                {{ match.result.split('-')[0] if match.result and '-' in match.result else '0' }}
+                                            </div>
+                                        </div>
+
+                                        <!-- VS -->
+                                        <div style="padding: 0.5rem 1rem; background: var(--bg-secondary); border-radius: var(--radius-md); font-weight: 700; color: var(--text-muted); font-size: 0.9rem;">
+                                            VS
+                                        </div>
+
+                                        <!-- Equipo 2 -->
+                                        <div class="text-center flex-fill">
+                                            <div class="mb-2" style="color: var(--text-primary); font-weight: 600;">
+                                                Equipo 2
+                                            </div>
+                                            <div style="font-size: 2rem; font-weight: 700; color: var(--primary); line-height: 1;">
+                                                {{ match.result.split('-')[1] if match.result and '-' in match.result else '0' }}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- MVP -->
+                                    {% if match.mvp_id %}
+                                        <div class="text-center mt-3">
+                                            <span class="badge" style="background: linear-gradient(135deg, var(--warning) 0%, #f39c12 100%); color: var(--bg-primary); font-weight: 600; padding: 0.5rem 1rem; border-radius: var(--radius-full); box-shadow: 0 4px 15px rgba(255, 193, 7, 0.3);">
+                                                <i class="bi bi-star-fill me-1"></i>
+                                                MVP: {{ match.mvp.first_name }} {{ match.mvp.last_name }}
+                                            </span>
+                                        </div>
+                                    {% endif %}
+                                </div>
+
+                                <!-- Acciones -->
+                                <div class="col-lg-3">
+                                    <div class="d-flex flex-column gap-2">
+                                        <a href="#" class="btn btn-primary w-100">
+                                            <i class="bi bi-eye me-1"></i>
+                                            Ver Detalles
                                         </a>
+                                        
                                         {% if user and user.is_admin %}
-                                        <a href="#" class="btn btn-sm btn-warning">
-                                            <i class="bi bi-pencil"></i> Editar
-                                        </a>
-                                        <a href="#" class="btn btn-sm btn-danger">
-                                            <i class="bi bi-trash"></i> Eliminar
-                                        </a>
+                                            <div class="d-flex gap-2">
+                                                <a href="#" class="btn btn-warning flex-fill">
+                                                    <i class="bi bi-pencil-fill"></i>
+                                                </a>
+                                                <button type="button" 
+                                                        class="btn btn-danger flex-fill" 
+                                                        data-bs-toggle="modal" 
+                                                        data-bs-target="#deleteModal{{ match.id }}">
+                                                    <i class="bi bi-trash-fill"></i>
+                                                </button>
+                                            </div>
                                         {% endif %}
-                                    </td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="row">
+            <div class="col-12">
+                <div class="text-center py-5" style="background: var(--bg-card); border-radius: var(--radius-lg); border: 1px solid var(--border);">
+                    <i class="bi bi-trophy" style="font-size: 4rem; color: var(--text-muted); display: block; margin-bottom: 1rem;"></i>
+                    <h5 class="text-muted">No hay partidos registrados</h5>
+                    <p class="text-muted mb-3">Los partidos aparecerán aquí cuando se registren</p>
+                    {% if user and user.is_admin %}
+                        <a href="{{ url_for('match.create') }}" class="btn btn-primary">
+                            <i class="bi bi-plus-circle me-1"></i>
+                            Crear el Primer Partido
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</div>
+
+<!-- Modales de confirmación para eliminar -->
+{% if user and user.is_admin and matches %}
+    {% for match in matches %}
+        <div class="modal fade" id="deleteModal{{ match.id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ match.id }}" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteModalLabel{{ match.id }}">
+                            <i class="bi bi-exclamation-triangle-fill text-danger me-2"></i>
+                            Confirmar Eliminación
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p class="mb-0">¿Estás seguro de que deseas eliminar el partido del <strong>{{ match.date.strftime('%d/%m/%Y') if match.date else 'N/A' }}</strong>?</p>
+                        <p class="text-muted mt-2 mb-0" style="font-size: 0.9rem;">Esta acción no se puede deshacer.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            <i class="bi bi-x-circle me-1"></i>
+                            Cancelar
+                        </button>
+                        <form action="#" method="POST" style="display: inline;">
+                            <button type="submit" class="btn btn-danger">
+                                <i class="bi bi-trash-fill me-1"></i>
+                                Eliminar
+                            </button>
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    {% else %}
-    <div class="alert alert-info text-center" role="alert">
-        <i class="bi bi-info-circle"></i> No hay partidos registrados todavía.
-        {% if user and user.is_admin %}
-        <br><br>
-        <a href="{{ url_for('match.create') }}" class="btn btn-primary">
-            <i class="bi bi-plus-circle"></i> Crear el Primer Partido
-        </a>
-        {% endif %}
-    </div>
-    {% endif %}
-</div>
+    {% endfor %}
+{% endif %}
+
+<style>
+    .card {
+        animation: slideInLeft 0.5s ease;
+    }
+    
+    @keyframes slideInLeft {
+        from {
+            opacity: 0;
+            transform: translateX(-30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+    
+    .card:hover {
+        transform: translateX(5px) !important;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6), 0 0 20px rgba(0, 255, 136, 0.2) !important;
+    }
+</style>
 {% endblock %}

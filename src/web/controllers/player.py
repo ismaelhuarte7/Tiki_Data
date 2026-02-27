@@ -2,6 +2,7 @@
 from flask import Blueprint, render_template, session, request, flash, redirect, url_for
 from src.web.utils.storage import save_file, delete_file
 import os
+from datetime import date
 from src.models import Player,User
 
 bp = Blueprint("player", __name__, url_prefix="/player")
@@ -18,7 +19,7 @@ def show(id):
     if not player:
         flash("Ese jugador no existe o fue eliminado", "danger")
         return render_template('player/list.html')
-    return render_template("player/show.html", player=player, user=user)
+    return render_template("player/show.html", player=player, user=user, today=date.today())
 
 @bp.route('/upload_profile_picture', methods=['GET', 'POST'])
 def upload_profile_picture():
