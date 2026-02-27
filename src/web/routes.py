@@ -1,13 +1,14 @@
-from flask import Blueprint, render_template, session, send_from_directory
+from flask import Blueprint, render_template, session, send_from_directory, request
 from config.config import env
 from config.database import db
 import os
-from src.models import Player, User, Goal, Court, Match, Team ,News
+from src.models import Player, User, Goal, Court, Match, Team, News, Notification
 from src.web.controllers.auth import bp as auth_bp
 from src.web.controllers.player import bp as player_bp
 from src.web.controllers.court import bp as court_bp
 from src.web.controllers.news import bp as news_bp
 from src.web.controllers.match import bp as match_bp
+from src.web.controllers.notification import bp as notification_bp
 
 
 
@@ -15,10 +16,13 @@ def register(app):
     @app.route("/")
     def home():
         user = User.get_by_id(session.get('user', {}).get('id'))
-        news = News.get_all()
+        page = request.args.get('page', 1, type=int)
+        news_pagination = News.query.order_by(News.created_at.desc()).paginate(
+            page=page, per_page=5, error_out=False
+        )
         if 'user' not in session:
             session.clear()
-        return render_template("home.html", user=user, news_list=news)
+        return render_template("home.html", user=user, news_pagination=news_pagination)
     
     # Ruta para servir archivos subidos (imágenes)
     @app.route('/uploads/<path:filename>')
@@ -32,9 +36,22 @@ def register(app):
     @app.errorhandler(500)
     def internal_server_error(e):
         return render_template("errors/500.html"), 500
+    
+    # Context processor para agregar notificaciones a todas las plantillas
+    @app.context_processor
+    def inject_notifications():
+        notifications = []
+        notification_count = 0
+        if 'user' in session:
+            user_id = session['user']['id']
+            notifications = Notification.get_by_user(user_id)
+            notification_count = len(notifications)
+        return dict(user_notifications=notifications, notification_count=notification_count)
+    
     app.register_blueprint(auth_bp)
     app.register_blueprint(player_bp)
     app.register_blueprint(news_bp)
     app.register_blueprint(court_bp)
     app.register_blueprint(match_bp)
+    app.register_blueprint(notification_bp)
 

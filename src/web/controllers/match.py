@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, session
-from src.models import Match, User, Court, Player, Team, Goal, GuestPlayer
+from src.models import Match, User, Court, Player, Team, Goal, GuestPlayer, News, Notification
 from datetime import datetime
 import json
 
@@ -7,11 +7,14 @@ bp = Blueprint("match", __name__, url_prefix="/match")
 
 @bp.route('/', methods=['GET'])
 def index():
-    matches = Match.get_all_matches()
+    page = request.args.get('page', 1, type=int)
+    matches_pagination = Match.query.order_by(Match.date.desc()).paginate(
+        page=page, per_page=5, error_out=False
+    )
     user = None
     if 'user' in session:
         user = User.get_by_id(session['user']['id'])
-    return render_template("match/index.html", matches=matches, user=user)
+    return render_template("match/index.html", matches_pagination=matches_pagination, user=user)
 
 @bp.route('/create', methods=['GET', 'POST'])
 def create():
@@ -114,6 +117,36 @@ def create():
                             team_id=team.id,
                             guest_player_id=guest.id
                         )
+            
+            # 12. Crear noticia automática del partido
+            court = Court.get_by_id(court_id)
+            court_name = court.name if court else "Cancha"
+            news_title = f"🏆 Nuevo Partido Registrado - {match_type}"
+            news_content = f"Se ha registrado un nuevo partido de {match_type} el {match_date.strftime('%d/%m/%Y')} en {court_name}. Resultado final: {result}. ¡Felicitaciones a todos los participantes!"
+            
+            News.create(
+                title=news_title,
+                content=news_content,
+                user_id=user.id,
+                court_id=court_id,
+                match_id=match.id
+            )
+            
+            # 13. Crear notificaciones para cada jugador registrado
+            all_registered_players = []
+            for player_id in team_a_players + team_b_players:
+                player = Player.get_by_id(int(player_id))
+                if player and player not in all_registered_players:
+                    all_registered_players.append(player)
+            
+            for player in all_registered_players:
+                # Verificar que el jugador tenga un usuario asociado
+                if player.user:
+                    Notification.create(
+                        user_id=player.user.id,
+                        message=f"Has jugado un nuevo partido ({result}) - {match_date.strftime('%d/%m/%Y')}",
+                        match_id=match.id
+                    )
             
             flash('Partido registrado exitosamente', 'success')
             return redirect(url_for('match.show', id=match.id))

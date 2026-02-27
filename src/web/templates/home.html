@@ -16,7 +16,7 @@
                         Bienvenido a <span style="color: var(--primary);">Tiki-Data</span>
                     </h1>
                     <p class="lead text-muted mb-0">
-                        Tu plataforma de gestión deportiva
+                        Todos los partidos, jugadores y canchas en un solo lugar.
                     </p>
                 </div>
             </div>
@@ -44,9 +44,9 @@
         </div>
     </div>
 
-    {% if news_list %}
+    {% if news_pagination.items %}
         <div class="row g-4">
-            {% for news in news_list %}
+            {% for news in news_pagination.items %}
                 <div class="col-12 col-lg-10 col-xl-8 mx-auto">
                     <div class="card fade-in" style="transition: all var(--transition);">
                         <div class="card-body">
@@ -100,7 +100,12 @@
                                             {{ news.created_at.strftime('%d/%m/%Y %H:%M') }}
                                         </small>
                                         
-                                        {% if news.player %}
+                                        {% if news.match %}
+                                            <a href="{{ url_for('match.show', id=news.match.id) }}" class="btn btn-sm btn-primary">
+                                                <i class="bi bi-trophy-fill me-1"></i>
+                                                Ver Detalle
+                                            </a>
+                                        {% elif news.player %}
                                             <a href="{{ url_for('player.show', id=news.player.id) }}" class="btn btn-sm btn-primary">
                                                 <i class="bi bi-arrow-right-circle me-1"></i>
                                                 Ver Perfil
@@ -119,6 +124,48 @@
                 </div>
             {% endfor %}
         </div>
+        
+        <!-- Paginación -->
+        {% if news_pagination.pages > 1 %}
+        <div class="row mt-5">
+            <div class="col-12">
+                <nav aria-label="Paginación de noticias">
+                    <ul class="pagination justify-content-center mb-0">
+                        <!-- Botón Anterior -->
+                        <li class="page-item {% if not news_pagination.has_prev %}disabled{% endif %}">
+                            <a class="page-link" href="{{ url_for('home', page=news_pagination.prev_num) if news_pagination.has_prev else '#' }}">
+                                <i class="bi bi-chevron-left me-1"></i> Anterior
+                            </a>
+                        </li>
+                        
+                        <!-- Números de página -->
+                        {% for page_num in range(1, news_pagination.pages + 1) %}
+                            {% if page_num == news_pagination.page %}
+                                <li class="page-item active" aria-current="page">
+                                    <span class="page-link">{{ page_num }}</span>
+                                </li>
+                            {% elif page_num <= 2 or page_num > news_pagination.pages - 2 or (page_num >= news_pagination.page - 1 and page_num <= news_pagination.page + 1) %}
+                                <li class="page-item">
+                                    <a class="page-link" href="{{ url_for('home', page=page_num) }}">{{ page_num }}</a>
+                                </li>
+                            {% elif page_num == 3 or page_num == news_pagination.pages - 2 %}
+                                <li class="page-item disabled">
+                                    <span class="page-link">...</span>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                        
+                        <!-- Botón Siguiente -->
+                        <li class="page-item {% if not news_pagination.has_next %}disabled{% endif %}">
+                            <a class="page-link" href="{{ url_for('home', page=news_pagination.next_num) if news_pagination.has_next else '#' }}">
+                                Siguiente <i class="bi bi-chevron-right ms-1"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+        {% endif %}
     {% else %}
         <div class="row">
             <div class="col-12">

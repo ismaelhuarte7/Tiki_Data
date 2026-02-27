@@ -86,16 +86,38 @@
                         
                         <!-- Notificaciones -->
                         <li class="nav-item dropdown me-lg-2 mb-2 mb-lg-0">
-                            <a class="nav-link position-relative notification-icon d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown">
+                            <a class="nav-link position-relative notification-icon {% if notification_count > 0 %}has-notifications{% endif %} d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown" id="notificationDropdown">
                                 <i class="bi bi-bell-fill fs-5 me-2 me-lg-0"></i>
                                 <span class="d-lg-none">Notificaciones</span>
-                                <!-- Badge solo visible cuando hay notificaciones -->
-                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="display: none;">
-                                    0
-                                </span>
                             </a>
-                            <ul class="dropdown-menu dropdown-menu-end">
-                                <li class="dropdown-item text-muted">Sin notificaciones</li>
+                            <ul class="dropdown-menu dropdown-menu-end" id="notificationList" style="min-width: 320px; max-width: 400px;">
+                                {% if user_notifications %}
+                                    <li class="dropdown-header" style="background: var(--bg-secondary); color: var(--text-primary); font-weight: 700;">
+                                        <i class="bi bi-bell me-2"></i>Notificaciones ({{ notification_count }})
+                                    </li>
+                                    {% for notification in user_notifications %}
+                                    <li>
+                                        <a class="dropdown-item notification-item py-3" href="#" 
+                                           data-notification-id="{{ notification.id }}" 
+                                           data-match-id="{{ notification.match_id }}"
+                                           style="white-space: normal; border-bottom: 1px solid var(--border);">
+                                            <div style="display: flex; align-items: start;">
+                                                <i class="bi bi-trophy-fill me-2 mt-1" style="color: var(--primary); font-size: 1.2rem;"></i>
+                                                <div style="flex: 1;">
+                                                    <p class="mb-1" style="font-size: 0.9rem; color: var(--text-primary);">{{ notification.message }}</p>
+                                                    <small style="color: #8b95a8; font-size: 0.75rem;">
+                                                        <i class="bi bi-clock me-1"></i>{{ notification.created_at.strftime('%d/%m/%Y %H:%M') }}
+                                                    </small>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </li>
+                                    {% endfor %}
+                                {% else %}
+                                    <li class="dropdown-item text-muted text-center py-3">
+                                        <i class="bi bi-inbox me-2"></i>Sin notificaciones
+                                    </li>
+                                {% endif %}
                             </ul>
                         </li>
                         
@@ -242,27 +264,46 @@
         });
 
         // Notification handler
-        function updateNotifications(count) {
-            const notificationIcon = document.querySelector('.notification-icon');
-            const badge = notificationIcon.querySelector('.badge');
-            
-            if (count > 0) {
-                // Show badge and add animation
-                badge.style.display = 'block';
-                badge.textContent = count;
-                notificationIcon.classList.add('has-notifications');
-            } else {
-                // Hide badge and remove animation
-                badge.style.display = 'none';
-                notificationIcon.classList.remove('has-notifications');
-            }
-        }
-
-        // Example: Check for notifications on page load
-        // Replace this with actual backend call
         document.addEventListener('DOMContentLoaded', function() {
-            // Example: updateNotifications(3); // This would show 3 notifications with animation
-            updateNotifications(0); // Currently no notifications
+            // Manejar click en notificaciones
+            const notificationItems = document.querySelectorAll('.notification-item');
+            
+            notificationItems.forEach(item => {
+                item.addEventListener('click', async function(e) {
+                    e.preventDefault();
+                    
+                    const notificationId = this.getAttribute('data-notification-id');
+                    const matchId = this.getAttribute('data-match-id');
+                    
+                    try {
+                        // Marcar como leída (eliminar de BD)
+                        const response = await fetch(`/notification/mark-read/${notificationId}`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            }
+                        });
+                        
+                        const data = await response.json();
+                        
+                        if (data.success) {
+                            // Redirigir al detalle del partido
+                            if (matchId) {
+                                window.location.href = `/match/${matchId}`;
+                            } else {
+                                // Si no hay match_id, solo recargar la página
+                                window.location.reload();
+                            }
+                        }
+                    } catch (error) {
+                        console.error('Error al marcar notificación como leída:', error);
+                        // Redirigir de todas formas
+                        if (matchId) {
+                            window.location.href = `/match/${matchId}`;
+                        }
+                    }
+                });
+            });
         });
     </script>
 </body>

@@ -6,3 +6,4 @@ from .match import Match
 from .team import Team   
 from .news import News
 from .guest_player import GuestPlayer
+from .notification import Notification

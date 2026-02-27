@@ -8,18 +8,21 @@ class News(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     player_id = db.Column(db.Integer, db.ForeignKey('player.id'), nullable=True)
     court_id = db.Column(db.Integer, db.ForeignKey('court.id'), nullable=True)
+    match_id = db.Column(db.Integer, db.ForeignKey('match.id'), nullable=True)
 
     user = db.relationship('User', backref='news')
     player = db.relationship('Player', backref='news')
     court = db.relationship('Court', backref='news')
+    match = db.relationship('Match', backref='news')
 
-    def create(title, content, user_id, player_id=None, court_id=None):
+    def create(title, content, user_id, player_id=None, court_id=None, match_id=None):
         news = News(
             title=title,
             content=content,
             user_id=user_id,
             player_id=player_id,
-            court_id=court_id
+            court_id=court_id,
+            match_id=match_id
         )
         db.session.add(news)
         db.session.commit()

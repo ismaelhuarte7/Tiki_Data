@@ -26,9 +26,9 @@
         </div>
     </div>
 
-    {% if matches %}
+    {% if matches_pagination.items %}
         <div class="row g-4">
-            {% for match in matches %}
+            {% for match in matches_pagination.items %}
                 <div class="col-12">
                     <div class="card">
                         <div class="card-body">
@@ -41,7 +41,7 @@
                                         </div>
                                         <div>
                                             <div style="font-weight: 700; color: var(--text-primary);">
-                                                {{ match.date.strftime('%d/%m/%Y') if match.date else 'N/A' }}
+                                                {{ match.date.strftime('%d/%m/%Y %H:%M') if match.date else 'N/A' }}hs
                                             </div>
                                             <div class="text-muted" style="font-size: 0.85rem;">
                                                 <i class="bi bi-geo-alt me-1"></i>
@@ -120,6 +120,48 @@
                 </div>
             {% endfor %}
         </div>
+        
+        <!-- Paginación -->
+        {% if matches_pagination.pages > 1 %}
+        <div class="row mt-5">
+            <div class="col-12">
+                <nav aria-label="Paginación de partidos">
+                    <ul class="pagination justify-content-center mb-0">
+                        <!-- Botón Anterior -->
+                        <li class="page-item {% if not matches_pagination.has_prev %}disabled{% endif %}">
+                            <a class="page-link" href="{{ url_for('match.index', page=matches_pagination.prev_num) if matches_pagination.has_prev else '#' }}">
+                                <i class="bi bi-chevron-left me-1"></i> Anterior
+                            </a>
+                        </li>
+                        
+                        <!-- Números de página -->
+                        {% for page_num in range(1, matches_pagination.pages + 1) %}
+                            {% if page_num == matches_pagination.page %}
+                                <li class="page-item active" aria-current="page">
+                                    <span class="page-link">{{ page_num }}</span>
+                                </li>
+                            {% elif page_num <= 2 or page_num > matches_pagination.pages - 2 or (page_num >= matches_pagination.page - 1 and page_num <= matches_pagination.page + 1) %}
+                                <li class="page-item">
+                                    <a class="page-link" href="{{ url_for('match.index', page=page_num) }}">{{ page_num }}</a>
+                                </li>
+                            {% elif page_num == 3 or page_num == matches_pagination.pages - 2 %}
+                                <li class="page-item disabled">
+                                    <span class="page-link">...</span>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                        
+                        <!-- Botón Siguiente -->
+                        <li class="page-item {% if not matches_pagination.has_next %}disabled{% endif %}">
+                            <a class="page-link" href="{{ url_for('match.index', page=matches_pagination.next_num) if matches_pagination.has_next else '#' }}">
+                                Siguiente <i class="bi bi-chevron-right ms-1"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+        {% endif %}
     {% else %}
         <div class="row">
             <div class="col-12">
@@ -140,8 +182,8 @@
 </div>
 
 <!-- Modales de confirmación para eliminar -->
-{% if user and user.is_admin and matches %}
-    {% for match in matches %}
+{% if user and user.is_admin and matches_pagination.items %}
+    {% for match in matches_pagination.items %}
         <div class="modal fade" id="deleteModal{{ match.id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ match.id }}" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">

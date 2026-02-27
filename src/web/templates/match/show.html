@@ -202,15 +202,15 @@
                             {% for goal in match.goals %}
                                 {% set is_team_a = goal.team_id == team_a.id %}
                                 <div class="col-12">
-                                    <div style="padding: 1rem; background: var(--bg-secondary); border-radius: var(--radius-md); border-left: 4px solid {{ '#ff6b6b' if is_team_a else '#4da3ff' }}; display: flex; align-items: center; gap: 1rem;">
-                                        <div style="width: 50px; height: 50px; border-radius: 50%; background: {{ '#ff6b6b' if is_team_a else '#4da3ff' }}; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                    <div class="goal-card {% if is_team_a %}goal-team-a{% else %}goal-team-b{% endif %}">
+                                        <div class="goal-icon {% if is_team_a %}goal-icon-a{% else %}goal-icon-b{% endif %}">
                                             <span style="color: white; font-size: 1.5rem;">⚽</span>
                                         </div>
                                         <div style="flex-grow: 1;">
                                             <div style="color: var(--text-primary); font-weight: 700; font-size: 1.1rem;">
                                                 {{ goal.get_scorer_name() }}
                                             </div>
-                                            <div style="color: {{ '#ff6b6b' if is_team_a else '#4da3ff' }}; font-weight: 600;">
+                                            <div class="goal-team-label {% if is_team_a %}team-a-label{% else %}team-b-label{% endif %}">
                                                 Equipo {{ 'A' if is_team_a else 'B' }}
                                             </div>
                                         </div>
@@ -231,4 +231,54 @@
         </div>
     </div>
 </div>
+
+<style>
+    /* Estilos para las tarjetas de goles */
+    .goal-card {
+        padding: 1rem;
+        background: var(--bg-secondary);
+        border-radius: var(--radius-md);
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+    
+    .goal-card.goal-team-a {
+        border-left: 4px solid #ff6b6b;
+    }
+    
+    .goal-card.goal-team-b {
+        border-left: 4px solid #4da3ff;
+    }
+    
+    .goal-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+    
+    .goal-icon.goal-icon-a {
+        background: #ff6b6b;
+    }
+    
+    .goal-icon.goal-icon-b {
+        background: #4da3ff;
+    }
+    
+    .goal-team-label {
+        font-weight: 600;
+    }
+    
+    .goal-team-label.team-a-label {
+        color: #ff6b6b;
+    }
+    
+    .goal-team-label.team-b-label {
+        color: #4da3ff;
+    }
+</style>
 {% endblock %}
