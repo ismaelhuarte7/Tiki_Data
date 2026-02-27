@@ -98,23 +98,19 @@
                                 <!-- Acciones -->
                                 <div class="col-lg-3">
                                     <div class="d-flex flex-column gap-2">
-                                        <a href="#" class="btn btn-primary w-100">
+                                        <a href="{{ url_for('match.show', id=match.id) }}" class="btn btn-primary w-100">
                                             <i class="bi bi-eye me-1"></i>
                                             Ver Detalles
                                         </a>
                                         
                                         {% if user and user.is_admin %}
-                                            <div class="d-flex gap-2">
-                                                <a href="#" class="btn btn-warning flex-fill">
-                                                    <i class="bi bi-pencil-fill"></i>
-                                                </a>
-                                                <button type="button" 
-                                                        class="btn btn-danger flex-fill" 
-                                                        data-bs-toggle="modal" 
-                                                        data-bs-target="#deleteModal{{ match.id }}">
-                                                    <i class="bi bi-trash-fill"></i>
-                                                </button>
-                                            </div>
+                                            <button type="button" 
+                                                    class="btn btn-danger w-100" 
+                                                    data-bs-toggle="modal" 
+                                                    data-bs-target="#deleteModal{{ match.id }}">
+                                                <i class="bi bi-trash-fill me-1"></i>
+                                                Eliminar
+                                            </button>
                                         {% endif %}
                                     </div>
                                 </div>
@@ -165,7 +161,7 @@
                             <i class="bi bi-x-circle me-1"></i>
                             Cancelar
                         </button>
-                        <form action="#" method="POST" style="display: inline;">
+                        <form action="{{ url_for('match.delete', id=match.id) }}" method="POST" style="display: inline;">
                             <button type="submit" class="btn btn-danger">
                                 <i class="bi bi-trash-fill me-1"></i>
                                 Eliminar
