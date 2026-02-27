@@ -11,9 +11,11 @@ class Match (db.Model):
     date = db.Column(db.DateTime, nullable=False)
     result = db.Column(db.String(80), nullable=True)
     court_id = db.Column(db.Integer, db.ForeignKey('court.id'), nullable=False)
+    court = db.relationship('Court', backref='matches', lazy=True)
     players = db.relationship('Player', secondary='player_match', back_populates='matches')
     goals = db.relationship('Goal', backref='match', lazy=True)
     mvp_id = db.Column(db.Integer, db.ForeignKey('player.id'), nullable=True)
+    mvp = db.relationship('Player', foreign_keys=[mvp_id], backref='mvp_matches', lazy=True)
     
     
     

@@ -1,7 +1,6 @@
 
 from flask import Blueprint, render_template, session, request, flash, redirect, url_for
-from vercel_blob.blob_store import put, delete
-import uuid
+from src.web.utils.storage import save_file, delete_file
 import os
 from src.models import Player,User
 
@@ -44,28 +43,21 @@ def upload_profile_picture():
             return redirect(url_for('player.show', id=session['user']['id']))
         
 
-        # Genera un nombre único para el archivo
-        file_name = f"profile_pictures/{uuid.uuid4()}_{file.filename}"
-
         try:
+            # Eliminar foto anterior si existe
             if player.profile_picture:
-                response = delete(
-                    url=player.profile_picture,
-                    options={"token": os.getenv("BLOB_READ_WRITE_TOKEN")}
-                )
-                pass
-            response = put(
-                path=file_name,
-                data=file.read(),
-                options={"token": os.getenv("BLOB_READ_WRITE_TOKEN")}
-            )
-            file_url = response.get("url")  # Obtén la URL del archivo subido
-
-            # Guarda la URL en la base de datos
-            user = User.get_by_id(session['user']['id'])
-            Player.update_profile_picture(user.player_id, file_url)
-
-            flash("Foto de perfil actualizada correctamente", "success")
+                delete_file(player.profile_picture)
+            
+            # Guardar nueva foto
+            result = save_file(file, folder='player')
+            if result:
+                file_url = result['url']
+                
+                # Guarda la URL en la base de datos
+                Player.update_profile_picture(user.player_id, file_url)
+                flash("Foto de perfil actualizada correctamente", "success")
+            else:
+                flash("Error al guardar la imagen", "danger")
         except Exception as e:
             flash(f"Error al subir la foto de perfil: {str(e)}", "danger")
 
@@ -87,11 +79,7 @@ def delete_profile_picture():
         player = Player.get_by_id(user.player_id)
 
         if player.profile_picture:
-            response = delete(
-                url=player.profile_picture,
-                options={"token": os.getenv("BLOB_READ_WRITE_TOKEN")}
-            )
-            pass
+            delete_file(player.profile_picture)
 
         # Actualiza la base de datos
         Player.update_profile_picture(user.player_id, None)
@@ -101,5 +89,3 @@ def delete_profile_picture():
         flash(f"Error al eliminar la foto de perfil: {str(e)}", "danger")
 
     return redirect(url_for('player.show', id=session['user']['id']))
-
-        

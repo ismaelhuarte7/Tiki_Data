@@ -1,12 +1,15 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash
-from src.models import Match
+from flask import Blueprint, render_template, request, redirect, url_for, flash, session
+from src.models import Match, User
 
 bp = Blueprint("match", __name__, url_prefix="/match")
 
 @bp.route('/', methods=['GET'])
 def index():
     matches = Match.get_all_matches()
-    return render_template("match/index.html", matches=matches)
+    user = None
+    if 'user' in session:
+        user = User.get_by_id(session['user']['id'])
+    return render_template("match/index.html", matches=matches, user=user)
 
 @bp.route('/create', methods=['GET', 'POST'])
 def create():

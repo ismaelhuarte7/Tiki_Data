@@ -1,11 +1,9 @@
 from flask import Flask
-from dotenv import load_dotenv
 from flask_session import Session
 from config import database
 from config.database import db
 from src.web import comandos, routes
     
-load_dotenv()    
 session = Session()
 
 def create_app(config_class):

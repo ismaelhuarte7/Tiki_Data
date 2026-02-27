@@ -1,6 +1,5 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for, session
-from vercel_blob.blob_store import put
-import uuid
+from src.web.utils.storage import save_file, delete_file
 import os
 from src.models import Court, User, News
 
@@ -29,14 +28,13 @@ def create():
         picture_url = None
         if picture and picture.filename != '':
             try:
-                # Generar un nombre único para el archivo
-                file_name = f"court_pictures/{uuid.uuid4()}_{picture.filename}"
-                response = put(
-                    path=file_name,
-                    data=picture.read(),
-                    options={"token": os.getenv("BLOB_READ_WRITE_TOKEN")}
-                )
-                picture_url = response.get("url")  # Obtener la URL del archivo subido
+                # Guardar la imagen localmente
+                result = save_file(picture, folder='court')
+                if result:
+                    picture_url = result['url']
+                else:
+                    flash("Error al guardar la imagen", "danger")
+                    return render_template("court/create.html")
             except Exception as e:
                 flash(f"Error al subir la imagen: {str(e)}", "danger")
                 return render_template("court/create.html")
@@ -57,7 +55,9 @@ def create():
 @bp.route('/list')
 def list():
     courts = Court.list()
-    user = User.get_by_id(session['user']['id'])
+    user = None
+    if 'user' in session:
+        user = User.get_by_id(session['user']['id'])
     return render_template("court/list.html", courts=courts, user=user)
 
 
@@ -85,18 +85,17 @@ def edit(id):
         picture_url = None
         if picture and picture.filename != '':
             try:
+                # Eliminar imagen anterior si existe
                 if court.picture:
-                    response = delete(
-                        url=court.picture,
-                        options={"token": os.getenv("BLOB_READ_WRITE_TOKEN")}
-                    )
-                file_name = f"court_pictures/{uuid.uuid4()}_{picture.filename}"
-                response = put(
-                    path=file_name,
-                    data=picture.read(),
-                    options={"token": os.getenv("BLOB_READ_WRITE_TOKEN")}
-                )
-                picture_url = response.get("url")  # Obtener la URL del archivo subido
+                    delete_file(court.picture)
+                
+                # Guardar nueva imagen
+                result = save_file(picture, folder='court')
+                if result:
+                    picture_url = result['url']
+                else:
+                    flash("Error al guardar la imagen", "danger")
+                    return render_template("court/edit.html", court=court)
             except Exception as e:
                 flash(f"Error al subir la imagen: {str(e)}", "danger")
                 return render_template("court/edit.html", court=court)
@@ -123,11 +122,10 @@ def delete(id):
     try:
         court = Court.get_by_id(id)
         if court:
+            # Eliminar imagen si existe
             if court.picture:
-                response = delete(
-                    url=court.picture,
-                    options={"token": os.getenv("BLOB_READ_WRITE_TOKEN")}
-                )
+                delete_file(court.picture)
+            
             Court.delete(id)
             flash("Cancha eliminada correctamente", "success")
         else:
@@ -135,7 +133,5 @@ def delete(id):
     except Exception as e:
         flash(f"Error al eliminar la cancha: {str(e)}", "danger")
         return render_template('court/list.html')
-    court = Court.get_by_id(id)
-    Court.delete(id)
-    flash("Cancha eliminada correctamente", "success")
-    return render_template('court/list.html')
+    
+    return redirect(url_for('court.list'))

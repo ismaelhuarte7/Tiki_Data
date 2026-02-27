@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, session
+from flask import Blueprint, render_template, session, send_from_directory
 from config.config import env
 from config.database import db
 import os
@@ -7,6 +7,7 @@ from src.web.controllers.auth import bp as auth_bp
 from src.web.controllers.player import bp as player_bp
 from src.web.controllers.court import bp as court_bp
 from src.web.controllers.news import bp as news_bp
+from src.web.controllers.match import bp as match_bp
 
 
 
@@ -19,6 +20,12 @@ def register(app):
             session.clear()
         return render_template("home.html", user=user, news_list=news)
     
+    # Ruta para servir archivos subidos (imágenes)
+    @app.route('/uploads/<path:filename>')
+    def uploaded_file(filename):
+        upload_folder = app.config.get('UPLOAD_FOLDER', 'uploads')
+        return send_from_directory(upload_folder, filename)
+    
     @app.errorhandler(404)
     def page_not_found(e):
         return render_template("errors/404.html"), 404
@@ -29,4 +36,5 @@ def register(app):
     app.register_blueprint(player_bp)
     app.register_blueprint(news_bp)
     app.register_blueprint(court_bp)
+    app.register_blueprint(match_bp)
 
