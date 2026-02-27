@@ -3,7 +3,7 @@ from config.database import db
 class Court (db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80), nullable=False)
-    address = db.Column(db.String(255), nullable=False)
+    address = db.Column(db.Text, nullable=False)  # Cambiado a Text para URLs largas de Google Maps
     picture = db.Column(db.String(255), nullable=True)
 
 
