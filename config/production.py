@@ -36,9 +36,10 @@ class Config:
         print("WARNING: Redis no configurado, usando sesiones en filesystem")
     
     # Cloudinary para almacenamiento de imágenes
-    CLOUDINARY_CLOUD_NAME = os.environ.get("CLOUDINARY_CLOUD_NAME")
-    CLOUDINARY_API_KEY = os.environ.get("CLOUDINARY_API_KEY")
-    CLOUDINARY_API_SECRET = os.environ.get("CLOUDINARY_API_SECRET")
+    # Limpiar espacios en blanco de las variables
+    CLOUDINARY_CLOUD_NAME = os.environ.get("CLOUDINARY_CLOUD_NAME", "").strip()
+    CLOUDINARY_API_KEY = os.environ.get("CLOUDINARY_API_KEY", "").strip()
+    CLOUDINARY_API_SECRET = os.environ.get("CLOUDINARY_API_SECRET", "").strip()
     
     # Validar configuración de Cloudinary
     if not all([CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET]):
@@ -47,6 +48,7 @@ class Config:
         UPLOAD_FOLDER = os.path.join(os.path.dirname(__file__), '..', 'uploads')
     else:
         USE_CLOUDINARY = True
+        print(f"INFO: Cloudinary configurado - Cloud: {CLOUDINARY_CLOUD_NAME}, API Key: {CLOUDINARY_API_KEY[:8]}...")
     
     MAX_CONTENT_LENGTH = 16 * 1024 * 1024  # 16MB max
     

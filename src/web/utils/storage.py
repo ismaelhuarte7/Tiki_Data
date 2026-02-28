@@ -53,19 +53,14 @@ def save_file(file, folder='general'):
         try:
             # Generar nombre único
             filename = secure_filename(file.filename)
-            unique_name = f"{uuid.uuid4().hex}_{filename}"
-            public_id = f"tiki/{folder}/{unique_name.rsplit('.', 1)[0]}"
+            unique_name = f"{uuid.uuid4().hex}_{filename.rsplit('.', 1)[0]}"
             
-            # Subir a Cloudinary
+            # Subir a Cloudinary sin transformaciones (más simple y rápido)
             result = cloudinary.uploader.upload(
                 file,
-                public_id=public_id,
                 folder=f"tiki/{folder}",
-                resource_type="auto",
-                transformation=[
-                    {'width': 1200, 'height': 1200, 'crop': 'limit'},
-                    {'quality': 'auto:good'}
-                ]
+                public_id=unique_name,
+                resource_type="auto"
             )
             
             return {
