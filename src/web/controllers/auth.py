@@ -1,8 +1,8 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from itsdangerous import URLSafeTimedSerializer
 from flask import session, current_app
-from flask import current_app
-from mailjet_rest import Client
+import resend
+from datetime import datetime
 from src.models import User, Player, News
 
 bp = Blueprint("auth", __name__, url_prefix="/auth")
@@ -88,42 +88,38 @@ def logout():
 
 
 def send_verification_email(to_email):
+    """Envía email de verificación usando Resend"""
     token = generate_verification_token(to_email)
     verification_url = f"{current_app.config['BASE_URL']}/auth/verify/{token}"
-
     user = User.get_by_email(to_email)
 
-    html_content = render_template("auth/mail_verification.html", mail_link_validator=verification_url, username=user.username)
-
-    correo = {
-        'Messages': [
-            {
-                "From": {
-                    "Email": current_app.config.get('MAIL_DEFAULT_SENDER'),  
-                    "Name": "Tiki-Data" 
-                },
-                "To": [
-                    {
-                        "Email": to_email,  
-                        "Name": user.username 
-                    }
-                ],
-                "Subject": "Verifica tu cuenta - Tiki-Data", 
-                "TextPart": f"Por favor, verifica tu correo electrónico: {verification_url}",  
-                "HTMLPart": html_content  
-            }
-        ]
-    }
+    # Renderizar plantilla HTML
+    html_content = render_template(
+        "auth/mail_verification.html", 
+        mail_link_validator=verification_url, 
+        username=user.username,
+        current_year=datetime.now().year
+    )
 
     try:
-        mailjet = Client(auth=(current_app.config.get('MAILJET_API_KEY'), current_app.config.get('MAILJET_SECRET_KEY')), version='v3.1')
-        resultado = mailjet.send.create(data=correo)
-        if resultado.status_code == 200:
-            print("Correo enviado correctamente")
-        else:
-            print("Error al enviar el correo:", resultado.json())
+        # Configurar API key de Resend
+        resend.api_key = current_app.config.get('RESEND_API_KEY')
+        
+        # Enviar email
+        params = {
+            "from": f"Tiki-Data <{current_app.config.get('MAIL_DEFAULT_SENDER')}>",
+            "to": [to_email],
+            "subject": "Verifica tu cuenta - Tiki-Data",
+            "html": html_content,
+        }
+        
+        email = resend.Emails.send(params)
+        print(f"✅ Email de verificación enviado a {to_email} - ID: {email.get('id', 'N/A')}")
+        return True
+        
     except Exception as e:
-        print("Error inesperado:", str(e))
+        print(f"❌ Error al enviar email de verificación: {str(e)}")
+        return False
 
 def generate_verification_token(email):
     serializer = URLSafeTimedSerializer(current_app.config["SECRET_KEY"])

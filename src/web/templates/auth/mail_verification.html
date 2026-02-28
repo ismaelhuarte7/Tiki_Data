@@ -5,65 +5,268 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Verificación de Cuenta - Tiki-Data</title>
     <style>
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: #181411;
-            color: #ffffff;
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+        
+        * {
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
         }
-        .container {
-            width: 100%;
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #0a0e18 0%, #111827 100%);
+            color: #f8fafc;
+            margin: 0;
+            padding: 40px 20px;
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        .email-wrapper {
             max-width: 600px;
-            margin: auto;
-            background-color: #14100d;
-            padding: 20px;
-            border-radius: 10px;
-            border: 1px solid #FF6B00;
+            margin: 0 auto;
+            background: #111827;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            padding: 40px 40px 30px;
+            text-align: center;
+            border-bottom: 2px solid rgba(0, 255, 136, 0.2);
+            position: relative;
+        }
+        
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #00ff88, transparent);
+        }
+        
+        .logo {
+            font-size: 32px;
+            font-weight: 700;
+            color: #00ff88;
+            text-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+        
+        .tagline {
+            font-size: 14px;
+            color: #94a3b8;
+            font-weight: 400;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: #f8fafc;
+            margin-bottom: 16px;
             text-align: center;
         }
-        .logo {
-            max-width: 150px;
-            margin-bottom: 20px;
-        }
-        h1 {
-            color: #FF6B00;
-        }
-        p {
+        
+        .greeting {
             font-size: 16px;
-            color: #ffffff;
+            color: #cbd5e1;
+            margin-bottom: 24px;
         }
-        .btn {
+        
+        .highlight {
+            color: #00ff88;
+            font-weight: 600;
+        }
+        
+        .message {
+            font-size: 15px;
+            color: #cbd5e1;
+            line-height: 1.6;
+            margin-bottom: 32px;
+        }
+        
+        .button-container {
+            text-align: center;
+            margin: 32px 0;
+        }
+        
+        .verify-button {
             display: inline-block;
-            background-color: #FF6B00;
-            color: white;
+            background: linear-gradient(135deg, #00ff88 0%, #00cc6d 100%);
+            color: #0a0e18;
             text-decoration: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            font-size: 18px;
-            margin-top: 20px;
+            padding: 16px 48px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            box-shadow: 0 4px 16px rgba(0, 255, 136, 0.3);
+            transition: all 0.3s ease;
         }
-        .btn:hover {
-            background-color: #e65a00;
+        
+        .verify-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 24px rgba(0, 255, 136, 0.5);
         }
-        .footer {
-            margin-top: 20px;
+        
+        .alternative-link {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            padding: 16px;
+            margin-top: 24px;
+        }
+        
+        .alternative-link p {
+            font-size: 13px;
+            color: #94a3b8;
+            margin-bottom: 8px;
+        }
+        
+        .link-text {
             font-size: 12px;
-            color: #bbbbbb;
+            color: #00ff88;
+            word-break: break-all;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .warning {
+            background: rgba(255, 107, 107, 0.1);
+            border-left: 3px solid #ff6b6b;
+            padding: 16px;
+            margin-top: 24px;
+            border-radius: 8px;
+        }
+        
+        .warning p {
+            font-size: 13px;
+            color: #f8fafc;
+            margin: 0;
+        }
+        
+        .footer {
+            background: #0f172a;
+            padding: 32px 40px;
+            text-align: center;
+            border-top: 1px solid #1e293b;
+        }
+        
+        .footer-text {
+            font-size: 13px;
+            color: #64748b;
+            line-height: 1.6;
+        }
+        
+        .footer-text a {
+            color: #00ff88;
+            text-decoration: none;
+        }
+        
+        .social-links {
+            margin-top: 16px;
+        }
+        
+        .social-links a {
+            display: inline-block;
+            width: 32px;
+            height: 32px;
+            background: #1e293b;
+            border-radius: 50%;
+            margin: 0 4px;
+            line-height: 32px;
+            color: #94a3b8;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .social-links a:hover {
+            background: #00ff88;
+            color: #0a0e18;
+        }
+        
+        @media only screen and (max-width: 600px) {
+            body {
+                padding: 20px 10px;
+            }
+            
+            .content {
+                padding: 32px 24px;
+            }
+            
+            .header {
+                padding: 32px 24px 24px;
+            }
+            
+            .footer {
+                padding: 24px 20px;
+            }
+            
+            h1 {
+                font-size: 24px;
+            }
+            
+            .verify-button {
+                padding: 14px 32px;
+                font-size: 15px;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Verifica tu Cuenta</h1>
-        <p>Hola {{ username }},</p>
-        <p>Gracias por registrarte en Tiki-Data. Antes de comenzar, por favor confirma tu dirección de correo electrónico haciendo clic en el siguiente botón:</p>
-        <a href="{{ mail_link_validator }}" class="btn">Verificar Cuenta</a>
-        <P> En caso de que el botón no funcione, puedes copiar y pegar el siguiente enlace en tu navegador:</p>
-        <p>{{ mail_link_validator }}</p>
-        <p>Si no solicitaste este correo, puedes ignorarlo.</p>
-        <div class="footer bg-dark">
-            <p>&copy; 2025 Tiki-Data. Todos los derechos reservados.</p>
+    <div class="email-wrapper">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo">⚽ TIKI-DATA</div>
+            <div class="tagline">Tu plataforma de gestión deportiva</div>
+        </div>
+        
+        <!-- Content -->
+        <div class="content">
+            <h1>¡Verifica tu Cuenta!</h1>
+            
+            <p class="greeting">
+                Hola <span class="highlight">{{ username }}</span>,
+            </p>
+            
+            <p class="message">
+                ¡Bienvenido a Tiki-Data! 🎉 Estamos emocionados de tenerte con nosotros. 
+                Para completar tu registro y empezar a disfrutar de todas las funcionalidades, 
+                necesitamos verificar tu dirección de correo electrónico.
+            </p>
+            
+            <div class="button-container">
+                <a href="{{ mail_link_validator }}" class="verify-button">
+                    Verificar mi Cuenta
+                </a>
+            </div>
+            
+            <div class="alternative-link">
+                <p>Si el botón no funciona, copia y pega este enlace en tu navegador:</p>
+                <p class="link-text">{{ mail_link_validator }}</p>
+            </div>
+            
+            <div class="warning">
+                <p>
+                    🔒 <strong>Seguridad:</strong> Si no creaste esta cuenta, puedes ignorar este correo. 
+                    El enlace expirará en 1 hora.
+                </p>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <div class="footer">
+            <p class="footer-text">
+                © {{ current_year }} Tiki-Data. Todos los derechos reservados.<br>
+                Sistema de gestión deportiva profesional.
+            </p>
         </div>
     </div>
 </body>

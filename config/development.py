@@ -19,9 +19,10 @@ class Config:
         SESSION_FILE_DIR = os.path.join(os.path.dirname(__file__), '..', 'flask_session')
     
     SECRET_KEY = os.environ.get("SECRET_KEY", "dev-secret-key-change-in-production")
-    MAILJET_API_KEY = os.environ.get("MAILJET_API_KEY", "")
-    MAILJET_SECRET_KEY = os.environ.get("MAILJET_SECRET_KEY", "")
-    MAIL_DEFAULT_SENDER = os.environ.get("MAIL_DEFAULT_SENDER", "noreply@localhost")
+    
+    # Resend para emails
+    RESEND_API_KEY = os.environ.get("RESEND_API_KEY", "")
+    MAIL_DEFAULT_SENDER = os.environ.get("MAIL_DEFAULT_SENDER", "onboarding@resend.dev")
     BASE_URL = os.getenv("BASE_URL", "http://localhost:5000")
     SESSION_COOKIE_SECURE = False
     SESSION_COOKIE_HTTPONLY = True

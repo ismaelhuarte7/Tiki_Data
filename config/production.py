@@ -5,9 +5,10 @@ from urllib.parse import quote_plus
 class Config:
     DEBUG = False
     SECRET_KEY = os.environ.get("SECRET_KEY")
-    MAILJET_API_KEY = os.getenv("MAILJET_API_KEY", "")
-    MAILJET_SECRET_KEY = os.getenv("MAILJET_SECRET_KEY", "")
-    MAIL_DEFAULT_SENDER = os.environ.get("MAIL_DEFAULT_SENDER", "noreply@localhost")
+    
+    # Resend para emails
+    RESEND_API_KEY = os.environ.get("RESEND_API_KEY", "").strip()
+    MAIL_DEFAULT_SENDER = os.environ.get("MAIL_DEFAULT_SENDER", "onboarding@resend.dev")
     BASE_URL = os.getenv("BASE_URL")
     SESSION_COOKIE_SECURE = True
     SESSION_COOKIE_HTTPONLY = True
