@@ -35,8 +35,19 @@ class Config:
         SESSION_TYPE = "filesystem"
         print("WARNING: Redis no configurado, usando sesiones en filesystem")
     
-    # Almacenamiento local para imágenes (Railway tiene volúmenes persistentes)
-    UPLOAD_FOLDER = os.path.join(os.path.dirname(__file__), '..', 'uploads')
+    # Cloudinary para almacenamiento de imágenes
+    CLOUDINARY_CLOUD_NAME = os.environ.get("CLOUDINARY_CLOUD_NAME")
+    CLOUDINARY_API_KEY = os.environ.get("CLOUDINARY_API_KEY")
+    CLOUDINARY_API_SECRET = os.environ.get("CLOUDINARY_API_SECRET")
+    
+    # Validar configuración de Cloudinary
+    if not all([CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET]):
+        print("WARNING: Cloudinary no configurado, usando almacenamiento local")
+        USE_CLOUDINARY = False
+        UPLOAD_FOLDER = os.path.join(os.path.dirname(__file__), '..', 'uploads')
+    else:
+        USE_CLOUDINARY = True
+    
     MAX_CONTENT_LENGTH = 16 * 1024 * 1024  # 16MB max
     
     # Base de datos MySQL (Railway proporciona estas variables)
