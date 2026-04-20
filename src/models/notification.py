@@ -1,5 +1,5 @@
 from config.database import db
-from datetime import datetime
+from datetime import datetime, timezone
 
 class Notification(db.Model):
     __tablename__ = 'notification'
@@ -8,7 +8,8 @@ class Notification(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     message = db.Column(db.String(255), nullable=False)
     match_id = db.Column(db.Integer, db.ForeignKey('match.id'), nullable=True)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
+    is_read = db.Column(db.Boolean, default=False)
     
     # Relaciones
     user = db.relationship('User', backref=db.backref('notifications', cascade='all, delete-orphan'))
@@ -29,14 +30,14 @@ class Notification(db.Model):
     @staticmethod
     def get_by_user(user_id):
         """Obtener todas las notificaciones de un usuario"""
-        return Notification.query.filter_by(user_id=user_id).order_by(Notification.created_at.desc()).all()
+        return Notification.query.filter_by(user_id=user_id, is_read=False).order_by(Notification.created_at.desc()).all()
     
     @staticmethod
     def mark_as_read(notification_id):
-        """Marcar como leída (eliminar de la BD)"""
+        """Marcar como leída (actualizar is_read en la BD)"""
         notification = Notification.query.get(notification_id)
         if notification:
-            db.session.delete(notification)
+            notification.is_read = True
             db.session.commit()
             return True
         return False
@@ -44,4 +45,4 @@ class Notification(db.Model):
     @staticmethod
     def count_by_user(user_id):
         """Contar notificaciones de un usuario"""
-        return Notification.query.filter_by(user_id=user_id).count()
+        return Notification.query.filter_by(user_id=user_id, is_read=False).count()

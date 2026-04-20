@@ -12,6 +12,7 @@
                 </div>
                 <div class="card-body">
                     <form method="POST" enctype="multipart/form-data">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                         <!-- Campo para el nombre -->
                         <div class="mb-3">
                             <label for="name" class="form-label">Nombre de la Cancha</label>

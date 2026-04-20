@@ -99,6 +99,8 @@ def edit(id):
             except Exception as e:
                 flash(f"Error al subir la imagen: {str(e)}", "danger")
                 return render_template("court/edit.html", court=court)
+        else:
+            picture_url = court.picture
 
         # Actualizar la cancha en la base de datos
         court = Court.update(id, name=name, address=address, picture=picture_url)
@@ -108,16 +110,16 @@ def edit(id):
     return render_template("court/edit.html", court=court)
 
 
-@bp.route('delete/<int:id>', methods=['GET', 'POST'])
+@bp.route('delete/<int:id>', methods=['POST'])
 def delete(id):
     if 'user' not in session:
         flash("Debes iniciar sesión para eliminar una cancha", "danger")
-        return render_template('auth/login.html')
+        return redirect(url_for('auth.login'))
     
     user=User.get_by_id(session['user']['id'])
     if user.is_admin == False:
         flash("No tienes permiso para eliminar una cancha", "danger")
-        return render_template('court/list.html')
+        return redirect(url_for('court.list'))
     
     try:
         court = Court.get_by_id(id)
@@ -132,6 +134,6 @@ def delete(id):
             flash("Cancha no encontrada", "danger")
     except Exception as e:
         flash(f"Error al eliminar la cancha: {str(e)}", "danger")
-        return render_template('court/list.html')
+        return redirect(url_for('court.list'))
     
     return redirect(url_for('court.list'))

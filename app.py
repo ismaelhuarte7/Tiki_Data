@@ -4,6 +4,15 @@ from dotenv import load_dotenv
 # Cargar variables de entorno ANTES de importar Config
 load_dotenv()
 
+import logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s [%(levelname)s] %(name)s: %(message)s',
+    handlers=[
+        logging.StreamHandler()
+    ]
+)
+
 from src.web import create_app
 from config.config import Config
 

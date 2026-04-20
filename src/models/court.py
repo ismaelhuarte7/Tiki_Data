@@ -10,18 +10,22 @@ class Court (db.Model):
     def __repr__(self):
         return self.name
     
+    @staticmethod
     def create(name, address, picture):
         court = Court(name=name, address=address, picture=picture)
         db.session.add(court)
         db.session.commit()
         return court
     
+    @staticmethod
     def get_by_id(id):
         return Court.query.get(id)
     
+    @staticmethod
     def list():
         return Court.query.all()
     
+    @staticmethod
     def update(id, name, address, picture):
         court = Court.get_by_id(id)
         court.name = name
@@ -30,6 +34,7 @@ class Court (db.Model):
         db.session.commit()
         return court
     
+    @staticmethod
     def delete(id):
         court = Court.get_by_id(id)
         db.session.delete(court)

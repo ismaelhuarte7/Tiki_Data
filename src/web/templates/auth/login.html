@@ -18,6 +18,7 @@
                 
                 <div class="card-body p-4">
                     <form method="POST" action="{{ url_for('auth.login') }}" class="needs-validation" novalidate>
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                         <!-- Usuario -->
                         <div class="mb-3">
                             <label for="username" class="form-label" style="color: var(--text-primary); font-weight: 600; font-size: 0.95rem;">
@@ -158,3 +159,4 @@
     }
 </style>
 {% endblock %}
+

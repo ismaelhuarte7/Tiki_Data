@@ -15,13 +15,16 @@ from src.web.controllers.notification import bp as notification_bp
 def register(app):
     @app.route("/")
     def home():
-        user = User.get_by_id(session.get('user', {}).get('id'))
+        user = None
+        if 'user' not in session:
+            session.clear()
+        else:
+            user = User.get_by_id(session['user']['id'])
+            
         page = request.args.get('page', 1, type=int)
         news_pagination = News.query.order_by(News.created_at.desc()).paginate(
             page=page, per_page=5, error_out=False
         )
-        if 'user' not in session:
-            session.clear()
         return render_template("home.html", user=user, news_pagination=news_pagination)
     
     # Ruta para servir archivos subidos (imágenes)

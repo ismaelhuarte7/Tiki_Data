@@ -15,6 +15,7 @@ class News(db.Model):
     court = db.relationship('Court', backref='news')
     match = db.relationship('Match', backref='news')
 
+    @staticmethod
     def create(title, content, user_id, player_id=None, court_id=None, match_id=None):
         news = News(
             title=title,
@@ -28,5 +29,6 @@ class News(db.Model):
         db.session.commit()
         return news
 
+    @staticmethod
     def get_all():
         return News.query.order_by(News.created_at.desc()).all()

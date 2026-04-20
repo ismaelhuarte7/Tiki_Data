@@ -9,7 +9,6 @@ bp = Blueprint("auth", __name__, url_prefix="/auth")
 
 @bp.route('/sign_up', methods=['GET', 'POST'])
 def signup():
-    session.clear()
     if request.method == "POST":
         email = request.form["email"]
         password = request.form["password"]
@@ -37,10 +36,27 @@ def signup():
                                  birthdate=birth_date)
         player = Player.create(name, surname, birth_date)
         user = User.create(username, email, password, player.id)
-        flash("Te enviamos un correo para verificar tu cuenta, revisa tu casilla de SPAM", "info")
-        send_verification_email(email)
         
-        return render_template("auth/login.html")
+        if current_app.config.get('REQUIRE_EMAIL_VERIFICATION', False):
+            flash("Te enviamos un correo para verificar tu cuenta, revisa tu casilla de SPAM", "info")
+            send_verification_email(email)
+            return render_template("auth/login.html")
+        else:
+            user.verify()
+            session['user'] = {
+                'id': user.id,       
+                'email': user.email,     
+                'username': user.username,
+                'player_id': user.player_id
+            }
+            News.create(
+                title="Nuevo Jugador Registrado",
+                content=f"Bienvenido a Tiki-Data, {user.username}!",
+                user_id=user.id,
+                player_id=player.id
+            )
+            flash("Registro exitoso. Bienvenido!", "success")
+            return redirect(url_for("home"))
         
     return render_template("auth/sign_up.html")
 
@@ -61,13 +77,14 @@ def login():
         if not user.check_password(password):
             flash("Contraseña incorrecta", "danger")
             return render_template("auth/login.html")
-        if not user.is_verified:
+        if current_app.config.get('REQUIRE_EMAIL_VERIFICATION', False) and not user.is_verified:
             flash("Usuario no verificado", "danger")
             return render_template("auth/login.html")
         session['user'] = {
             'id': user.id,       
             'email': user.email,     
-            'username': user.username  
+            'username': user.username,
+            'player_id': user.player_id
         }
         flash("Bienvenido", "success")
         return redirect(url_for("home"))
@@ -130,7 +147,7 @@ def confirm_verification_token(token, expiration=3600):
     serializer = URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
     try:
         email = serializer.loads(token, salt="email-confirm", max_age=expiration)
-    except:
+    except Exception:
         return None
     return email
 
@@ -149,7 +166,13 @@ def verify(token):
             user_id=user.id,
             player_id=player.id
         )
-    flash("Usuario verificado correctamente", "success")
-    return render_template("auth/login.html")
+    session['user'] = {
+        'id': user.id,       
+        'email': user.email,     
+        'username': user.username,
+        'player_id': user.player_id
+    }
+    flash("Usuario verificado correctamente. Bienvenido!", "success")
+    return redirect(url_for("home"))
 
     

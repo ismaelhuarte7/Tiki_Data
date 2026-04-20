@@ -48,7 +48,7 @@
         <div class="row g-4">
             {% for news in news_pagination.items %}
                 <div class="col-12 col-lg-10 col-xl-8 mx-auto">
-                    <div class="card fade-in" style="transition: all var(--transition);">
+                    <div class="card news-card fade-in" style="transition: all var(--transition);">
                         <div class="card-body">
                             <div class="row g-4">
                                 <!-- Imagen -->
@@ -195,7 +195,7 @@
         }
     }
     
-    .card:hover {
+    .news-card:hover {
         transform: translateY(-8px) !important;
         box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6), 0 0 30px rgba(0, 255, 136, 0.3) !important;
     }

@@ -16,9 +16,11 @@ class User(db.Model):
     def __repr__(self):
         return f"<User {self.username}>"
     
+    @staticmethod
     def get_all_users():
         return User.query.all()
     
+    @staticmethod
     def create(username, email, password, player_id):
         passwordhash = generate_password_hash(password,"scrypt", 8)
         user = User(username=username, email=email, password=passwordhash, player_id=player_id)
@@ -26,12 +28,15 @@ class User(db.Model):
         db.session.commit()
         return user
     
+    @staticmethod
     def get_by_id(id):
         return User.query.get(id)
     
+    @staticmethod
     def get_by_username(username):
         return User.query.filter_by(username=username).first()
     
+    @staticmethod
     def get_by_email(email):
         return User.query.filter_by(email=email).first()
     
@@ -42,6 +47,7 @@ class User(db.Model):
         self.is_verified = True
         db.session.commit()
 
+    @staticmethod
     def get_by_player_id(player_id):
         return User.query.filter_by(player_id=player_id).first()
     

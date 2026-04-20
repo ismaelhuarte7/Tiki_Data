@@ -11,7 +11,7 @@ class Config:
         SESSION_TYPE = "redis"
         try:
             SESSION_REDIS = redis.from_url(REDIS_URL)
-        except:
+        except Exception:
             SESSION_TYPE = "filesystem"
             SESSION_FILE_DIR = os.path.join(os.path.dirname(__file__), '..', 'flask_session')
     else:

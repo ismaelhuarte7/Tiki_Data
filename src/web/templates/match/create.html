@@ -52,6 +52,7 @@
 
             <!-- Form -->
             <form id="matchForm" action="{{ url_for('match.create') }}" method="POST">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                 
                 <!-- Step 1: Info Básica -->
                 <div class="form-step active" data-step="1">
@@ -706,7 +707,7 @@ function updateGoalsList() {
             <div style="background: var(--bg-card); padding: 1rem; border-radius: var(--radius-md); margin-bottom: 0.5rem; display: flex; align-items: center; justify-content: space-between; border-left: 4px solid ${color};">
                 <div>
                     <strong style="color: ${color};">Equipo ${goal.team}</strong>
-                    <span style="color: var(--text-primary); margin-left: 1rem;">⚽ ${scorerDisplay}</span>
+                    <span style="color: var(--text-primary); margin-left: 1rem;">Gol: ${scorerDisplay}</span>
                 </div>
                 <i class="bi bi-trash" style="color: var(--danger); cursor: pointer;" onclick="removeGoal(${index})"></i>
             </div>
@@ -750,7 +751,7 @@ function loadMatchSummary() {
                         <span style="color: #4da3ff;">${scoreB}</span>
                     </h2>
                     <p style="color: var(--text-muted); font-size: 1.1rem;">
-                        ${matchType} • ${courtName} • ${new Date(date).toLocaleString('es-AR')}
+                        ${matchType} - ${courtName} - ${new Date(date).toLocaleString('es-AR')}
                     </p>
                 </div>
             </div>
@@ -782,7 +783,7 @@ function loadMatchSummary() {
     
     goals.filter(g => g.team === 'A').forEach(goal => {
         const name = goal.scorer_type === 'guest' ? `${goal.scorer_name} (Invitado)` : goal.scorer_name;
-        html += `<li style="padding: 0.5rem; color: var(--text-secondary);">⚽ ${name}</li>`;
+        html += `<li style="padding: 0.5rem; color: var(--text-secondary);">Gol: ${name}</li>`;
     });
     
     html += `
@@ -821,7 +822,7 @@ function loadMatchSummary() {
     
     goals.filter(g => g.team === 'B').forEach(goal => {
         const name = goal.scorer_type === 'guest' ? `${goal.scorer_name} (Invitado)` : goal.scorer_name;
-        html += `<li style="padding: 0.5rem; color: var(--text-secondary);">⚽ ${name}</li>`;
+        html += `<li style="padding: 0.5rem; color: var(--text-secondary);">Gol: ${name}</li>`;
     });
     
     html += `
@@ -839,3 +840,4 @@ function loadMatchSummary() {
 showStep(1);
 </script>
 {% endblock %}
+

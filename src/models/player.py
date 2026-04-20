@@ -12,20 +12,24 @@ class Player (db.Model):
     user = db.relationship('User', back_populates='player', uselist=False)
     
     def __repr__(self):
-        return '<Player %r>' % self.user_name
+        return f'<Player {self.name} {self.surname}>'
     
+    @staticmethod
     def list():
         return Player.query.all()
     
+    @staticmethod
     def create(name, surname, birth_date):
         player = Player(name=name, surname=surname, birth_date=birth_date)
         db.session.add(player)
         db.session.commit()
         return player
     
+    @staticmethod
     def get_by_id(id):
         return Player.query.get(id)
     
+    @staticmethod
     def update_profile_picture(id, profile_picture):
         player = Player.query.get(id)
         player.profile_picture = profile_picture

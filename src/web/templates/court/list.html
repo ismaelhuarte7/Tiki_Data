@@ -125,6 +125,7 @@
                             Cancelar
                         </button>
                         <form action="{{ url_for('court.delete', id=court.id) }}" method="POST" style="display: inline;">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                             <button type="submit" class="btn btn-danger">
                                 <i class="bi bi-trash-fill me-1"></i>
                                 Eliminar
