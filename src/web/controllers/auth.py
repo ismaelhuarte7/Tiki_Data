@@ -1,9 +1,10 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from itsdangerous import URLSafeTimedSerializer
 from flask import session, current_app
-import resend
+from flask_mail import Message
 from datetime import datetime
 from src.models import User, Player, News
+from src.web import mail
 
 bp = Blueprint("auth", __name__, url_prefix="/auth")
 
@@ -105,7 +106,7 @@ def logout():
 
 
 def send_verification_email(to_email):
-    """Envía email de verificación usando Resend"""
+    """Envía email de verificación usando SMTP (Gmail)"""
     token = generate_verification_token(to_email)
     verification_url = f"{current_app.config['BASE_URL']}/auth/verify/{token}"
     user = User.get_by_email(to_email)
@@ -119,23 +120,22 @@ def send_verification_email(to_email):
     )
 
     try:
-        # Configurar API key de Resend
-        resend.api_key = current_app.config.get('RESEND_API_KEY')
-        
-        # Enviar email
-        params = {
-            "from": f"Tiki-Data <{current_app.config.get('MAIL_DEFAULT_SENDER')}>",
-            "to": [to_email],
-            "subject": "Verifica tu cuenta - Tiki-Data",
-            "html": html_content,
-        }
-        
-        email = resend.Emails.send(params)
-        print(f"✅ Email de verificación enviado a {to_email} - ID: {email.get('id', 'N/A')}")
+        if not current_app.config.get('MAIL_USERNAME') or not current_app.config.get('MAIL_PASSWORD'):
+            current_app.logger.error("MAIL_USERNAME/MAIL_PASSWORD no configurados")
+            return False
+
+        message = Message(
+            subject="Verifica tu cuenta - Tiki-Data",
+            sender=current_app.config.get('MAIL_DEFAULT_SENDER') or current_app.config.get('MAIL_USERNAME'),
+            recipients=[to_email],
+            html=html_content,
+        )
+        mail.send(message)
+        current_app.logger.info("Email de verificacion enviado a %s", to_email)
         return True
         
     except Exception as e:
-        print(f"❌ Error al enviar email de verificación: {str(e)}")
+        current_app.logger.exception("Error al enviar email de verificacion: %s", str(e))
         return False
 
 def generate_verification_token(email):

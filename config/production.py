@@ -2,13 +2,25 @@ import os
 import redis
 from urllib.parse import quote_plus
 
+
+def _to_bool(value, default=False):
+    if value is None:
+        return default
+    return value.strip().lower() in ("1", "true", "yes", "on")
+
 class Config:
     DEBUG = False
     SECRET_KEY = os.environ.get("SECRET_KEY")
+    REQUIRE_EMAIL_VERIFICATION = _to_bool(os.environ.get("REQUIRE_EMAIL_VERIFICATION"), True)
     
-    # Resend para emails
-    RESEND_API_KEY = os.environ.get("RESEND_API_KEY", "").strip()
-    MAIL_DEFAULT_SENDER = os.environ.get("MAIL_DEFAULT_SENDER", "onboarding@resend.dev")
+    # SMTP (Gmail)
+    MAIL_SERVER = os.environ.get("MAIL_SERVER", "smtp.gmail.com").strip()
+    MAIL_PORT = int(os.environ.get("MAIL_PORT", 587))
+    MAIL_USE_TLS = _to_bool(os.environ.get("MAIL_USE_TLS"), True)
+    MAIL_USE_SSL = _to_bool(os.environ.get("MAIL_USE_SSL"), False)
+    MAIL_USERNAME = os.environ.get("MAIL_USERNAME", "").strip()
+    MAIL_PASSWORD = os.environ.get("MAIL_PASSWORD", "").strip()
+    MAIL_DEFAULT_SENDER = os.environ.get("MAIL_DEFAULT_SENDER", MAIL_USERNAME).strip()
     BASE_URL = os.getenv("BASE_URL")
     SESSION_COOKIE_SECURE = True
     SESSION_COOKIE_HTTPONLY = True
@@ -77,4 +89,9 @@ class Config:
     
     SQLALCHEMY_DATABASE_URI = f"mysql+pymysql://{db_user}:{db_password_encoded}@{db_host}:{db_port}/{db_name}"
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+
+    if REQUIRE_EMAIL_VERIFICATION and (not MAIL_USERNAME or not MAIL_PASSWORD):
+        raise ValueError(
+            "ERROR: REQUIRE_EMAIL_VERIFICATION=true pero faltan MAIL_USERNAME/MAIL_PASSWORD en producción."
+        )
     

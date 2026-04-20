@@ -1,21 +1,25 @@
 from flask import Flask
 from flask_session import Session
+from flask_mail import Mail
 from config import database
 from config.database import db
-from src.web import comandos, routes
 from flask_wtf.csrf import CSRFProtect
 from flask_migrate import Migrate
 
 session = Session()
 csrf = CSRFProtect()
 migrate = Migrate()
+mail = Mail()
 
 def create_app(config_class):
     app = Flask(__name__)
-    # Comandos
-    comandos.register(app)
     # Configuración
     app.config.from_object(config_class)
+
+    from src.web import comandos, routes
+
+    # Comandos
+    comandos.register(app)
     # Rutas
 
     routes.register(app)
@@ -24,6 +28,7 @@ def create_app(config_class):
     session.init_app(app)
     csrf.init_app(app)
     migrate.init_app(app, db)
+    mail.init_app(app)
 
     @app.after_request
     def force_utf8(response):
