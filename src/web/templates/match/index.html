@@ -3,14 +3,14 @@
 {% block title %}Partidos - Tiki-Data{% endblock %}
 
 {% block content %}
-<div class="container-fluid">
+<div class="container-fluid match-list-page">
     <!-- Header Section -->
     <div class="row mb-4">
         <div class="col-12">
             <div class="d-flex align-items-center justify-content-between">
                 <div>
-                    <h2 class="mb-0" style="font-weight: 700;">
-                        <i class="bi bi-trophy-fill me-2" style="color: var(--primary);"></i>
+                    <h2 class="section-title">
+                        <i class="bi bi-trophy-fill"></i>
                         Partidos
                     </h2>
                     <p class="text-muted mt-2 mb-0">Historial de todos los partidos jugados</p>
@@ -22,7 +22,7 @@
                     </a>
                 {% endif %}
             </div>
-            <hr style="border-color: var(--border); opacity: 0.5; margin-top: 1rem;">
+            <hr class="section-divider">
         </div>
     </div>
 
@@ -30,20 +30,20 @@
         <div class="row g-4">
             {% for match in matches_pagination.items %}
                 <div class="col-12">
-                    <div class="card">
+                    <div class="card match-list-card">
                         <div class="card-body">
                             <div class="row align-items-center">
                                 <!-- Fecha y Cancha -->
                                 <div class="col-lg-3 mb-3 mb-lg-0">
                                     <div class="d-flex align-items-center gap-3">
-                                        <div style="width: 60px; height: 60px; background: var(--bg-secondary); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; border: 2px solid var(--primary);">
-                                            <i class="bi bi-calendar-event" style="font-size: 1.5rem; color: var(--primary);"></i>
+                                        <div class="match-list-date-icon">
+                                            <i class="bi bi-calendar-event"></i>
                                         </div>
                                         <div>
-                                            <div style="font-weight: 700; color: var(--text-primary);">
+                                            <div class="match-list-date-text">
                                                 {{ match.date.strftime('%d/%m/%Y %H:%M') if match.date else 'N/A' }}hs
                                             </div>
-                                            <div class="text-muted" style="font-size: 0.85rem;">
+                                            <div class="text-muted match-list-court-text">
                                                 <i class="bi bi-geo-alt me-1"></i>
                                                 {% if match.court %}
                                                     {{ match.court.name }}
@@ -57,28 +57,28 @@
 
                                 <!-- Equipos y Resultado -->
                                 <div class="col-lg-6 mb-3 mb-lg-0">
-                                    <div class="d-flex align-items-center justify-content-center gap-4">
+                                    <div class="d-flex align-items-center justify-content-center gap-4 match-list-score-wrap">
                                         <!-- Equipo 1 -->
                                         <div class="text-center flex-fill">
-                                            <div class="mb-2" style="color: var(--text-primary); font-weight: 600;">
+                                            <div class="mb-2 match-list-team-label">
                                                 Equipo 1
                                             </div>
-                                            <div style="font-size: 2rem; font-weight: 700; color: var(--primary); line-height: 1;">
+                                            <div class="match-list-team-score">
                                                 {{ match.result.split('-')[0] if match.result and '-' in match.result else '0' }}
                                             </div>
                                         </div>
 
                                         <!-- VS -->
-                                        <div style="padding: 0.5rem 1rem; background: var(--bg-secondary); border-radius: var(--radius-md); font-weight: 700; color: var(--text-muted); font-size: 0.9rem;">
+                                        <div class="match-list-vs-pill">
                                             VS
                                         </div>
 
                                         <!-- Equipo 2 -->
                                         <div class="text-center flex-fill">
-                                            <div class="mb-2" style="color: var(--text-primary); font-weight: 600;">
+                                            <div class="mb-2 match-list-team-label">
                                                 Equipo 2
                                             </div>
-                                            <div style="font-size: 2rem; font-weight: 700; color: var(--primary); line-height: 1;">
+                                            <div class="match-list-team-score">
                                                 {{ match.result.split('-')[1] if match.result and '-' in match.result else '0' }}
                                             </div>
                                         </div>
@@ -87,7 +87,7 @@
                                     <!-- MVP -->
                                     {% if match.mvp_id %}
                                         <div class="text-center mt-3">
-                                            <span class="badge" style="background: linear-gradient(135deg, var(--warning) 0%, #f39c12 100%); color: var(--bg-primary); font-weight: 600; padding: 0.5rem 1rem; border-radius: var(--radius-full); box-shadow: 0 4px 15px rgba(255, 193, 7, 0.3);">
+                                            <span class="badge match-list-mvp-badge">
                                                 <i class="bi bi-star-fill me-1"></i>
                                                 MVP: {{ match.mvp.first_name }} {{ match.mvp.last_name }}
                                             </span>
@@ -165,8 +165,8 @@
     {% else %}
         <div class="row">
             <div class="col-12">
-                <div class="text-center py-5" style="background: var(--bg-card); border-radius: var(--radius-lg); border: 1px solid var(--border);">
-                    <i class="bi bi-trophy" style="font-size: 4rem; color: var(--text-muted); display: block; margin-bottom: 1rem;"></i>
+                <div class="text-center py-5 empty-state-block">
+                    <i class="bi bi-trophy d-block mb-3 empty-state-icon"></i>
                     <h5 class="text-muted">No hay partidos registrados</h5>
                     <p class="text-muted mb-3">Los partidos aparecerán aquí cuando se registren</p>
                     {% if user and user.is_admin %}
@@ -196,14 +196,14 @@
                     </div>
                     <div class="modal-body">
                         <p class="mb-0">¿Estás seguro de que deseas eliminar el partido del <strong>{{ match.date.strftime('%d/%m/%Y') if match.date else 'N/A' }}</strong>?</p>
-                        <p class="text-muted mt-2 mb-0" style="font-size: 0.9rem;">Esta acción no se puede deshacer.</p>
+                        <p class="text-muted mt-2 mb-0 match-delete-note">Esta acción no se puede deshacer.</p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                             <i class="bi bi-x-circle me-1"></i>
                             Cancelar
                         </button>
-                        <form action="{{ url_for('match.delete', id=match.id) }}" method="POST" style="display: inline;">
+                        <form action="{{ url_for('match.delete', id=match.id) }}" method="POST" class="d-inline">
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                             <button type="submit" class="btn btn-danger">
                                 <i class="bi bi-trash-fill me-1"></i>
@@ -216,27 +216,5 @@
         </div>
     {% endfor %}
 {% endif %}
-
-<style>
-    .card {
-        animation: slideInLeft 0.5s ease;
-    }
-    
-    @keyframes slideInLeft {
-        from {
-            opacity: 0;
-            transform: translateX(-30px);
-        }
-        to {
-            opacity: 1;
-            transform: translateX(0);
-        }
-    }
-    
-    .card:hover {
-        transform: translateX(5px) !important;
-        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6), 0 0 20px rgba(0, 255, 136, 0.2) !important;
-    }
-</style>
 {% endblock %}
 

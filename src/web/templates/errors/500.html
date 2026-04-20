@@ -3,21 +3,22 @@
 {% block title %}Error 500 - Error del servidor{% endblock %}
 
 {% block content %}
-<div class="container mt-5">
+<div class="container error-page-wrap">
     <div class="row justify-content-center">
-        <div class="col-md-8 text-center">
-            <!-- Icono de error -->
-            <div class="mb-4">
-                <i class="bi bi-server text-danger" style="font-size: 5rem;"></i>
+        <div class="col-md-9 col-lg-8">
+            <div class="card error-page-card text-center">
+                <div class="card-body py-5 px-4 px-md-5">
+                    <div class="mb-4">
+                        <i class="bi bi-server error-page-icon error-page-icon-500"></i>
+                    </div>
+                    <h1 class="error-page-code">Error 500</h1>
+                    <p class="error-page-lead">Algo salió mal en el servidor.</p>
+                    <p class="error-page-copy">Intenta nuevamente en unos minutos o contacta al soporte técnico si el problema persiste.</p>
+                    <a href="{{ url_for('home') }}" class="btn btn-primary btn-lg mt-3 error-page-btn">
+                        <i class="bi bi-house-door-fill me-2"></i>Volver al inicio
+                    </a>
+                </div>
             </div>
-            <!-- Título y mensaje -->
-            <h1 class="display-4 fw-bold">Error 500</h1>
-            <p class="lead">¡Ups! Algo salió mal en el servidor.</p>
-            <p class="text-muted">Por favor, intenta nuevamente más tarde o contacta al soporte técnico.</p>
-            <!-- Botón para volver al inicio -->
-            <a href="{{ url_for('home') }}" class="btn btn-primary mt-3">
-                <i class="bi bi-house-door-fill"></i> Volver al inicio
-            </a>
         </div>
     </div>
 </div>

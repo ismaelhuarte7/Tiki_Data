@@ -3,48 +3,48 @@
 {% block title %}Registrar Partido{% endblock %}
 
 {% block content %}
-<div class="container mt-5" style="max-width: 1400px;">
+<div class="container mt-5 match-create-shell match-create-page">
     <div class="row">
         <div class="col-12">
             <!-- Header -->
-            <div class="card mb-4" style="background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-secondary) 100%); border: 1px solid var(--border);">
+            <div class="card mb-4 match-create-hero">
                 <div class="card-body text-center py-4">
-                    <h2 style="font-weight: 800; color: var(--text-primary); margin-bottom: 0.5rem;">
-                        <i class="bi bi-trophy me-2" style="color: var(--primary);"></i>
+                    <h2 class="match-create-title">
+                        <i class="bi bi-trophy me-2 match-create-title-icon"></i>
                         Registrar Nuevo Partido
                     </h2>
-                    <p style="color: var(--text-muted); margin: 0;">Completa los datos del partido paso a paso</p>
+                    <p class="match-create-subtitle">Completa los datos del partido paso a paso</p>
                 </div>
             </div>
 
             <!-- Progress Steps -->
             <div class="card mb-4">
                 <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center" style="position: relative;">
+                    <div class="d-flex justify-content-between align-items-center match-progress-wrap">
                         <!-- Progress Line -->
-                        <div style="position: absolute; top: 20px; left: 5%; right: 5%; height: 3px; background: var(--border); z-index: 0;"></div>
-                        <div id="progressLine" style="position: absolute; top: 20px; left: 5%; height: 3px; background: var(--primary); z-index: 0; width: 0%; transition: width 0.3s ease;"></div>
+                        <div class="match-progress-track"></div>
+                        <div id="progressLine" class="match-progress-line"></div>
                         
                         <!-- Steps -->
-                        <div class="text-center" style="flex: 1; position: relative; z-index: 1;">
-                            <div class="step-circle active" data-step="1" style="width: 40px; height: 40px; border-radius: 50%; background: var(--primary); margin: 0 auto 0.5rem; display: flex; align-items: center; justify-content: center; color: var(--bg-primary); font-weight: 700; box-shadow: 0 0 15px rgba(0, 255, 136, 0.5);">1</div>
-                            <small style="color: var(--text-primary); font-weight: 600;">Info Básica</small>
+                        <div class="text-center match-step-item">
+                            <div class="step-circle active" data-step="1">1</div>
+                            <small class="step-label active">Info Básica</small>
                         </div>
-                        <div class="text-center" style="flex: 1; position: relative; z-index: 1;">
-                            <div class="step-circle" data-step="2" style="width: 40px; height: 40px; border-radius: 50%; background: var(--bg-secondary); border: 2px solid var(--border); margin: 0 auto 0.5rem; display: flex; align-items: center; justify-content: center; color: var(--text-muted); font-weight: 700;">2</div>
-                            <small style="color: var(--text-muted);">Equipo A</small>
+                        <div class="text-center match-step-item">
+                            <div class="step-circle" data-step="2">2</div>
+                            <small class="step-label">Equipo A</small>
                         </div>
-                        <div class="text-center" style="flex: 1; position: relative; z-index: 1;">
-                            <div class="step-circle" data-step="3" style="width: 40px; height: 40px; border-radius: 50%; background: var(--bg-secondary); border: 2px solid var(--border); margin: 0 auto 0.5rem; display: flex; align-items: center; justify-content: center; color: var(--text-muted); font-weight: 700;">3</div>
-                            <small style="color: var(--text-muted);">Equipo B</small>
+                        <div class="text-center match-step-item">
+                            <div class="step-circle" data-step="3">3</div>
+                            <small class="step-label">Equipo B</small>
                         </div>
-                        <div class="text-center" style="flex: 1; position: relative; z-index: 1;">
-                            <div class="step-circle" data-step="4" style="width: 40px; height: 40px; border-radius: 50%; background: var(--bg-secondary); border: 2px solid var(--border); margin: 0 auto 0.5rem; display: flex; align-items: center; justify-content: center; color: var(--text-muted); font-weight: 700;">4</div>
-                            <small style="color: var(--text-muted);">Goles</small>
+                        <div class="text-center match-step-item">
+                            <div class="step-circle" data-step="4">4</div>
+                            <small class="step-label">Goles</small>
                         </div>
-                        <div class="text-center" style="flex: 1; position: relative; z-index: 1;">
-                            <div class="step-circle" data-step="5" style="width: 40px; height: 40px; border-radius: 50%; background: var(--bg-secondary); border: 2px solid var(--border); margin: 0 auto 0.5rem; display: flex; align-items: center; justify-content: center; color: var(--text-muted); font-weight: 700;">5</div>
-                            <small style="color: var(--text-muted);">Confirmar</small>
+                        <div class="text-center match-step-item">
+                            <div class="step-circle" data-step="5">5</div>
+                            <small class="step-label">Confirmar</small>
                         </div>
                     </div>
                 </div>
@@ -58,7 +58,7 @@
                 <div class="form-step active" data-step="1">
                     <div class="card">
                         <div class="card-header">
-                            <h4 style="margin: 0; color: var(--text-primary);"><i class="bi bi-info-circle me-2"></i>Información Básica del Partido</h4>
+                            <h4 class="match-step-title"><i class="bi bi-info-circle me-2"></i>Información Básica del Partido</h4>
                         </div>
                         <div class="card-body">
                             <div class="row g-4">
@@ -92,32 +92,32 @@
                 </div>
 
                 <!-- Step 2: Equipo A -->
-                <div class="form-step" data-step="2" style="display: none;">
+                <div class="form-step d-none" data-step="2">
                     <div class="card">
-                        <div class="card-header" style="background: linear-gradient(135deg, #ff6b6b 0%, #c92a2a 100%);">
-                            <h4 style="margin: 0; color: white;"><i class="bi bi-people-fill me-2"></i>Equipo A</h4>
+                        <div class="card-header match-team-header match-team-header-a">
+                            <h4 class="match-team-title"><i class="bi bi-people-fill me-2"></i>Equipo A</h4>
                         </div>
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-md-6">
-                                    <h5 style="color: var(--text-primary); margin-bottom: 1rem;">Jugadores Registrados</h5>
+                                    <h5 class="match-team-section-title">Jugadores Registrados</h5>
                                     <div class="mb-3">
-                                        <input type="text" class="form-control" id="searchPlayerA" placeholder="Buscar jugador..." style="margin-bottom: 1rem;">
+                                        <input type="text" class="form-control match-search-input" id="searchPlayerA" placeholder="Buscar jugador...">
                                     </div>
-                                    <div id="availablePlayersA" style="max-height: 400px; overflow-y: auto; border: 1px solid var(--border); border-radius: var(--radius-md); padding: 0.5rem;">
+                                    <div id="availablePlayersA" class="match-player-pool">
                                         {% for player in players %}
-                                            <div class="player-card" data-player-id="{{ player.id }}" data-player-name="{{ player.name }} {{ player.surname }}" style="padding: 0.75rem; margin-bottom: 0.5rem; background: var(--bg-secondary); border-radius: var(--radius-sm); cursor: pointer; transition: all 0.2s;">
+                                            <div class="player-card match-player-card" data-player-id="{{ player.id }}" data-player-name="{{ player.name }} {{ player.surname }}">
                                                 <div class="d-flex align-items-center">
                                                     {% if player.profile_picture %}
-                                                        <img src="{{ player.profile_picture }}" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; margin-right: 0.75rem;">
+                                                        <img src="{{ player.profile_picture }}" class="match-player-avatar" alt="{{ player.name }} {{ player.surname }}">
                                                     {% else %}
-                                                        <div style="width: 40px; height: 40px; border-radius: 50%; background: var(--border); display: flex; align-items: center; justify-content: center; margin-right: 0.75rem;">
-                                                            <i class="bi bi-person-fill" style="color: var(--text-muted);"></i>
+                                                        <div class="match-player-avatar-fallback">
+                                                            <i class="bi bi-person-fill"></i>
                                                         </div>
                                                     {% endif %}
                                                     <div>
-                                                        <div style="color: var(--text-primary); font-weight: 600;">{{ player.name }} {{ player.surname }}</div>
-                                                        <small style="color: var(--text-muted);">@{{ player.user.username }}</small>
+                                                        <div class="match-player-name">{{ player.name }} {{ player.surname }}</div>
+                                                        <small class="match-player-user">@{{ player.user.username }}</small>
                                                     </div>
                                                 </div>
                                             </div>
@@ -125,13 +125,13 @@
                                     </div>
                                 </div>
                                 <div class="col-md-6">
-                                    <h5 style="color: var(--text-primary); margin-bottom: 1rem;">Jugadores Seleccionados (<span id="countTeamA">0</span>/<span id="maxPlayersA">0</span>)</h5>
-                                    <div id="selectedPlayersA" style="min-height: 400px; border: 2px dashed var(--border); border-radius: var(--radius-md); padding: 1rem;">
-                                        <p style="color: var(--text-muted); text-align: center; margin-top: 2rem;">Haz clic en los jugadores para agregarlos</p>
+                                    <h5 class="match-team-section-title">Jugadores Seleccionados (<span id="countTeamA">0</span>/<span id="maxPlayersA">0</span>)</h5>
+                                    <div id="selectedPlayersA" class="match-selected-players">
+                                        <p class="match-selected-empty">Haz clic en los jugadores para agregarlos</p>
                                     </div>
                                     
                                     <div class="mt-3">
-                                        <h6 style="color: var(--text-primary); margin-bottom: 0.5rem;">Agregar Jugador Invitado</h6>
+                                        <h6 class="match-team-guest-title">Agregar Jugador Invitado</h6>
                                         <div class="input-group">
                                             <input type="text" class="form-control" id="guestNameA" placeholder="Nombre del invitado">
                                             <button type="button" class="btn btn-outline-primary" id="addGuestA">
@@ -148,30 +148,30 @@
                 </div>
 
                 <!-- Step 3: Equipo B -->
-                <div class="form-step" data-step="3" style="display: none;">
+                <div class="form-step d-none" data-step="3">
                     <div class="card">
-                        <div class="card-header" style="background: linear-gradient(135deg, #4da3ff 0%, #1c7ed6 100%);">
-                            <h4 style="margin: 0; color: white;"><i class="bi bi-people-fill me-2"></i>Equipo B</h4>
+                        <div class="card-header match-team-header match-team-header-b">
+                            <h4 class="match-team-title"><i class="bi bi-people-fill me-2"></i>Equipo B</h4>
                         </div>
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-md-6">
-                                    <h5 style="color: var(--text-primary); margin-bottom: 1rem;">Jugadores Registrados</h5>
+                                    <h5 class="match-team-section-title">Jugadores Registrados</h5>
                                     <div class="mb-3">
-                                        <input type="text" class="form-control" id="searchPlayerB" placeholder="Buscar jugador..." style="margin-bottom: 1rem;">
+                                        <input type="text" class="form-control match-search-input" id="searchPlayerB" placeholder="Buscar jugador...">
                                     </div>
-                                    <div id="availablePlayersB" style="max-height: 400px; overflow-y: auto; border: 1px solid var(--border); border-radius: var(--radius-md); padding: 0.5rem;">
+                                    <div id="availablePlayersB" class="match-player-pool">
                                         <!-- Se cargará dinámicamente con jugadores no seleccionados en equipo A -->
                                     </div>
                                 </div>
                                 <div class="col-md-6">
-                                    <h5 style="color: var(--text-primary); margin-bottom: 1rem;">Jugadores Seleccionados (<span id="countTeamB">0</span>/<span id="maxPlayersB">0</span>)</h5>
-                                    <div id="selectedPlayersB" style="min-height: 400px; border: 2px dashed var(--border); border-radius: var(--radius-md); padding: 1rem;">
-                                        <p style="color: var(--text-muted); text-align: center; margin-top: 2rem;">Haz clic en los jugadores para agregarlos</p>
+                                    <h5 class="match-team-section-title">Jugadores Seleccionados (<span id="countTeamB">0</span>/<span id="maxPlayersB">0</span>)</h5>
+                                    <div id="selectedPlayersB" class="match-selected-players">
+                                        <p class="match-selected-empty">Haz clic en los jugadores para agregarlos</p>
                                     </div>
                                     
                                     <div class="mt-3">
-                                        <h6 style="color: var(--text-primary); margin-bottom: 0.5rem;">Agregar Jugador Invitado</h6>
+                                        <h6 class="match-team-guest-title">Agregar Jugador Invitado</h6>
                                         <div class="input-group">
                                             <input type="text" class="form-control" id="guestNameB" placeholder="Nombre del invitado">
                                             <button type="button" class="btn btn-outline-primary" id="addGuestB">
@@ -188,18 +188,18 @@
                 </div>
 
                 <!-- Step 4: Goles -->
-                <div class="form-step" data-step="4" style="display: none;">
+                <div class="form-step d-none" data-step="4">
                     <div class="card">
                         <div class="card-header">
-                            <h4 style="margin: 0; color: var(--text-primary);"><i class="bi bi-award me-2"></i>Registro de Goles</h4>
+                            <h4 class="match-step-title"><i class="bi bi-award me-2"></i>Registro de Goles</h4>
                         </div>
                         <div class="card-body">
                             <div class="row g-3 mb-4">
                                 <div class="col-md-6">
-                                    <div class="card" style="border: 2px solid #ff6b6b;">
+                                    <div class="card match-goal-team-card team-a-card">
                                         <div class="card-body text-center">
-                                            <h3 style="color: #ff6b6b; font-weight: 800; margin: 0;">Equipo A</h3>
-                                            <div style="font-size: 4rem; color: var(--text-primary); font-weight: 800; margin: 1rem 0;" id="scoreTeamA">0</div>
+                                            <h3 class="match-goal-team-title team-a-title">Equipo A</h3>
+                                            <div class="match-goal-team-score" id="scoreTeamA">0</div>
                                             <button type="button" class="btn btn-primary" id="addGoalA">
                                                 <i class="bi bi-plus-circle me-2"></i>Agregar Gol
                                             </button>
@@ -207,10 +207,10 @@
                                     </div>
                                 </div>
                                 <div class="col-md-6">
-                                    <div class="card" style="border: 2px solid #4da3ff;">
+                                    <div class="card match-goal-team-card team-b-card">
                                         <div class="card-body text-center">
-                                            <h3 style="color: #4da3ff; font-weight: 800; margin: 0;">Equipo B</h3>
-                                            <div style="font-size: 4rem; color: var(--text-primary); font-weight: 800; margin: 1rem 0;" id="scoreTeamB">0</div>
+                                            <h3 class="match-goal-team-title team-b-title">Equipo B</h3>
+                                            <div class="match-goal-team-score" id="scoreTeamB">0</div>
                                             <button type="button" class="btn btn-primary" id="addGoalB">
                                                 <i class="bi bi-plus-circle me-2"></i>Agregar Gol
                                             </button>
@@ -219,11 +219,11 @@
                                 </div>
                             </div>
 
-                            <div class="card" style="background: var(--bg-secondary);">
+                            <div class="card match-goals-list-card">
                                 <div class="card-body">
-                                    <h5 style="color: var(--text-primary); margin-bottom: 1rem;">Lista de Goles</h5>
-                                    <div id="goalsList" style="max-height: 300px; overflow-y: auto;">
-                                        <p style="color: var(--text-muted); text-align: center; padding: 2rem;">No se han registrado goles aún</p>
+                                    <h5 class="match-team-section-title">Lista de Goles</h5>
+                                    <div id="goalsList" class="match-goals-list-wrap">
+                                        <p class="match-goals-empty">No se han registrado goles aún</p>
                                     </div>
                                 </div>
                             </div>
@@ -233,10 +233,10 @@
                 </div>
 
                 <!-- Step 5: Confirmación -->
-                <div class="form-step" data-step="5" style="display: none;">
+                <div class="form-step d-none" data-step="5">
                     <div class="card">
-                        <div class="card-header" style="background: linear-gradient(135deg, var(--primary) 0%, #00cc70 100%);">
-                            <h4 style="margin: 0; color: var(--bg-primary);"><i class="bi bi-check-circle me-2"></i>Resumen del Partido</h4>
+                        <div class="card-header match-summary-header">
+                            <h4 class="match-summary-title"><i class="bi bi-check-circle me-2"></i>Resumen del Partido</h4>
                         </div>
                         <div class="card-body">
                             <div id="matchSummary"></div>
@@ -247,14 +247,14 @@
                 <!-- Navigation Buttons -->
                 <div class="card mt-4">
                     <div class="card-body">
-                        <div class="d-flex justify-content-between">
-                            <button type="button" class="btn btn-secondary btn-lg" id="prevBtn" style="display: none;">
+                        <div class="d-flex justify-content-between match-nav-actions">
+                            <button type="button" class="btn btn-secondary btn-lg d-none" id="prevBtn">
                                 <i class="bi bi-arrow-left me-2"></i>Anterior
                             </button>
                             <button type="button" class="btn btn-primary btn-lg ms-auto" id="nextBtn">
                                 Siguiente<i class="bi bi-arrow-right ms-2"></i>
                             </button>
-                            <button type="submit" class="btn btn-success btn-lg ms-auto" id="submitBtn" style="display: none;">
+                            <button type="submit" class="btn btn-success btn-lg ms-auto d-none" id="submitBtn">
                                 <i class="bi bi-check-circle me-2"></i>Registrar Partido
                             </button>
                         </div>
@@ -317,34 +317,26 @@ document.getElementById('prevBtn').addEventListener('click', function() {
 
 function showStep(step) {
     // Ocultar todos los pasos
-    document.querySelectorAll('.form-step').forEach(s => s.style.display = 'none');
+    document.querySelectorAll('.form-step').forEach(s => s.classList.add('d-none'));
     
     // Mostrar paso actual
-    document.querySelector(`.form-step[data-step="${step}"]`).style.display = 'block';
+    document.querySelector(`.form-step[data-step="${step}"]`).classList.remove('d-none');
     
     // Actualizar círculos de progreso
     document.querySelectorAll('.step-circle').forEach((circle, index) => {
         const stepNum = index + 1;
+        const stepLabel = circle.nextElementSibling;
+        circle.classList.remove('active', 'completed');
+        stepLabel.classList.remove('active');
+
         if (stepNum < step) {
-            circle.style.background = 'var(--primary)';
-            circle.style.color = 'var(--bg-primary)';
-            circle.style.border = 'none';
-            circle.style.boxShadow = '0 0 15px rgba(0, 255, 136, 0.5)';
-            circle.nextElementSibling.style.color = 'var(--text-primary)';
+            circle.classList.add('completed');
+            stepLabel.classList.add('active');
         } else if (stepNum === step) {
-            circle.style.background = 'var(--primary)';
-            circle.style.color = 'var(--bg-primary)';
-            circle.style.border = 'none';
-            circle.style.boxShadow = '0 0 15px rgba(0, 255, 136, 0.5)';
-            circle.nextElementSibling.style.color = 'var(--text-primary)';
-            circle.nextElementSibling.style.fontWeight = '600';
+            circle.classList.add('active');
+            stepLabel.classList.add('active');
         } else {
-            circle.style.background = 'var(--bg-secondary)';
-            circle.style.color = 'var(--text-muted)';
-            circle.style.border = '2px solid var(--border)';
-            circle.style.boxShadow = 'none';
-            circle.nextElementSibling.style.color = 'var(--text-muted)';
-            circle.nextElementSibling.style.fontWeight = '400';
+            // Mantener estado visual base para pasos pendientes
         }
     });
     
@@ -353,9 +345,9 @@ function showStep(step) {
     document.getElementById('progressLine').style.width = progress + '%';
     
     // Botones de navegación
-    document.getElementById('prevBtn').style.display = step === 1 ? 'none' : 'block';
-    document.getElementById('nextBtn').style.display = step === totalSteps ? 'none' : 'block';
-    document.getElementById('submitBtn').style.display = step === totalSteps ? 'block' : 'none';
+    document.getElementById('prevBtn').classList.toggle('d-none', step === 1);
+    document.getElementById('nextBtn').classList.toggle('d-none', step === totalSteps);
+    document.getElementById('submitBtn').classList.toggle('d-none', step !== totalSteps);
     
     // Cargar resumen en el último paso
     if (step === 5) {
@@ -446,8 +438,7 @@ document.getElementById('availablePlayersA').addEventListener('click', function(
     if (teamAPlayers.includes(playerId)) {
         // Remover
         teamAPlayers = teamAPlayers.filter(id => id !== playerId);
-        card.style.opacity = '1';
-        card.style.background = 'var(--bg-secondary)';
+        card.classList.remove('is-selected', 'team-a-selected');
     } else {
         // Agregar
         if (teamAPlayers.length + teamAGuests.length >= maxPlayersPerTeam) {
@@ -455,8 +446,7 @@ document.getElementById('availablePlayersA').addEventListener('click', function(
             return;
         }
         teamAPlayers.push(playerId);
-        card.style.opacity = '0.6';
-        card.style.background = '#ff6b6b';
+        card.classList.add('is-selected', 'team-a-selected');
     }
     
     updateSelectedPlayers('A');
@@ -514,29 +504,29 @@ function updateSelectedPlayers(team) {
     players.forEach(playerId => {
         const card = document.querySelector(`.player-card[data-player-id="${playerId}"]`);
         const name = card.dataset.playerName;
-        const color = team === 'A' ? '#ff6b6b' : '#4da3ff';
+        const teamClass = team === 'A' ? 'team-a-tag' : 'team-b-tag';
         
         html += `
-            <div class="selected-player-tag" style="background: ${color}; color: white; padding: 0.5rem 1rem; border-radius: var(--radius-md); margin-bottom: 0.5rem; display: flex; align-items: center; justify-content: space-between;">
+            <div class="selected-player-tag ${teamClass}">
                 <span><i class="bi bi-person-check-fill me-2"></i>${name}</span>
-                <i class="bi bi-x-circle" style="cursor: pointer;" onclick="removePlayer('${team}', '${playerId}', false)"></i>
+                <i class="bi bi-x-circle selected-player-remove" onclick="removePlayer('${team}', '${playerId}', false)"></i>
             </div>
         `;
     });
     
     // Jugadores invitados
     guests.forEach((name, index) => {
-        const color = team === 'A' ? '#c92a2a' : '#1c7ed6';
+        const teamClass = team === 'A' ? 'team-a-guest-tag' : 'team-b-guest-tag';
         html += `
-            <div class="selected-player-tag" style="background: ${color}; color: white; padding: 0.5rem 1rem; border-radius: var(--radius-md); margin-bottom: 0.5rem; display: flex; align-items: center; justify-content: space-between;">
+            <div class="selected-player-tag ${teamClass}">
                 <span><i class="bi bi-person-plus-fill me-2"></i>${name} (Invitado)</span>
-                <i class="bi bi-x-circle" style="cursor: pointer;" onclick="removePlayer('${team}', ${index}, true)"></i>
+                <i class="bi bi-x-circle selected-player-remove" onclick="removePlayer('${team}', ${index}, true)"></i>
             </div>
         `;
     });
     
     if (html === '') {
-        html = '<p style="color: var(--text-muted); text-align: center; margin-top: 2rem;">Haz clic en los jugadores para agregarlos</p>';
+        html = '<p class="match-selected-empty">Haz clic en los jugadores para agregarlos</p>';
     }
     
     container.innerHTML = html;
@@ -551,8 +541,7 @@ function removePlayer(team, identifier, isGuest) {
             // Restaurar apariencia de la card
             const card = document.querySelector(`.player-card[data-player-id="${identifier}"]`);
             if (card) {
-                card.style.opacity = '1';
-                card.style.background = 'var(--bg-secondary)';
+                card.classList.remove('is-selected', 'team-a-selected');
             }
         }
         updateSelectedPlayers('A');
@@ -563,8 +552,7 @@ function removePlayer(team, identifier, isGuest) {
             teamBPlayers = teamBPlayers.filter(id => id !== identifier);
             const card = document.querySelector(`#availablePlayersB .player-card[data-player-id="${identifier}"]`);
             if (card) {
-                card.style.opacity = '1';
-                card.style.background = 'var(--bg-secondary)';
+                card.classList.remove('is-selected', 'team-b-selected');
             }
         }
         updateSelectedPlayers('B');
@@ -597,16 +585,14 @@ function loadAvailablePlayersForTeamB() {
         
         if (teamBPlayers.includes(playerId)) {
             teamBPlayers = teamBPlayers.filter(id => id !== playerId);
-            card.style.opacity = '1';
-            card.style.background = 'var(--bg-secondary)';
+            card.classList.remove('is-selected', 'team-b-selected');
         } else {
             if (teamBPlayers.length + teamBGuests.length >= maxPlayersPerTeam) {
                 alert(`El equipo B ya tiene ${maxPlayersPerTeam} jugadores`);
                 return;
             }
             teamBPlayers.push(playerId);
-            card.style.opacity = '0.6';
-            card.style.background = '#4da3ff';
+            card.classList.add('is-selected', 'team-b-selected');
         }
         
         updateSelectedPlayers('B');
@@ -635,8 +621,8 @@ function addGoal(team) {
     }
     
     let html = `
-        <div style="background: var(--bg-card); padding: 1.5rem; border-radius: var(--radius-md); margin-bottom: 1rem;">
-            <h6 style="color: var(--text-primary); margin-bottom: 1rem;">Selecciona el goleador del Equipo ${team}</h6>
+        <div class="goal-editor-card">
+            <h6 class="goal-editor-title">Selecciona el goleador del Equipo ${team}</h6>
             <select class="form-control" id="goalScorer${team}">
                 <option value="">Selecciona un jugador</option>
     `;
@@ -694,7 +680,7 @@ function updateGoalsList() {
     const container = document.getElementById('goalsList');
     
     if (goals.length === 0) {
-        container.innerHTML = '<p style="color: var(--text-muted); text-align: center; padding: 2rem;">No se han registrado goles aún</p>';
+        container.innerHTML = '<p class="match-goals-empty">No se han registrado goles aún</p>';
         return;
     }
     
@@ -704,12 +690,12 @@ function updateGoalsList() {
         const scorerDisplay = goal.scorer_type === 'guest' ? `${goal.scorer_name} (Invitado)` : goal.scorer_name;
         
         html += `
-            <div style="background: var(--bg-card); padding: 1rem; border-radius: var(--radius-md); margin-bottom: 0.5rem; display: flex; align-items: center; justify-content: space-between; border-left: 4px solid ${color};">
+            <div class="goal-list-item ${goal.team === 'A' ? 'team-a-goal' : 'team-b-goal'}">
                 <div>
-                    <strong style="color: ${color};">Equipo ${goal.team}</strong>
-                    <span style="color: var(--text-primary); margin-left: 1rem;">Gol: ${scorerDisplay}</span>
+                    <strong class="goal-list-team ${goal.team === 'A' ? 'team-a-label' : 'team-b-label'}">Equipo ${goal.team}</strong>
+                    <span class="goal-list-text">Gol: ${scorerDisplay}</span>
                 </div>
-                <i class="bi bi-trash" style="color: var(--danger); cursor: pointer;" onclick="removeGoal(${index})"></i>
+                <i class="bi bi-trash goal-list-remove" onclick="removeGoal(${index})"></i>
             </div>
         `;
     });
@@ -730,7 +716,7 @@ function removeGoal(index) {
 }
 
 function closeModal(button) {
-    button.closest('div[style*="background: var(--bg-card)"]').remove();
+    button.closest('.goal-editor-card').remove();
 }
 
 function loadMatchSummary() {
@@ -744,46 +730,46 @@ function loadMatchSummary() {
     let html = `
         <div class="row g-4">
             <div class="col-12">
-                <div class="text-center mb-4">
-                    <h2 style="font-size: 3rem; font-weight: 800; color: var(--text-primary);">
-                        <span style="color: #ff6b6b;">${scoreA}</span>
-                        <span style="color: var(--text-muted); margin: 0 1rem;">-</span>
-                        <span style="color: #4da3ff;">${scoreB}</span>
+                <div class="text-center mb-4 match-summary-score-wrap">
+                    <h2 class="match-summary-score">
+                        <span class="match-summary-team-a">${scoreA}</span>
+                        <span class="match-summary-separator">-</span>
+                        <span class="match-summary-team-b">${scoreB}</span>
                     </h2>
-                    <p style="color: var(--text-muted); font-size: 1.1rem;">
+                    <p class="match-summary-meta">
                         ${matchType} - ${courtName} - ${new Date(date).toLocaleString('es-AR')}
                     </p>
                 </div>
             </div>
             
             <div class="col-md-6">
-                <div class="card" style="border: 2px solid #ff6b6b;">
-                    <div class="card-header" style="background: #ff6b6b;">
-                        <h5 style="color: white; margin: 0;">Equipo A (${teamAPlayers.length + teamAGuests.length} jugadores)</h5>
+                <div class="card match-summary-team-card team-a-card">
+                    <div class="card-header match-summary-team-header team-a-header">
+                        <h5 class="match-summary-team-title">Equipo A (${teamAPlayers.length + teamAGuests.length} jugadores)</h5>
                     </div>
                     <div class="card-body">
-                        <h6 style="color: var(--text-primary);">Jugadores:</h6>
-                        <ul style="list-style: none; padding: 0;">
+                        <h6 class="match-summary-list-title">Jugadores:</h6>
+                        <ul class="match-summary-list">
     `;
     
     teamAPlayers.forEach(id => {
         const name = document.querySelector(`.player-card[data-player-id="${id}"]`).dataset.playerName;
-        html += `<li style="padding: 0.5rem; color: var(--text-secondary);"><i class="bi bi-person-fill me-2"></i>${name}</li>`;
+        html += `<li class="match-summary-item"><i class="bi bi-person-fill me-2"></i>${name}</li>`;
     });
     
     teamAGuests.forEach(name => {
-        html += `<li style="padding: 0.5rem; color: var(--text-secondary);"><i class="bi bi-person-plus-fill me-2"></i>${name} (Invitado)</li>`;
+        html += `<li class="match-summary-item"><i class="bi bi-person-plus-fill me-2"></i>${name} (Invitado)</li>`;
     });
     
     html += `
                         </ul>
-                        <h6 style="color: var(--text-primary); margin-top: 1rem;">Goles (${scoreA}):</h6>
-                        <ul style="list-style: none; padding: 0;">
+                        <h6 class="match-summary-list-title mt-3">Goles (${scoreA}):</h6>
+                        <ul class="match-summary-list">
     `;
     
     goals.filter(g => g.team === 'A').forEach(goal => {
         const name = goal.scorer_type === 'guest' ? `${goal.scorer_name} (Invitado)` : goal.scorer_name;
-        html += `<li style="padding: 0.5rem; color: var(--text-secondary);">Gol: ${name}</li>`;
+        html += `<li class="match-summary-item">Gol: ${name}</li>`;
     });
     
     html += `
@@ -793,36 +779,36 @@ function loadMatchSummary() {
             </div>
             
             <div class="col-md-6">
-                <div class="card" style="border: 2px solid #4da3ff;">
-                    <div class="card-header" style="background: #4da3ff;">
-                        <h5 style="color: white; margin: 0;">Equipo B (${teamBPlayers.length + teamBGuests.length} jugadores)</h5>
+                <div class="card match-summary-team-card team-b-card">
+                    <div class="card-header match-summary-team-header team-b-header">
+                        <h5 class="match-summary-team-title">Equipo B (${teamBPlayers.length + teamBGuests.length} jugadores)</h5>
                     </div>
                     <div class="card-body">
-                        <h6 style="color: var(--text-primary);">Jugadores:</h6>
-                        <ul style="list-style: none; padding: 0;">
+                        <h6 class="match-summary-list-title">Jugadores:</h6>
+                        <ul class="match-summary-list">
     `;
     
     teamBPlayers.forEach(id => {
         const card = document.querySelector(`#availablePlayersB .player-card[data-player-id="${id}"]`);
         if (card) {
             const name = card.dataset.playerName;
-            html += `<li style="padding: 0.5rem; color: var(--text-secondary);"><i class="bi bi-person-fill me-2"></i>${name}</li>`;
+            html += `<li class="match-summary-item"><i class="bi bi-person-fill me-2"></i>${name}</li>`;
         }
     });
     
     teamBGuests.forEach(name => {
-        html += `<li style="padding: 0.5rem; color: var(--text-secondary);"><i class="bi bi-person-plus-fill me-2"></i>${name} (Invitado)</li>`;
+        html += `<li class="match-summary-item"><i class="bi bi-person-plus-fill me-2"></i>${name} (Invitado)</li>`;
     });
     
     html += `
                         </ul>
-                        <h6 style="color: var(--text-primary); margin-top: 1rem;">Goles (${scoreB}):</h6>
-                        <ul style="list-style: none; padding: 0;">
+                        <h6 class="match-summary-list-title mt-3">Goles (${scoreB}):</h6>
+                        <ul class="match-summary-list">
     `;
     
     goals.filter(g => g.team === 'B').forEach(goal => {
         const name = goal.scorer_type === 'guest' ? `${goal.scorer_name} (Invitado)` : goal.scorer_name;
-        html += `<li style="padding: 0.5rem; color: var(--text-secondary);">Gol: ${name}</li>`;
+        html += `<li class="match-summary-item">Gol: ${name}</li>`;
     });
     
     html += `

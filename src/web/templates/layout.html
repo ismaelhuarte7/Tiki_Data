@@ -41,6 +41,7 @@
 
             <!-- Contenido del navbar -->
             <div class="collapse navbar-collapse" id="navbarContent">
+                {% if session.get('user') %}
                 <!-- Links de navegación -->
                 <ul class="navbar-nav mx-auto mb-lg-0 mb-3">
                     <li class="nav-item">
@@ -59,9 +60,12 @@
                         </a>
                     </li>
                 </ul>
+                {% endif %}
 
                 <!-- Separador móvil -->
-                <div class="navbar-divider d-lg-none"></div>
+                {% if session.get('user') %}
+                    <div class="navbar-divider d-lg-none"></div>
+                {% endif %}
 
                 <!-- Acciones del usuario -->
                 <ul class="navbar-nav align-items-lg-center">
@@ -90,22 +94,21 @@
                                 <i class="bi bi-bell-fill fs-5 me-2 me-lg-0"></i>
                                 <span class="d-lg-none">Notificaciones</span>
                             </a>
-                            <ul class="dropdown-menu dropdown-menu-end" id="notificationList" style="min-width: 320px; max-width: 400px;">
+                            <ul class="dropdown-menu dropdown-menu-end notification-menu" id="notificationList">
                                 {% if user_notifications %}
-                                    <li class="dropdown-header" style="background: var(--bg-secondary); color: var(--text-primary); font-weight: 700;">
+                                    <li class="dropdown-header notification-header">
                                         <i class="bi bi-bell me-2"></i>Notificaciones ({{ notification_count }})
                                     </li>
                                     {% for notification in user_notifications %}
                                     <li>
                                         <a class="dropdown-item notification-item py-3" href="#" 
                                            data-notification-id="{{ notification.id }}" 
-                                           data-match-id="{{ notification.match_id }}"
-                                           style="white-space: normal; border-bottom: 1px solid var(--border);">
-                                            <div style="display: flex; align-items: start;">
-                                                <i class="bi bi-trophy-fill me-2 mt-1" style="color: var(--primary); font-size: 1.2rem;"></i>
-                                                <div style="flex: 1;">
-                                                    <p class="mb-1" style="font-size: 0.9rem; color: var(--text-primary);">{{ notification.message }}</p>
-                                                    <small style="color: #8b95a8; font-size: 0.75rem;">
+                                           data-match-id="{{ notification.match_id }}">
+                                            <div class="notification-item-wrap">
+                                                <i class="bi bi-trophy-fill notification-item-icon"></i>
+                                                <div class="notification-item-content">
+                                                    <p class="notification-item-text">{{ notification.message }}</p>
+                                                    <small class="notification-item-date">
                                                         <i class="bi bi-clock me-1"></i>{{ notification.created_at.strftime('%d/%m/%Y %H:%M') }}
                                                     </small>
                                                 </div>
@@ -140,18 +143,6 @@
                                     </a>
                                 </li>
                             </ul>
-                        </li>
-                    {% else %}
-                        <!-- Botones para usuarios no autenticados -->
-                        <li class="nav-item mb-2 mb-lg-0 me-lg-2">
-                            <a class="btn btn-outline-light btn-sm w-100 w-lg-auto" href="{{ url_for('auth.signup') }}">
-                                <i class="bi bi-person-plus me-2"></i> Registrarse
-                            </a>
-                        </li>
-                        <li class="nav-item mb-2 mb-lg-0">
-                            <a class="btn btn-primary btn-sm w-100 w-lg-auto" href="{{ url_for('auth.login') }}">
-                                <i class="bi bi-box-arrow-in-right me-2"></i> Iniciar Sesión
-                            </a>
                         </li>
                     {% endif %}
                 </ul>
@@ -265,6 +256,26 @@
 
         // Notification handler
         document.addEventListener('DOMContentLoaded', function() {
+            const csrfToken = '{{ csrf_token() }}';
+            const notificationDropdown = document.getElementById('notificationDropdown');
+            const notificationList = document.getElementById('notificationList');
+
+            function renderEmptyNotifications() {
+                notificationList.innerHTML = `
+                    <li class="dropdown-item text-muted text-center py-3">
+                        <i class="bi bi-inbox me-2"></i>Sin notificaciones
+                    </li>
+                `;
+                notificationDropdown.classList.remove('has-notifications');
+            }
+
+            function updateNotificationHeader(remaining) {
+                const header = notificationList.querySelector('.notification-header');
+                if (header) {
+                    header.innerHTML = `<i class="bi bi-bell me-2"></i>Notificaciones (${remaining})`;
+                }
+            }
+
             // Manejar click en notificaciones
             const notificationItems = document.querySelectorAll('.notification-item');
             
@@ -276,17 +287,39 @@
                     const matchId = this.getAttribute('data-match-id');
                     
                     try {
-                        // Marcar como leída (eliminar de BD)
+                        // Marcar como leída en el backend
                         const response = await fetch(`/notification/mark-read/${notificationId}`, {
                             method: 'POST',
                             headers: {
-                                'Content-Type': 'application/json'
-                            }
+                                'Content-Type': 'application/json',
+                                'X-CSRFToken': csrfToken,
+                                'X-CSRF-Token': csrfToken,
+                                'X-Requested-With': 'XMLHttpRequest'
+                            },
+                            body: JSON.stringify({ notification_id: notificationId })
                         });
-                        
+
+                        if (!response.ok) {
+                            throw new Error(`HTTP ${response.status}`);
+                        }
+
                         const data = await response.json();
                         
                         if (data.success) {
+                            // Sincronizar UI de la campanita antes de navegar
+                            const itemContainer = this.closest('li');
+                            if (itemContainer) {
+                                itemContainer.remove();
+                            }
+
+                            const remaining = Number(data.remaining || 0);
+                            if (remaining <= 0) {
+                                renderEmptyNotifications();
+                            } else {
+                                updateNotificationHeader(remaining);
+                                notificationDropdown.classList.add('has-notifications');
+                            }
+
                             // Redirigir al detalle del partido
                             if (matchId) {
                                 window.location.href = `/match/${matchId}`;
@@ -294,13 +327,12 @@
                                 // Si no hay match_id, solo recargar la página
                                 window.location.reload();
                             }
+                        } else {
+                            alert('No se pudo marcar la notificación como leída. Intenta nuevamente.');
                         }
                     } catch (error) {
                         console.error('Error al marcar notificación como leída:', error);
-                        // Redirigir de todas formas
-                        if (matchId) {
-                            window.location.href = `/match/${matchId}`;
-                        }
+                        alert('Hubo un problema al procesar la notificación. Intenta nuevamente.');
                     }
                 });
             });

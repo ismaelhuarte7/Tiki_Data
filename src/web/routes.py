@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, session, send_from_directory, request
+from flask import Blueprint, render_template, session, send_from_directory, request, redirect, url_for
 from config.config import env
 from config.database import db
 import os
@@ -13,11 +13,37 @@ from src.web.controllers.notification import bp as notification_bp
 
 
 def register(app):
+    @app.before_request
+    def require_auth_for_private_pages():
+        endpoint = request.endpoint
+        if not endpoint:
+            return None
+
+        public_endpoints = {
+            'home',
+            'auth.login',
+            'auth.signup',
+            'auth.verify',
+            'static',
+        }
+
+        if endpoint in public_endpoints:
+            return None
+
+        if endpoint.startswith('auth.') and endpoint in {'auth.login', 'auth.signup', 'auth.verify'}:
+            return None
+
+        if 'user' not in session:
+            return redirect(url_for('home'))
+
+        return None
+
     @app.route("/")
     def home():
         user = None
         if 'user' not in session:
             session.clear()
+            return render_template("landing.html")
         else:
             user = User.get_by_id(session['user']['id'])
             

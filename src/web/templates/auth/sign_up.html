@@ -3,17 +3,17 @@
 {% block title %}Registro - Tiki-Data{% endblock %}
 
 {% block content %}
-<div class="container" style="max-width: 900px; margin-top: 3rem; margin-bottom: 3rem;">
+<div class="container auth-page auth-page-signup">
     <div class="row justify-content-center">
         <div class="col-12">
-            <div class="card fade-in">
+            <div class="card auth-card fade-in-up">
                 <!-- Header -->
-                <div class="card-header text-center py-3" style="background: linear-gradient(135deg, var(--bg-secondary), var(--bg-card)); border-bottom: 2px solid var(--primary);">
-                    <h2 class="mb-0" style="font-weight: 700; letter-spacing: -0.02em; font-size: 1.75rem; color: var(--text-primary);">
-                        <i class="bi bi-person-plus me-2" style="color: var(--primary);"></i>
+                <div class="card-header text-center py-3 auth-card-header">
+                    <h2 class="mb-0 auth-title">
+                        <i class="bi bi-person-plus me-2 auth-title-icon"></i>
                         Crear Cuenta
                     </h2>
-                    <p class="mb-0 mt-2" style="color: #8b95a8; font-size: 0.95rem;">Únete a la comunidad de Tiki-Data</p>
+                    <p class="mb-0 mt-2 auth-subtitle">Únete a la comunidad de Tiki-Data</p>
                 </div>
                 
                 <div class="card-body p-4">
@@ -22,19 +22,19 @@
                         <div class="row">
                             <!-- Nombre -->
                             <div class="col-md-6 mb-3">
-                                <label for="first_name" class="form-label" style="color: var(--text-primary); font-weight: 600; font-size: 0.95rem;">
+                                <label for="first_name" class="form-label auth-label">
                                     <i class="bi bi-person me-1"></i>Nombre
                                 </label>
-                                <input type="text" class="form-control" id="first_name" name="first_name" placeholder="Tu nombre" required autofocus>
+                                <input type="text" class="form-control auth-control" id="first_name" name="first_name" placeholder="Tu nombre" required autofocus>
                                 <div class="invalid-feedback">Ingresa tu nombre.</div>
                             </div>
                             
                             <!-- Apellido -->
                             <div class="col-md-6 mb-3">
-                                <label for="last_name" class="form-label" style="color: var(--text-primary); font-weight: 600; font-size: 0.95rem;">
+                                <label for="last_name" class="form-label auth-label">
                                     <i class="bi bi-person me-1"></i>Apellido
                                 </label>
-                                <input type="text" class="form-control" id="last_name" name="last_name" placeholder="Tu apellido" required>
+                                <input type="text" class="form-control auth-control" id="last_name" name="last_name" placeholder="Tu apellido" required>
                                 <div class="invalid-feedback">Ingresa tu apellido.</div>
                             </div>
                         </div>
@@ -42,19 +42,19 @@
                         <div class="row">
                             <!-- Username -->
                             <div class="col-md-6 mb-3">
-                                <label for="username" class="form-label" style="color: var(--text-primary); font-weight: 600; font-size: 0.95rem;">
+                                <label for="username" class="form-label auth-label">
                                     <i class="bi bi-at me-1"></i>Nombre de usuario
                                 </label>
-                                <input type="text" class="form-control" id="username" name="username" placeholder="usuario123" required>
+                                <input type="text" class="form-control auth-control" id="username" name="username" placeholder="usuario123" required>
                                 <div class="invalid-feedback">Elige un nombre de usuario.</div>
                             </div>
                             
                             <!-- Email -->
                             <div class="col-md-6 mb-3">
-                                <label for="email" class="form-label" style="color: var(--text-primary); font-weight: 600; font-size: 0.95rem;">
+                                <label for="email" class="form-label auth-label">
                                     <i class="bi bi-envelope me-1"></i>Email
                                 </label>
-                                <input type="email" class="form-control" id="email" name="email" placeholder="tu@email.com" required>
+                                <input type="email" class="form-control auth-control" id="email" name="email" placeholder="tu@email.com" required>
                                 <div class="invalid-feedback">Ingresa un email válido.</div>
                             </div>
                         </div>
@@ -62,11 +62,11 @@
                         <div class="row">
                             <!-- Contraseña -->
                             <div class="col-md-6 mb-3">
-                                <label for="password" class="form-label" style="color: var(--text-primary); font-weight: 600; font-size: 0.95rem;">
+                                <label for="password" class="form-label auth-label">
                                     <i class="bi bi-shield-lock me-1"></i>Contraseña
                                 </label>
-                                <input type="password" class="form-control" id="password" name="password" placeholder="Mínimo 8 caracteres" required>
-                                <small class="form-text" style="color: #8b95a8; font-size: 0.85rem;">
+                                <input type="password" class="form-control auth-control" id="password" name="password" placeholder="Mínimo 8 caracteres" required>
+                                <small class="form-text auth-help-text">
                                     <i class="bi bi-info-circle me-1"></i>
                                     Mínimo 8 caracteres y al menos 1 número
                                 </small>
@@ -75,20 +75,20 @@
                             
                             <!-- Confirmar Contraseña -->
                             <div class="col-md-6 mb-3">
-                                <label for="confirm_password" class="form-label" style="color: var(--text-primary); font-weight: 600; font-size: 0.95rem;">
+                                <label for="confirm_password" class="form-label auth-label">
                                     <i class="bi bi-shield-check me-1"></i>Confirmar Contraseña
                                 </label>
-                                <input type="password" class="form-control" id="confirm_password" name="confirm_password" placeholder="Repite tu contraseña" required>
+                                <input type="password" class="form-control auth-control" id="confirm_password" name="confirm_password" placeholder="Repite tu contraseña" required>
                                 <div class="invalid-feedback">Las contraseñas no coinciden.</div>
                             </div>
                         </div>
                         
                         <!-- Fecha de nacimiento -->
                         <div class="mb-4">
-                            <label for="birthdate" class="form-label" style="color: var(--text-primary); font-weight: 600; font-size: 0.95rem;">
+                            <label for="birthdate" class="form-label auth-label">
                                 <i class="bi bi-calendar-event me-1"></i>Fecha de Nacimiento
                             </label>
-                            <input type="date" class="form-control" id="birthdate" name="birthdate" required>
+                            <input type="date" class="form-control auth-control" id="birthdate" name="birthdate" required>
                             <div class="invalid-feedback">Ingresa tu fecha de nacimiento.</div>
                         </div>
                         
@@ -102,18 +102,18 @@
                         
                         <!-- Divider -->
                         <div class="text-center mb-3">
-                            <div style="display: flex; align-items: center; text-align: center; margin: 0;">
-                                <div style="flex: 1; border-bottom: 1px solid var(--border);"></div>
-                                <span style="padding: 0 1rem; color: #8b95a8; font-size: 0.875rem;">O</span>
-                                <div style="flex: 1; border-bottom: 1px solid var(--border);"></div>
+                            <div class="auth-divider">
+                                <div class="auth-divider-line"></div>
+                                <span class="auth-divider-text">O</span>
+                                <div class="auth-divider-line"></div>
                             </div>
                         </div>
                         
                         <!-- Link a login -->
                         <div class="text-center">
-                            <p class="mb-0" style="color: #8b95a8;">
+                            <p class="mb-0 auth-link-copy">
                                 ¿Ya tienes una cuenta? 
-                                <a href="{{ url_for('auth.login') }}" class="text-decoration-none" style="color: var(--primary); font-weight: 600;">
+                                <a href="{{ url_for('auth.login') }}" class="text-decoration-none auth-link-cta">
                                     Inicia Sesión
                                 </a>
                             </p>

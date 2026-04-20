@@ -3,34 +3,35 @@
 {% block title %}Partido - {{ match.result }}{% endblock %}
 
 {% block content %}
-<div class="container mt-5">
+{% set team_a = match.get_team_a() %}
+{% set team_b = match.get_team_b() %}
+
+<div class="container mt-5 match-detail-page">
     <div class="row">
         <div class="col-12">
             <!-- Header del Partido -->
-            <div class="card mb-4" style="background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-secondary) 100%); border: 1px solid var(--border); overflow: hidden;">
-                <div class="card-body text-center py-5">
+            <div class="card mb-4 match-hero-card">
+                <div class="card-body text-center py-5 match-hero-body">
                     <!-- Marcador -->
-                    <h1 style="font-size: 4rem; font-weight: 900; color: var(--text-primary); margin-bottom: 1rem;">
-                        {% set team_a = match.get_team_a() %}
-                        {% set team_b = match.get_team_b() %}
-                        <span style="color: #ff6b6b;">{{ team_a.score if team_a else 0 }}</span>
-                        <span style="color: var(--text-muted); font-size: 3rem; margin: 0 2rem;">-</span>
-                        <span style="color: #4da3ff;">{{ team_b.score if team_b else 0 }}</span>
+                    <h1 class="match-hero-score">
+                        <span class="team-a-score">{{ team_a.score if team_a else 0 }}</span>
+                        <span class="match-score-separator">-</span>
+                        <span class="team-b-score">{{ team_b.score if team_b else 0 }}</span>
                     </h1>
                     
                     <!-- Información del partido -->
-                    <div style="display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap; color: var(--text-secondary);">
-                        <div>
+                    <div class="match-hero-meta">
+                        <div class="match-hero-meta-item">
                             <i class="bi bi-calendar3 me-2"></i>
                             {{ match.date.strftime('%d/%m/%Y %H:%M') }}
                         </div>
-                        <div>
+                        <div class="match-hero-meta-item">
                             <i class="bi bi-trophy me-2"></i>
                             Fútbol {{ match.match_type }}
                         </div>
-                        <div>
+                        <div class="match-hero-meta-item">
                             <i class="bi bi-geo-alt me-2"></i>
-                            <a href="{{ match.court.address }}" target="_blank" style="color: var(--primary); text-decoration: none;">
+                            <a href="{{ match.court.address }}" target="_blank" class="match-court-link">
                                 {{ match.court.name }}
                             </a>
                         </div>
@@ -42,14 +43,14 @@
             <div class="row g-4 mb-4">
                 <!-- Equipo A -->
                 <div class="col-md-6">
-                    <div class="card h-100" style="border: 3px solid #ff6b6b;">
-                        <div class="card-header" style="background: linear-gradient(135deg, #ff6b6b 0%, #c92a2a 100%);">
-                            <h3 style="margin: 0; color: white; text-align: center;">
+                    <div class="card h-100 team-card team-card-a">
+                        <div class="card-header team-card-header team-card-header-a">
+                            <h3 class="team-card-title">
                                 <i class="bi bi-shield-fill me-2"></i>Equipo A
                             </h3>
                         </div>
                         <div class="card-body">
-                            <h5 style="color: var(--text-primary); margin-bottom: 1rem; border-bottom: 2px solid var(--border); padding-bottom: 0.5rem;">
+                            <h5 class="team-roster-title">
                                 <i class="bi bi-people me-2"></i>Plantilla ({{ team_a.players|length + team_a.guest_players|length }})
                             </h5>
                             
@@ -57,24 +58,24 @@
                             {% if team_a.players %}
                                 <div class="mb-3">
                                     {% for player in team_a.players %}
-                                        <a href="{{ url_for('player.show', id=player.id) }}" style="text-decoration: none;">
-                                            <div style="padding: 0.75rem; margin-bottom: 0.5rem; background: var(--bg-secondary); border-radius: var(--radius-md); transition: all 0.2s; display: flex; align-items: center; cursor: pointer;" onmouseover="this.style.background='rgba(255, 107, 107, 0.2)'" onmouseout="this.style.background='var(--bg-secondary)'">
+                                        <a href="{{ url_for('player.show', id=player.id) }}" class="team-player-link">
+                                            <div class="team-player-item team-player-item-a">
                                                 {% if player.profile_picture %}
-                                                    <img src="{{ player.profile_picture }}" style="width: 45px; height: 45px; border-radius: 50%; object-fit: cover; border: 2px solid #ff6b6b; margin-right: 1rem;">
+                                                    <img src="{{ player.profile_picture }}" class="team-player-avatar team-player-avatar-a" alt="{{ player.name }} {{ player.surname }}">
                                                 {% else %}
-                                                    <div style="width: 45px; height: 45px; border-radius: 50%; background: #ff6b6b; display: flex; align-items: center; justify-content: center; margin-right: 1rem;">
-                                                        <i class="bi bi-person-fill" style="color: white; font-size: 1.2rem;"></i>
+                                                    <div class="team-player-avatar-fallback team-player-avatar-fallback-a">
+                                                        <i class="bi bi-person-fill"></i>
                                                     </div>
                                                 {% endif %}
-                                                <div>
-                                                    <div style="color: var(--text-primary); font-weight: 600;">{{ player.name }} {{ player.surname }}</div>
-                                                    <small style="color: var(--text-muted);">@{{ player.user.username }}</small>
+                                                <div class="team-player-info">
+                                                    <div class="team-player-name">{{ player.name }} {{ player.surname }}</div>
+                                                    <small class="team-player-user">@{{ player.user.username }}</small>
                                                 </div>
                                                 
                                                 <!-- Goles del jugador -->
                                                 {% set player_goals = match.goals|selectattr('player_id', 'equalto', player.id)|list %}
                                                 {% if player_goals|length > 0 %}
-                                                    <div style="margin-left: auto; background: #ffc107; color: var(--bg-primary); padding: 0.25rem 0.75rem; border-radius: 20px; font-weight: 700;">
+                                                    <div class="team-goals-pill">
                                                         ⚽ {{ player_goals|length }}
                                                     </div>
                                                 {% endif %}
@@ -87,23 +88,23 @@
                             <!-- Jugadores Invitados -->
                             {% if team_a.guest_players %}
                                 <div class="mb-3">
-                                    <h6 style="color: var(--text-muted); font-size: 0.85rem; text-transform: uppercase; margin-bottom: 0.75rem;">
+                                    <h6 class="team-guests-title">
                                         <i class="bi bi-person-plus me-1"></i>Invitados
                                     </h6>
                                     {% for guest in team_a.guest_players %}
-                                        <div style="padding: 0.75rem; margin-bottom: 0.5rem; background: var(--bg-secondary); border-radius: var(--radius-md); border-left: 3px solid #c92a2a; display: flex; align-items: center;">
-                                            <div style="width: 45px; height: 45px; border-radius: 50%; background: #c92a2a; display: flex; align-items: center; justify-content: center; margin-right: 1rem;">
-                                                <i class="bi bi-person-plus-fill" style="color: white; font-size: 1.2rem;"></i>
+                                        <div class="team-guest-item team-guest-item-a">
+                                            <div class="team-guest-avatar team-guest-avatar-a">
+                                                <i class="bi bi-person-plus-fill"></i>
                                             </div>
-                                            <div>
-                                                <div style="color: var(--text-primary); font-weight: 600;">{{ guest.name }}</div>
-                                                <small style="color: var(--text-muted);">Jugador invitado</small>
+                                            <div class="team-player-info">
+                                                <div class="team-player-name">{{ guest.name }}</div>
+                                                <small class="team-player-user">Jugador invitado</small>
                                             </div>
                                             
                                             <!-- Goles del invitado -->
                                             {% set guest_goals = match.goals|selectattr('guest_player_id', 'equalto', guest.id)|list %}
                                             {% if guest_goals|length > 0 %}
-                                                <div style="margin-left: auto; background: #ffc107; color: var(--bg-primary); padding: 0.25rem 0.75rem; border-radius: 20px; font-weight: 700;">
+                                                <div class="team-goals-pill">
                                                     ⚽ {{ guest_goals|length }}
                                                 </div>
                                             {% endif %}
@@ -117,14 +118,14 @@
 
                 <!-- Equipo B -->
                 <div class="col-md-6">
-                    <div class="card h-100" style="border: 3px solid #4da3ff;">
-                        <div class="card-header" style="background: linear-gradient(135deg, #4da3ff 0%, #1c7ed6 100%);">
-                            <h3 style="margin: 0; color: white; text-align: center;">
+                    <div class="card h-100 team-card team-card-b">
+                        <div class="card-header team-card-header team-card-header-b">
+                            <h3 class="team-card-title">
                                 <i class="bi bi-shield-fill me-2"></i>Equipo B
                             </h3>
                         </div>
                         <div class="card-body">
-                            <h5 style="color: var(--text-primary); margin-bottom: 1rem; border-bottom: 2px solid var(--border); padding-bottom: 0.5rem;">
+                            <h5 class="team-roster-title">
                                 <i class="bi bi-people me-2"></i>Plantilla ({{ team_b.players|length + team_b.guest_players|length }})
                             </h5>
                             
@@ -132,24 +133,24 @@
                             {% if team_b.players %}
                                 <div class="mb-3">
                                     {% for player in team_b.players %}
-                                        <a href="{{ url_for('player.show', id=player.id) }}" style="text-decoration: none;">
-                                            <div style="padding: 0.75rem; margin-bottom: 0.5rem; background: var(--bg-secondary); border-radius: var(--radius-md); transition: all 0.2s; display: flex; align-items: center; cursor: pointer;" onmouseover="this.style.background='rgba(77, 163, 255, 0.2)'" onmouseout="this.style.background='var(--bg-secondary)'">
+                                        <a href="{{ url_for('player.show', id=player.id) }}" class="team-player-link">
+                                            <div class="team-player-item team-player-item-b">
                                                 {% if player.profile_picture %}
-                                                    <img src="{{ player.profile_picture }}" style="width: 45px; height: 45px; border-radius: 50%; object-fit: cover; border: 2px solid #4da3ff; margin-right: 1rem;">
+                                                    <img src="{{ player.profile_picture }}" class="team-player-avatar team-player-avatar-b" alt="{{ player.name }} {{ player.surname }}">
                                                 {% else %}
-                                                    <div style="width: 45px; height: 45px; border-radius: 50%; background: #4da3ff; display: flex; align-items: center; justify-content: center; margin-right: 1rem;">
-                                                        <i class="bi bi-person-fill" style="color: white; font-size: 1.2rem;"></i>
+                                                    <div class="team-player-avatar-fallback team-player-avatar-fallback-b">
+                                                        <i class="bi bi-person-fill"></i>
                                                     </div>
                                                 {% endif %}
-                                                <div>
-                                                    <div style="color: var(--text-primary); font-weight: 600;">{{ player.name }} {{ player.surname }}</div>
-                                                    <small style="color: var(--text-muted);">@{{ player.user.username }}</small>
+                                                <div class="team-player-info">
+                                                    <div class="team-player-name">{{ player.name }} {{ player.surname }}</div>
+                                                    <small class="team-player-user">@{{ player.user.username }}</small>
                                                 </div>
                                                 
                                                 <!-- Goles del jugador -->
                                                 {% set player_goals = match.goals|selectattr('player_id', 'equalto', player.id)|list %}
                                                 {% if player_goals|length > 0 %}
-                                                    <div style="margin-left: auto; background: #ffc107; color: var(--bg-primary); padding: 0.25rem 0.75rem; border-radius: 20px; font-weight: 700;">
+                                                    <div class="team-goals-pill">
                                                         ⚽ {{ player_goals|length }}
                                                     </div>
                                                 {% endif %}
@@ -162,23 +163,23 @@
                             <!-- Jugadores Invitados -->
                             {% if team_b.guest_players %}
                                 <div class="mb-3">
-                                    <h6 style="color: var(--text-muted); font-size: 0.85rem; text-transform: uppercase; margin-bottom: 0.75rem;">
+                                    <h6 class="team-guests-title">
                                         <i class="bi bi-person-plus me-1"></i>Invitados
                                     </h6>
                                     {% for guest in team_b.guest_players %}
-                                        <div style="padding: 0.75rem; margin-bottom: 0.5rem; background: var(--bg-secondary); border-radius: var(--radius-md); border-left: 3px solid #1c7ed6; display: flex; align-items: center;">
-                                            <div style="width: 45px; height: 45px; border-radius: 50%; background: #1c7ed6; display: flex; align-items: center; justify-content: center; margin-right: 1rem;">
-                                                <i class="bi bi-person-plus-fill" style="color: white; font-size: 1.2rem;"></i>
+                                        <div class="team-guest-item team-guest-item-b">
+                                            <div class="team-guest-avatar team-guest-avatar-b">
+                                                <i class="bi bi-person-plus-fill"></i>
                                             </div>
-                                            <div>
-                                                <div style="color: var(--text-primary); font-weight: 600;">{{ guest.name }}</div>
-                                                <small style="color: var(--text-muted);">Jugador invitado</small>
+                                            <div class="team-player-info">
+                                                <div class="team-player-name">{{ guest.name }}</div>
+                                                <small class="team-player-user">Jugador invitado</small>
                                             </div>
                                             
                                             <!-- Goles del invitado -->
                                             {% set guest_goals = match.goals|selectattr('guest_player_id', 'equalto', guest.id)|list %}
                                             {% if guest_goals|length > 0 %}
-                                                <div style="margin-left: auto; background: #ffc107; color: var(--bg-primary); padding: 0.25rem 0.75rem; border-radius: 20px; font-weight: 700;">
+                                                <div class="team-goals-pill">
                                                     ⚽ {{ guest_goals|length }}
                                                 </div>
                                             {% endif %}
@@ -195,7 +196,7 @@
             {% if match.goals %}
                 <div class="card mb-4">
                     <div class="card-header">
-                        <h4 style="margin: 0; color: var(--text-primary);"><i class="bi bi-award me-2"></i>Resumen de Goles</h4>
+                        <h4 class="match-goals-title"><i class="bi bi-award me-2"></i>Resumen de Goles</h4>
                     </div>
                     <div class="card-body">
                         <div class="row g-3">
@@ -204,10 +205,10 @@
                                 <div class="col-12">
                                     <div class="goal-card {% if is_team_a %}goal-team-a{% else %}goal-team-b{% endif %}">
                                         <div class="goal-icon {% if is_team_a %}goal-icon-a{% else %}goal-icon-b{% endif %}">
-                                            <span style="color: white; font-size: 1.5rem;">⚽</span>
+                                            <span class="goal-icon-ball">⚽</span>
                                         </div>
-                                        <div style="flex-grow: 1;">
-                                            <div style="color: var(--text-primary); font-weight: 700; font-size: 1.1rem;">
+                                        <div class="goal-scorer-content">
+                                            <div class="goal-scorer-name">
                                                 {{ goal.get_scorer_name() }}
                                             </div>
                                             <div class="goal-team-label {% if is_team_a %}team-a-label{% else %}team-b-label{% endif %}">
@@ -224,7 +225,7 @@
 
             <!-- Botón Volver -->
             <div class="text-center mb-4">
-                <a href="{{ url_for('match.index') }}" class="btn btn-secondary btn-lg">
+                <a href="{{ url_for('match.index') }}" class="btn btn-secondary btn-lg match-back-btn">
                     <i class="bi bi-arrow-left me-2"></i>Volver a Partidos
                 </a>
             </div>
@@ -232,53 +233,4 @@
     </div>
 </div>
 
-<style>
-    /* Estilos para las tarjetas de goles */
-    .goal-card {
-        padding: 1rem;
-        background: var(--bg-secondary);
-        border-radius: var(--radius-md);
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-    }
-    
-    .goal-card.goal-team-a {
-        border-left: 4px solid #ff6b6b;
-    }
-    
-    .goal-card.goal-team-b {
-        border-left: 4px solid #4da3ff;
-    }
-    
-    .goal-icon {
-        width: 50px;
-        height: 50px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-shrink: 0;
-    }
-    
-    .goal-icon.goal-icon-a {
-        background: #ff6b6b;
-    }
-    
-    .goal-icon.goal-icon-b {
-        background: #4da3ff;
-    }
-    
-    .goal-team-label {
-        font-weight: 600;
-    }
-    
-    .goal-team-label.team-a-label {
-        color: #ff6b6b;
-    }
-    
-    .goal-team-label.team-b-label {
-        color: #4da3ff;
-    }
-</style>
 {% endblock %}

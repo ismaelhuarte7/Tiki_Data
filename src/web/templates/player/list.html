@@ -3,16 +3,16 @@
 {% block title %}Jugadores - Tiki-Data{% endblock %}
 
 {% block content %}
-<div class="container-fluid">
+<div class="container-fluid player-list-page">
     <!-- Header Section -->
     <div class="row mb-4">
         <div class="col-12">
-            <h2 class="mb-0" style="font-weight: 700;">
-                <i class="bi bi-people-fill me-2" style="color: var(--primary);"></i>
+            <h2 class="section-title">
+                <i class="bi bi-people-fill"></i>
                 Jugadores
             </h2>
             <p class="text-muted mt-2 mb-0">Explora los perfiles de todos los jugadores</p>
-            <hr style="border-color: var(--border); opacity: 0.5; margin-top: 1rem;">
+            <hr class="section-divider">
         </div>
     </div>
 
@@ -20,40 +20,40 @@
         <div class="row g-4">
             {% for player in players %}
                 <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
-                    <div class="card h-100" style="transition: all var(--transition); cursor: pointer;" onclick="window.location='{{ url_for('player.show', id=player.id) }}';">
+                    <div class="card h-100 player-list-card" onclick="window.location='{{ url_for('player.show', id=player.id) }}';">
                         <div class="card-body text-center">
                             <!-- Foto de perfil -->
                             <div class="mb-3">
                                 {% if player.profile_picture %}
                                     <img src="{{ player.profile_picture }}" 
                                          alt="Foto de perfil" 
-                                         style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 3px solid var(--primary); box-shadow: 0 4px 15px rgba(0, 255, 136, 0.3);">
+                                         class="player-list-avatar">
                                 {% else %}
-                                    <div style="width: 120px; height: 120px; border-radius: 50%; background: var(--bg-secondary); border: 3px solid var(--border); display: flex; align-items: center; justify-content: center; margin: 0 auto;">
-                                        <i class="bi bi-person-fill" style="font-size: 3rem; color: var(--text-muted);"></i>
+                                    <div class="player-list-avatar-empty">
+                                        <i class="bi bi-person-fill"></i>
                                     </div>
                                 {% endif %}
                             </div>
 
                             <!-- Nombre de usuario -->
-                            <h5 class="mb-2" style="font-weight: 700; color: var(--text-primary);">
+                            <h5 class="mb-2 player-list-username">
                                 {{ player.user.username }}
                             </h5>
 
                             <!-- Nombre completo -->
-                            <p class="text-muted mb-3" style="font-size: 0.9rem;">
+                            <p class="text-muted mb-3 player-list-fullname">
                                 {{ player.name }} {{ player.surname }}
                             </p>
 
                             <!-- Stats rápidas -->
-                            <div class="d-flex justify-content-center gap-3 mb-3" style="font-size: 0.85rem;">
+                            <div class="d-flex justify-content-center gap-3 mb-3 player-list-stats">
                                 <div class="text-center">
-                                    <div style="color: var(--primary); font-weight: 700;">{{ player.goals|length }}</div>
+                                    <div class="player-list-stat-value">{{ player.goals|length }}</div>
                                     <div class="text-muted">Goles</div>
                                 </div>
-                                <div style="width: 1px; background: var(--border);"></div>
+                                <div class="player-list-stats-divider"></div>
                                 <div class="text-center">
-                                    <div style="color: var(--primary); font-weight: 700;">{{ player.matches|length }}</div>
+                                    <div class="player-list-stat-value">{{ player.matches|length }}</div>
                                     <div class="text-muted">Partidos</div>
                                 </div>
                             </div>
@@ -73,8 +73,8 @@
     {% else %}
         <div class="row">
             <div class="col-12">
-                <div class="text-center py-5" style="background: var(--bg-card); border-radius: var(--radius-lg); border: 1px solid var(--border);">
-                    <i class="bi bi-people" style="font-size: 4rem; color: var(--text-muted); display: block; margin-bottom: 1rem;"></i>
+                <div class="text-center py-5 empty-state-block">
+                    <i class="bi bi-people d-block mb-3 empty-state-icon"></i>
                     <h5 class="text-muted">No hay jugadores registrados</h5>
                     <p class="text-muted mb-0">Los jugadores aparecerán aquí cuando se registren</p>
                 </div>
@@ -82,26 +82,4 @@
         </div>
     {% endif %}
 </div>
-
-<style>
-    .card {
-        animation: fadeInScale 0.5s ease;
-    }
-    
-    @keyframes fadeInScale {
-        from {
-            opacity: 0;
-            transform: scale(0.95);
-        }
-        to {
-            opacity: 1;
-            transform: scale(1);
-        }
-    }
-    
-    .card:hover {
-        transform: translateY(-10px) !important;
-        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6), 0 0 30px rgba(0, 255, 136, 0.25) !important;
-    }
-</style>
 {% endblock %}

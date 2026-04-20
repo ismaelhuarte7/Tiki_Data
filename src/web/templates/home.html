@@ -7,15 +7,12 @@
 <div class="container-fluid px-0 mb-5">
     <div class="row g-0">
         <div class="col-12">
-            <div class="text-center py-5" style="background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-card) 100%); border-radius: var(--radius-lg); border: 1px solid var(--border); position: relative; overflow: hidden;">
-                <!-- Efecto de fondo animado -->
-                <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; opacity: 0.1; background: repeating-linear-gradient(45deg, transparent, transparent 10px, var(--primary) 10px, var(--primary) 11px);"></div>
-                
-                <div style="position: relative; z-index: 1;">
-                    <h1 class="display-4 fw-bold mb-3" style="letter-spacing: -0.02em;">
-                        Bienvenido a <span style="color: var(--primary);">Tiki-Data</span>
+            <div class="home-hero">
+                <div class="home-hero-content">
+                    <h1 class="home-hero-title">
+                        Bienvenido a <span class="home-hero-highlight">Tiki-Data</span>
                     </h1>
-                    <p class="lead text-muted mb-0">
+                    <p class="home-hero-subtitle">
                         Todos los partidos, jugadores y canchas en un solo lugar.
                     </p>
                 </div>
@@ -29,8 +26,8 @@
     <div class="row mb-4">
         <div class="col-12">
             <div class="d-flex align-items-center justify-content-between">
-                <h2 class="mb-0" style="font-weight: 700;">
-                    <i class="bi bi-newspaper me-2" style="color: var(--primary);"></i>
+                <h2 class="section-title">
+                    <i class="bi bi-newspaper"></i>
                     Últimas Noticias
                 </h2>
                 {% if user and user.is_admin %}
@@ -40,37 +37,35 @@
                     </a>
                 {% endif %}
             </div>
-            <hr style="border-color: var(--border); opacity: 0.5; margin-top: 1rem;">
+            <hr class="section-divider">
         </div>
     </div>
 
     {% if news_pagination.items %}
-        <div class="row g-4">
+        <div class="row g-4 home-news-grid">
             {% for news in news_pagination.items %}
-                <div class="col-12 col-lg-10 col-xl-8 mx-auto">
-                    <div class="card news-card fade-in" style="transition: all var(--transition);">
+                <div class="col-12 col-lg-10 col-xl-8 mx-auto news-col">
+                    <div class="card news-card">
                         <div class="card-body">
                             <div class="row g-4">
                                 <!-- Imagen -->
                                 <div class="col-md-4">
-                                    <div style="position: relative; border-radius: var(--radius-md); overflow: hidden; height: 200px; background: var(--bg-secondary);">
+                                    <div class="news-media">
                                         {% if news.player and news.player.profile_picture %}
                                             <img src="{{ news.player.profile_picture }}" 
-                                                 alt="Foto del jugador" 
-                                                 style="width: 100%; height: 100%; object-fit: cover;">
+                                                 alt="Foto del jugador">
                                         {% elif news.court and news.court.picture %}
                                             <img src="{{ news.court.picture }}" 
-                                                 alt="Foto de la cancha" 
-                                                 style="width: 100%; height: 100%; object-fit: cover;">
+                                                 alt="Foto de la cancha">
                                         {% else %}
-                                            <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;">
-                                                <i class="bi bi-newspaper" style="font-size: 4rem; color: var(--text-muted);"></i>
+                                            <div class="news-placeholder">
+                                                <i class="bi bi-newspaper"></i>
                                             </div>
                                         {% endif %}
                                         
                                         <!-- Badge de categoría -->
-                                        <div style="position: absolute; top: 1rem; left: 1rem;">
-                                            <span class="badge" style="background: var(--primary); color: var(--bg-primary); font-weight: 600; padding: 0.5rem 1rem; border-radius: var(--radius-full);">
+                                        <div class="news-badge-wrap">
+                                            <span class="badge news-badge">
                                                 {% if news.player %}
                                                     <i class="bi bi-person-fill me-1"></i> Jugador
                                                 {% elif news.court %}
@@ -86,15 +81,15 @@
                                 <!-- Contenido -->
                                 <div class="col-md-8 d-flex flex-column">
                                     <div class="flex-grow-1">
-                                        <h4 class="card-title mb-3" style="font-weight: 700; line-height: 1.3;">
+                                        <h4 class="card-title news-title mb-3">
                                             {{ news.title }}
                                         </h4>
-                                        <p class="card-text text-muted mb-3" style="line-height: 1.7;">
+                                        <p class="card-text text-muted news-content mb-3">
                                             {{ news.content }}
                                         </p>
                                     </div>
                                     
-                                    <div class="d-flex align-items-center justify-content-between mt-auto pt-3" style="border-top: 1px solid var(--border);">
+                                    <div class="d-flex align-items-center justify-content-between mt-auto pt-3 news-footer">
                                         <small class="text-muted">
                                             <i class="bi bi-clock me-1"></i>
                                             {{ news.created_at.strftime('%d/%m/%Y %H:%M') }}
@@ -169,8 +164,8 @@
     {% else %}
         <div class="row">
             <div class="col-12">
-                <div class="text-center py-5" style="background: var(--bg-card); border-radius: var(--radius-lg); border: 1px solid var(--border);">
-                    <i class="bi bi-inbox" style="font-size: 4rem; color: var(--text-muted); display: block; margin-bottom: 1rem;"></i>
+                <div class="text-center py-5 empty-state-block">
+                    <i class="bi bi-inbox d-block mb-3 empty-state-icon"></i>
                     <h5 class="text-muted">No hay noticias disponibles</h5>
                     <p class="text-muted mb-0">Las últimas actualizaciones aparecerán aquí</p>
                 </div>
@@ -178,26 +173,4 @@
         </div>
     {% endif %}
 </div>
-
-<style>
-    .card {
-        animation: fadeInUp 0.6s ease;
-    }
-    
-    @keyframes fadeInUp {
-        from {
-            opacity: 0;
-            transform: translateY(30px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-    
-    .news-card:hover {
-        transform: translateY(-8px) !important;
-        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6), 0 0 30px rgba(0, 255, 136, 0.3) !important;
-    }
-</style>
 {% endblock %}

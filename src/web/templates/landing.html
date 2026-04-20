@@ -1,0 +1,159 @@
+{% extends "layout.html" %}
+
+{% block title %}Tiki-Data | Gestión Deportiva{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-0 landing-page">
+    <section class="landing-hero mb-5">
+        <div class="landing-hero-overlay"></div>
+        <div class="row g-0 align-items-center">
+            <div class="col-12 col-lg-7">
+                <div class="landing-hero-content">
+                    <span class="landing-kicker">Nuestra Liga</span>
+                    <h1 class="landing-title">
+                        Todo lo que pasa en la cancha, en un solo lugar.
+                    </h1>
+                    <p class="landing-subtitle">
+                        Resultados, goles, historial de partidos y el rendimiento de cada uno. 
+                    </p>
+                </div>
+            </div>
+            <div class="col-12 col-lg-5">
+                <div class="landing-hero-preview">
+                    <div class="preview-metric-card landing-auth-card">
+                        <span class="preview-metric-label">¿Ya estás registrado?</span>
+                        <a href="{{ url_for('auth.login') }}" class="btn btn-primary btn-lg w-100 mt-2">
+                            <i class="bi bi-box-arrow-in-right me-2"></i>Iniciar Sesión
+                        </a>
+                    </div>
+                    <div class="preview-metric-card landing-auth-card">
+                        <span class="preview-metric-label">¿Primera vez por acá?</span>
+                        <a href="{{ url_for('auth.signup') }}" class="btn btn-outline-light btn-lg w-100 mt-2">
+                            <i class="bi bi-person-plus-fill me-2"></i>Registrarse
+                        </a>
+                    </div>
+                    <div class="preview-metric-card landing-hero-note-card">
+                        <span class="landing-hero-note">
+                            <i class="bi bi-info-circle me-2"></i>
+                            Con tu cuenta podés ver resultados, tabla de goleadores y todo el historial de partidos.
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="landing-features mb-5">
+        <div class="d-flex justify-content-between align-items-end flex-wrap gap-2 mb-3">
+            <h2 class="section-title mb-0">
+                <i class="bi bi-stars"></i>
+                ¿Por qué Tiki-Data?
+            </h2>
+        </div>
+        <hr class="section-divider">
+
+        <div class="row g-4 mt-1">
+            <div class="col-12 col-md-6 col-xl-4">
+                <article class="card landing-feature-card h-100">
+                    <div class="card-body">
+                        <div class="landing-feature-icon feature-match">
+                            <i class="bi bi-trophy-fill"></i>
+                        </div>
+                        <h3 class="landing-feature-title">Gestión de Partidos</h3>
+                        <p class="landing-feature-copy">
+                            Crea encuentros paso a paso, arma equipos, registra goles y centraliza toda la historia competitiva.
+                        </p>
+                    </div>
+                </article>
+            </div>
+            <div class="col-12 col-md-6 col-xl-4">
+                <article class="card landing-feature-card h-100">
+                    <div class="card-body">
+                        <div class="landing-feature-icon feature-player">
+                            <i class="bi bi-graph-up-arrow"></i>
+                        </div>
+                        <h3 class="landing-feature-title">Estadísticas de Jugadores</h3>
+                        <p class="landing-feature-copy">
+                            Analiza rendimiento individual con métricas de goles, MVPs, promedio y trazabilidad partido a partido.
+                        </p>
+                    </div>
+                </article>
+            </div>
+            <div class="col-12 col-md-6 col-xl-4">
+                <article class="card landing-feature-card h-100">
+                    <div class="card-body">
+                        <div class="landing-feature-icon feature-court">
+                            <i class="bi bi-geo-alt-fill"></i>
+                        </div>
+                        <h3 class="landing-feature-title">Control de Canchas</h3>
+                        <p class="landing-feature-copy">
+                            Mantén ubicaciones, imágenes y disponibilidad siempre a mano para planificar mejor cada jornada.
+                        </p>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <section class="landing-preview mb-5">
+        <div class="d-flex justify-content-between align-items-end flex-wrap gap-2 mb-3">
+            <h2 class="section-title mb-0">
+                <i class="bi bi-window-stack"></i>
+                Adelanto de la Plataforma
+            </h2>
+        </div>
+        <hr class="section-divider">
+
+        <div class="row g-4 mt-1">
+            <div class="col-12 col-lg-4">
+                <article class="card landing-screen-card h-100">
+                    <div class="landing-screen-head">
+                        <span></span><span></span><span></span>
+                    </div>
+                    <div class="card-body">
+                        <p class="landing-screen-label">Módulo Partidos</p>
+                        <h3 class="landing-screen-title">Resultados, MVP y detalle por encuentro</h3>
+                        <div class="landing-screen-mock">
+                            <div class="mock-row"></div>
+                            <div class="mock-score">3 - 2</div>
+                            <div class="mock-row short"></div>
+                        </div>
+                    </div>
+                </article>
+            </div>
+            <div class="col-12 col-lg-4">
+                <article class="card landing-screen-card h-100">
+                    <div class="landing-screen-head">
+                        <span></span><span></span><span></span>
+                    </div>
+                    <div class="card-body">
+                        <p class="landing-screen-label">Módulo Jugadores</p>
+                        <h3 class="landing-screen-title">Perfil con historial y estadísticas en vivo</h3>
+                        <div class="landing-screen-mock">
+                            <div class="mock-avatar"></div>
+                            <div class="mock-row"></div>
+                            <div class="mock-row short"></div>
+                        </div>
+                    </div>
+                </article>
+            </div>
+            <div class="col-12 col-lg-4">
+                <article class="card landing-screen-card h-100">
+                    <div class="landing-screen-head">
+                        <span></span><span></span><span></span>
+                    </div>
+                    <div class="card-body">
+                        <p class="landing-screen-label">Módulo Canchas</p>
+                        <h3 class="landing-screen-title">Catálogo visual con acceso rápido a ubicación</h3>
+                        <div class="landing-screen-mock">
+                            <div class="mock-map"></div>
+                            <div class="mock-row"></div>
+                            <div class="mock-row short"></div>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}

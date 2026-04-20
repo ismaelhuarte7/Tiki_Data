@@ -3,17 +3,17 @@
 {% block title %}Iniciar Sesión - Tiki-Data{% endblock %}
 
 {% block content %}
-<div class="container" style="max-width: 500px; margin-top: 4rem; margin-bottom: 4rem;">
+<div class="container auth-page auth-page-login">
     <div class="row justify-content-center">
         <div class="col-12">
-            <div class="card fade-in">
+            <div class="card auth-card fade-in-up">
                 <!-- Header -->
-                <div class="card-header text-center py-3" style="background: linear-gradient(135deg, var(--bg-secondary), var(--bg-card)); border-bottom: 2px solid var(--primary);">
-                    <h2 class="mb-0" style="font-weight: 700; letter-spacing: -0.02em; font-size: 1.75rem; color: var(--text-primary);">
-                        <i class="bi bi-box-arrow-in-right me-2" style="color: var(--primary);"></i>
+                <div class="card-header text-center py-3 auth-card-header">
+                    <h2 class="mb-0 auth-title">
+                        <i class="bi bi-box-arrow-in-right me-2 auth-title-icon"></i>
                         Iniciar Sesión
                     </h2>
-                    <p class="mb-0 mt-2" style="color: #8b95a8; font-size: 0.95rem;">Accede a tu cuenta de Tiki-Data</p>
+                    <p class="mb-0 mt-2 auth-subtitle">Accede a tu cuenta de Tiki-Data</p>
                 </div>
                 
                 <div class="card-body p-4">
@@ -21,41 +21,38 @@
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                         <!-- Usuario -->
                         <div class="mb-3">
-                            <label for="username" class="form-label" style="color: var(--text-primary); font-weight: 600; font-size: 0.95rem;">
+                            <label for="username" class="form-label auth-label">
                                 <i class="bi bi-person-circle me-1"></i>Usuario
                             </label>
                             <input 
                                 type="text" 
-                                class="form-control form-control-lg" 
+                                class="form-control form-control-lg auth-control" 
                                 id="username" 
                                 name="username" 
                                 placeholder="Ingresa tu usuario" 
                                 required 
-                                autofocus
-                                style="padding: 0.75rem 1rem; font-size: 1rem;">
+                                autofocus>
                             <div class="invalid-feedback">Por favor, ingresa tu usuario.</div>
                         </div>
                         
                         <!-- Contraseña -->
                         <div class="mb-4">
-                            <label for="password" class="form-label" style="color: var(--text-primary); font-weight: 600; font-size: 0.95rem;">
+                            <label for="password" class="form-label auth-label">
                                 <i class="bi bi-lock-fill me-1"></i>Contraseña
                             </label>
-                            <div class="input-group" style="border: 2px solid var(--border); border-radius: var(--radius-md); background: var(--bg-secondary); transition: var(--transition);">
+                            <div class="input-group auth-password-group">
                                 <input 
                                     type="password" 
-                                    class="form-control form-control-lg" 
+                                    class="form-control form-control-lg auth-control" 
                                     id="password" 
                                     name="password" 
                                     placeholder="Tu contraseña" 
-                                    required
-                                    style="padding: 0.75rem 1rem; font-size: 1rem; border: none; background: transparent;">
+                                    required>
                                 <button 
-                                    class="btn" 
+                                    class="btn auth-toggle-btn" 
                                     type="button" 
-                                    id="togglePassword"
-                                    style="border: none; background: transparent; padding: 0 1rem;">
-                                    <i class="bi bi-eye" id="toggleIcon" style="color: #8b95a8;"></i>
+                                    id="togglePassword">
+                                    <i class="bi bi-eye auth-toggle-icon" id="toggleIcon"></i>
                                 </button>
                             </div>
                             <div class="invalid-feedback">Por favor, ingresa tu contraseña.</div>
@@ -71,18 +68,18 @@
                         
                         <!-- Divider -->
                         <div class="text-center mb-3">
-                            <div style="display: flex; align-items: center; text-align: center; margin: 0;">
-                                <div style="flex: 1; border-bottom: 1px solid var(--border);"></div>
-                                <span style="padding: 0 1rem; color: #8b95a8; font-size: 0.875rem;">O</span>
-                                <div style="flex: 1; border-bottom: 1px solid var(--border);"></div>
+                            <div class="auth-divider">
+                                <div class="auth-divider-line"></div>
+                                <span class="auth-divider-text">O</span>
+                                <div class="auth-divider-line"></div>
                             </div>
                         </div>
                         
                         <!-- Link a registro -->
                         <div class="text-center">
-                            <p class="mb-0" style="color: #8b95a8;">
+                            <p class="mb-0 auth-link-copy">
                                 ¿No tienes una cuenta? 
-                                <a href="{{ url_for('auth.signup') }}" class="text-decoration-none" style="color: var(--primary); font-weight: 600;">
+                                <a href="{{ url_for('auth.signup') }}" class="text-decoration-none auth-link-cta">
                                     Regístrate aquí
                                 </a>
                             </p>
@@ -116,15 +113,11 @@
     const inputGroup = passwordInput.closest('.input-group');
     
     passwordInput.addEventListener('focus', function() {
-        inputGroup.style.borderColor = 'var(--primary)';
-        inputGroup.style.boxShadow = '0 0 0 4px rgba(0, 255, 136, 0.1)';
-        inputGroup.style.transform = 'translateY(-2px)';
+        inputGroup.classList.add('is-focused');
     });
     
     passwordInput.addEventListener('blur', function() {
-        inputGroup.style.borderColor = 'var(--border)';
-        inputGroup.style.boxShadow = 'none';
-        inputGroup.style.transform = 'translateY(0)';
+        inputGroup.classList.remove('is-focused');
     });
 
     // Form validation
@@ -137,26 +130,5 @@
         form.classList.add('was-validated');
     }, false);
 </script>
-
-<style>
-    .fade-in {
-        animation: fadeInUp 0.6s ease;
-    }
-    
-    @keyframes fadeInUp {
-        from {
-            opacity: 0;
-            transform: translateY(30px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-    
-    .input-group .form-control:focus + .btn {
-        border-color: var(--primary);
-    }
-</style>
 {% endblock %}
 

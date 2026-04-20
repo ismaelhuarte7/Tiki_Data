@@ -3,12 +3,13 @@
 {% block title %}Registrar Noticia{% endblock %}
 
 {% block content %}
-<div class="container mt-5">
+<div class="container form-page fade-in-up">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title text-white">Registrar Noticia</h3>
+            <div class="card form-shell-card">
+                <div class="card-header form-shell-header">
+                    <h3 class="form-shell-title"><i class="bi bi-megaphone-fill me-2"></i>Registrar Noticia</h3>
+                    <p class="form-shell-subtitle">Publica novedades sobre partidos, jugadores o canchas.</p>
                 </div>
                 <div class="card-body">
                     <form action="{{ url_for('news.create') }}" method="POST">
@@ -39,8 +40,12 @@
                                 {% endfor %}
                             </select>
                         </div>
-                        <button type="submit" class="btn btn-primary">Registrar Noticia</button>
-                        <a href="{{ url_for('home') }}" class="btn btn-secondary">Cancelar</a>
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-send-check me-1"></i>Registrar Noticia
+                            </button>
+                            <a href="{{ url_for('home') }}" class="btn btn-secondary">Cancelar</a>
+                        </div>
                     </form>
                 </div>
             </div>
