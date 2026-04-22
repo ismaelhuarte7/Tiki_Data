@@ -1,5 +1,6 @@
-from datetime import datetime
-from src.models import Match, Team, Player, GuestPlayer, Goal, News, Notification, Court
+from datetime import datetime, timedelta
+from sqlalchemy import func, desc
+from src.models import Match, Team, Player, GuestPlayer, Goal, News, Notification, Court, MVPVote, User
 from config.database import db
 
 class MatchService:
@@ -106,7 +107,7 @@ class MatchService:
                 if player.user:
                     noti = Notification(
                         user_id=player.user.id,
-                        message=f"Has jugado un nuevo partido ({result}) - {match_date.strftime('%d/%m/%Y')}",
+                        message=f"Has jugado un nuevo partido ({result}) - {match_date.strftime('%d/%m/%Y')}. Tenés 24 horas para votar al jugador del partido.",
                         match_id=match_id
                     )
                     db.session.add(noti)
@@ -114,3 +115,166 @@ class MatchService:
         except Exception as e:
             print(f"Error creando notificaciones post-partido: {e}")
             db.session.rollback()
+
+    @staticmethod
+    def register_mvp_vote(match_id, voter_player_id, voted_player_id):
+        """
+        Registra un voto al MVP validando:
+        - votante participante del partido,
+        - objetivo participante del partido,
+        - no auto-voto,
+        - solo un voto por jugador y partido,
+        - ventana de 24h vigente.
+        """
+        match = Match.query.get(match_id)
+        if not match:
+            return False, "Partido no encontrado"
+
+        if match.mvp_id is not None:
+            return False, "La votación ya finalizó para este partido"
+
+        if datetime.utcnow() > match.get_mvp_voting_deadline():
+            MatchService.finalize_expired_mvp_votes()
+            return False, "La ventana de votación (24 horas) ya venció"
+
+        if voter_player_id == voted_player_id:
+            return False, "No podés votarte a vos mismo"
+
+        participant_ids = {player.id for player in match.players}
+        if voter_player_id not in participant_ids:
+            return False, "Solo pueden votar jugadores que participaron del partido"
+
+        if voted_player_id not in participant_ids:
+            return False, "Solo se puede votar a jugadores que participaron del partido"
+
+        existing_vote = MVPVote.query.filter_by(
+            match_id=match_id,
+            voter_player_id=voter_player_id
+        ).first()
+        if existing_vote:
+            return False, "Ya registraste tu voto para este partido"
+
+        try:
+            vote = MVPVote(
+                match_id=match_id,
+                voter_player_id=voter_player_id,
+                voted_player_id=voted_player_id
+            )
+            db.session.add(vote)
+            db.session.commit()
+            return True, "Voto registrado correctamente"
+        except Exception:
+            db.session.rollback()
+            return False, "Ocurrió un error al registrar tu voto"
+
+    @staticmethod
+    def finalize_expired_mvp_votes():
+        """
+        Cierra votaciones vencidas (24h), calcula MVP, crea noticia y notifica a votantes.
+        Es idempotente: un partido con mvp_id definido no se reprocesa.
+        """
+        now = datetime.utcnow()
+        expired_matches = Match.query.filter(
+            Match.mvp_id.is_(None),
+            Match.date <= now - timedelta(hours=24)
+        ).all()
+
+        if not expired_matches:
+            return 0
+
+        finalized_count = 0
+
+        for match in expired_matches:
+            participant_ids = [player.id for player in match.players]
+            if not participant_ids:
+                continue
+
+            vote_counts = db.session.query(
+                MVPVote.voted_player_id,
+                func.count(MVPVote.id).label('total_votes')
+            ).filter(
+                MVPVote.match_id == match.id
+            ).group_by(
+                MVPVote.voted_player_id
+            ).order_by(
+                desc('total_votes'),
+                MVPVote.voted_player_id.asc()
+            ).all()
+
+            winner_player_id = None
+            winner_votes = 0
+
+            if vote_counts:
+                winner_player_id = vote_counts[0].voted_player_id
+                winner_votes = vote_counts[0].total_votes
+            else:
+                # Fallback en caso de no haber votos: máximo goleador registrado del partido.
+                top_scorer = db.session.query(
+                    Goal.player_id,
+                    func.count(Goal.id).label('goals')
+                ).filter(
+                    Goal.match_id == match.id,
+                    Goal.player_id.isnot(None)
+                ).group_by(
+                    Goal.player_id
+                ).order_by(
+                    desc('goals'),
+                    Goal.player_id.asc()
+                ).first()
+
+                if top_scorer:
+                    winner_player_id = top_scorer.player_id
+                else:
+                    winner_player_id = sorted(participant_ids)[0]
+
+            winner = Player.query.get(winner_player_id)
+            if not winner:
+                continue
+
+            match.mvp_id = winner_player_id
+
+            title = "Jugador del Partido"
+            if winner_votes > 0:
+                content = (
+                    f"Finalizó la votación del partido del {match.date.strftime('%d/%m/%Y')} "
+                    f"y el jugador del partido fue {winner.name} {winner.surname} con {winner_votes} voto(s)."
+                )
+            else:
+                content = (
+                    f"Finalizó la ventana de votación del partido del {match.date.strftime('%d/%m/%Y')} "
+                    f"y el jugador del partido fue {winner.name} {winner.surname}."
+                )
+
+            system_user = User.query.filter_by(is_admin=True).first() or User.query.first()
+            if not system_user:
+                continue
+
+            news = News(
+                title=title,
+                content=content,
+                user_id=system_user.id,
+                player_id=winner_player_id,
+                court_id=match.court_id,
+                match_id=match.id
+            )
+            db.session.add(news)
+
+            voter_ids = db.session.query(MVPVote.voter_player_id).filter(
+                MVPVote.match_id == match.id
+            ).distinct().all()
+
+            for voter_tuple in voter_ids:
+                voter_player = Player.query.get(voter_tuple[0])
+                if voter_player and voter_player.user:
+                    db.session.add(Notification(
+                        user_id=voter_player.user.id,
+                        message=f"Se cerró la votación del partido {match.result}. MVP: {winner.name} {winner.surname}.",
+                        match_id=match.id
+                    ))
+
+            finalized_count += 1
+
+        if finalized_count > 0:
+            db.session.commit()
+
+        return finalized_count

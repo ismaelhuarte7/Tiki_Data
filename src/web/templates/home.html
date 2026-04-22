@@ -66,7 +66,9 @@
                                         <!-- Badge de categoría -->
                                         <div class="news-badge-wrap">
                                             <span class="badge news-badge">
-                                                {% if news.player %}
+                                                {% if news.match %}
+                                                    <i class="bi bi-trophy-fill me-1"></i> Partido
+                                                {% elif news.player %}
                                                     <i class="bi bi-person-fill me-1"></i> Jugador
                                                 {% elif news.court %}
                                                     <i class="bi bi-geo-alt-fill me-1"></i> Cancha

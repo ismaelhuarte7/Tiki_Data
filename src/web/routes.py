@@ -9,6 +9,7 @@ from src.web.controllers.court import bp as court_bp
 from src.web.controllers.news import bp as news_bp
 from src.web.controllers.match import bp as match_bp
 from src.web.controllers.notification import bp as notification_bp
+from src.services.match_service import MatchService
 
 
 
@@ -35,6 +36,8 @@ def register(app):
 
         if 'user' not in session:
             return redirect(url_for('home'))
+
+        MatchService.finalize_expired_mvp_votes()
 
         return None
 

@@ -1,7 +1,8 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, session
-from src.models import Match, User, Court, Player, Team, Goal, GuestPlayer, News, Notification
+from src.models import Match, User, Court, Player, Team, Goal, GuestPlayer, News, Notification, MVPVote
 from datetime import datetime
 import json
+from src.services.match_service import MatchService
 
 bp = Blueprint("match", __name__, url_prefix="/match")
 
@@ -66,6 +67,8 @@ def create():
 
 @bp.route('/<int:id>', methods=['GET'])
 def show(id):
+    MatchService.finalize_expired_mvp_votes()
+
     match = Match.get_by_id(id)
     if not match:
         flash('Partido no encontrado', 'danger')
@@ -74,8 +77,61 @@ def show(id):
     user = None
     if 'user' in session:
         user = User.get_by_id(session['user']['id'])
+
+    participant_ids = {player.id for player in match.players}
+    voter_player_id = user.player_id if user else None
+    vote = None
+    if voter_player_id:
+        vote = MVPVote.query.filter_by(match_id=match.id, voter_player_id=voter_player_id).first()
+
+    is_participant = voter_player_id in participant_ids if voter_player_id else False
+    can_vote = is_participant and match.is_mvp_voting_open() and vote is None
+    voting_candidates = []
+    if is_participant:
+        voting_candidates = [p for p in match.players if p.id != voter_player_id]
+
+    now = datetime.utcnow()
+    voting_deadline = match.get_mvp_voting_deadline()
+    voting_remaining_hours = max(0, int((voting_deadline - now).total_seconds() // 3600))
     
-    return render_template("match/show.html", match=match, user=user)
+    return render_template(
+        "match/show.html",
+        match=match,
+        user=user,
+        can_vote=can_vote,
+        has_voted=vote is not None,
+        user_vote=vote,
+        is_participant=is_participant,
+        voting_candidates=voting_candidates,
+        voting_deadline=voting_deadline,
+        voting_remaining_hours=voting_remaining_hours
+    )
+
+
+@bp.route('/<int:id>/vote-mvp', methods=['POST'])
+def vote_mvp(id):
+    if 'user' not in session:
+        flash('Debes iniciar sesión', 'danger')
+        return redirect(url_for('auth.login'))
+
+    user = User.get_by_id(session['user']['id'])
+    if not user or not user.player_id:
+        flash('No tenés un jugador asociado para votar', 'danger')
+        return redirect(url_for('match.show', id=id))
+
+    voted_player_id = request.form.get('voted_player_id', type=int)
+    if not voted_player_id:
+        flash('Debes seleccionar un jugador para votar', 'warning')
+        return redirect(url_for('match.show', id=id))
+
+    success, message = MatchService.register_mvp_vote(
+        match_id=id,
+        voter_player_id=user.player_id,
+        voted_player_id=voted_player_id
+    )
+
+    flash(message, 'success' if success else 'danger')
+    return redirect(url_for('match.show', id=id))
 
 @bp.route('/<int:id>/delete', methods=['POST'])
 def delete(id):

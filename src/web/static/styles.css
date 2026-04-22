@@ -1368,6 +1368,189 @@ input[type="email"]:focus {
     text-decoration: underline;
 }
 
+.match-formation-card {
+    border: 1px solid rgba(130, 243, 74, 0.22);
+    background: linear-gradient(135deg, rgba(9, 21, 27, 0.92), rgba(16, 37, 45, 0.9));
+}
+
+.match-formation-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.7rem;
+    margin-bottom: 0.9rem;
+}
+
+.match-formation-schema {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    font-weight: 700;
+}
+
+.match-formation-pitch {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0;
+    border: 1px solid rgba(130, 243, 74, 0.24);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    background:
+        repeating-linear-gradient(90deg, rgba(130, 243, 74, 0.07) 0, rgba(130, 243, 74, 0.07) 46px, transparent 46px, transparent 92px),
+        linear-gradient(180deg, rgba(8, 48, 33, 0.96), rgba(7, 37, 30, 0.94));
+}
+
+.match-formation-pitch::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 1px;
+    background: rgba(130, 243, 74, 0.32);
+    transform: translateX(-50%);
+    z-index: 0;
+}
+
+.match-formation-pitch::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    border: 1px solid rgba(130, 243, 74, 0.35);
+    transform: translate(-50%, -50%);
+    z-index: 0;
+}
+
+.formation-half {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    z-index: 1;
+    padding: 0.75rem;
+    min-height: 480px;
+    flex: 1;
+}
+
+.formation-team-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.4rem 0.6rem;
+    border-radius: var(--radius-sm);
+    margin-bottom: 0.5rem;
+}
+
+.formation-team-header-a {
+    background: linear-gradient(135deg, rgba(255, 117, 117, 0.28), rgba(209, 56, 56, 0.28));
+}
+
+.formation-team-header-b {
+    background: linear-gradient(135deg, rgba(91, 180, 255, 0.28), rgba(37, 105, 211, 0.28));
+}
+
+.formation-team-name {
+    color: var(--text-primary);
+    font-weight: 700;
+}
+
+.formation-team-meta {
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    font-weight: 700;
+}
+
+.formation-lines {
+    display: flex;
+    align-items: stretch;
+    justify-content: space-evenly;
+    gap: clamp(0.5rem, 1.2vw, 1.2rem);
+    flex: 1;
+    padding: 0.6rem 0.4rem;
+}
+
+.formation-lines-a {
+    flex-direction: row;
+}
+
+.formation-lines-b {
+    flex-direction: row-reverse;
+}
+
+.formation-line {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    gap: 0.7rem;
+    flex: 1 1 0;
+    max-width: 110px;
+    min-width: 0;
+}
+
+.formation-player {
+    width: 88px;
+    min-width: 60px;
+    max-width: 88px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.formation-player-shirt {
+    width: 40px;
+    height: 40px;
+    margin: 0 auto 0.3rem;
+    border-radius: 10px 10px 8px 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 1.1rem;
+    position: relative;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+}
+
+.formation-player-shirt.team-a-shirt {
+    background: linear-gradient(135deg, #ff7575, #d13838);
+}
+
+.formation-player-shirt.team-b-shirt {
+    background: linear-gradient(135deg, #5bb4ff, #2569d3);
+}
+
+.formation-player-goals {
+    position: absolute;
+    top: -6px;
+    right: -7px;
+    min-width: 16px;
+    height: 16px;
+    border-radius: 999px;
+    font-size: 0.66rem;
+    font-weight: 700;
+    color: #1f1502;
+    background: var(--goal-pill);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 4px;
+}
+
+.formation-player-name {
+    color: #fff;
+    font-size: 0.78rem;
+    font-weight: 700;
+    line-height: 1.2;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    width: 100%;
+    max-width: 88px;
+}
+
 .team-card {
     border-width: 2px;
     border-style: solid;
@@ -1385,6 +1568,13 @@ input[type="email"]:focus {
     border-bottom: none;
 }
 
+.team-card-header-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.6rem;
+}
+
 .team-card-header-a {
     background: linear-gradient(135deg, #ff7575 0%, #d13838 100%);
 }
@@ -1396,10 +1586,20 @@ input[type="email"]:focus {
 .team-card-title {
     margin: 0;
     color: #ffffff;
-    text-align: center;
+    text-align: left;
     font-family: 'Rajdhani', sans-serif;
     font-size: 2rem;
     font-weight: 700;
+}
+
+.team-card-score-badge {
+    padding: 0.3rem 0.7rem;
+    border-radius: var(--radius-full);
+    background: rgba(255, 255, 255, 0.16);
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.85rem;
+    white-space: nowrap;
 }
 
 .team-roster-title {
@@ -1535,6 +1735,25 @@ input[type="email"]:focus {
     font-family: 'Rajdhani', sans-serif;
     font-size: 1.6rem;
     font-weight: 700;
+}
+
+.match-goals-panel {
+    border: 1px solid rgba(130, 243, 74, 0.2);
+}
+
+.match-goals-panel-body {
+    max-height: none;
+    overflow-y: visible;
+}
+
+.match-goals-empty {
+    text-align: center;
+    color: var(--text-muted);
+    padding: 2.2rem 1rem;
+}
+
+.match-goals-empty i {
+    font-size: 2.2rem;
 }
 
 .goal-card {
@@ -3046,8 +3265,86 @@ input[type="email"]:focus {
         text-align: left;
     }
 
+    .match-formation-pitch {
+        grid-template-columns: 1fr;
+    }
+
+    .match-formation-pitch::before {
+        top: 50%;
+        bottom: auto;
+        left: 0;
+        right: 0;
+        width: auto;
+        height: 1px;
+        transform: translateY(-50%);
+    }
+
+    .match-formation-pitch::after {
+        width: 52px;
+        height: 52px;
+    }
+
+    .formation-half {
+        min-height: 300px;
+    }
+
+    .formation-half-b .formation-lines {
+        order: 1;
+    }
+
+    .formation-half-b .formation-team-header {
+        order: 2;
+        margin-top: 0.55rem;
+        margin-bottom: 0;
+    }
+
+    .formation-lines {
+        flex-direction: column;
+        flex: 1;
+        gap: 0.5rem;
+        padding: 0.35rem 0.5rem;
+        align-items: stretch;
+        justify-content: space-evenly;
+    }
+
+    /* En mobile ambos equipos tienen misma dirección de columna (arriba=ataque, abajo=arco) */
+    .formation-lines-b {
+        flex-direction: column;
+    }
+
+    .formation-line {
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        gap: 0.5rem;
+        flex: 0 0 auto;
+        max-width: none;
+        width: 100%;
+    }
+
+    .formation-player {
+        /* Ancho fijo basado en la cantidad de jugadores por línea para simetría */
+        width: clamp(52px, 18vw, 80px);
+        min-width: 52px;
+        max-width: 80px;
+        flex-shrink: 0;
+    }
+
+    .formation-player-name {
+        font-size: 0.7rem;
+        max-width: clamp(52px, 18vw, 80px);
+    }
+
     .team-card-title {
-        font-size: 1.6rem;
+        font-size: 1.45rem;
+    }
+
+    .team-card-score-badge {
+        font-size: 0.8rem;
+    }
+
+    .match-goals-panel-body {
+        max-height: none;
     }
 
     .player-main-name {
@@ -3102,6 +3399,50 @@ input[type="email"]:focus {
 }
 
 @media (max-width: 576px) {
+    .match-formation-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .formation-line {
+        gap: 0.3rem;
+    }
+
+    .formation-player {
+        width: clamp(46px, 16vw, 68px);
+        min-width: 46px;
+        max-width: 68px;
+    }
+
+    .formation-player-shirt {
+        width: 28px;
+        height: 28px;
+        font-size: 0.8rem;
+    }
+
+    .formation-player-name {
+        font-size: 0.64rem;
+        max-width: clamp(46px, 16vw, 68px);
+    }
+
+    .formation-half {
+        min-height: 260px;
+        padding: 0.5rem;
+    }
+
+    .formation-lines {
+        gap: 0.45rem;
+    }
+
+    .team-card-header-content {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .team-card-score-badge {
+        align-self: flex-start;
+    }
+
     .landing-hero {
         border-radius: var(--radius-md);
     }

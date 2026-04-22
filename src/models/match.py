@@ -1,4 +1,5 @@
 from config.database import db
+from datetime import datetime, timedelta
 
 player_match = db.Table('player_match',
     db.Column('player_id', db.Integer, db.ForeignKey('player.id'), primary_key=True),
@@ -57,3 +58,11 @@ class Match (db.Model):
         """Retorna el número máximo de jugadores por equipo según el tipo"""
         match_types = {'5': 5, '6': 6, '7': 7, '8': 8, '11': 11}
         return match_types.get(self.match_type, 11)
+
+    def get_mvp_voting_deadline(self):
+        """Retorna la fecha límite para votar MVP (24h posteriores al partido)."""
+        return self.date + timedelta(hours=24)
+
+    def is_mvp_voting_open(self):
+        """Indica si la ventana de votación sigue abierta y el MVP aún no fue definido."""
+        return self.mvp_id is None and datetime.utcnow() <= self.get_mvp_voting_deadline()
