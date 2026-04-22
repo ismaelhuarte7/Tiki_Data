@@ -236,8 +236,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js"></script>
     
     <script>
-        // Auto-cerrar alertas después de 5 segundos
-        document.querySelectorAll('.alert').forEach(alert => {
+        // Auto-cerrar alertas después de 5 segundos (excepto las static)
+        document.querySelectorAll('.alert:not(.alert-dismissible-static)').forEach(alert => {
             setTimeout(() => {
                 const bsAlert = new bootstrap.Alert(alert);
                 bsAlert.close();

@@ -3561,3 +3561,10 @@ input[type="email"]:focus {
         padding: var(--spacing-xs) var(--spacing-sm);
     }
 }
+
+/* Alertas que no se cierran automáticamente */
+.alert-dismissible-static {
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
